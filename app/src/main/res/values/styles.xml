@@ -6,6 +6,17 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:fontFamily">@font/amatic_sc</item>
+    </style>
+
+    <style name="Button">
+        <item name="android:background">@drawable/ic_button</item>
+        <item name="android:gravity">center</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/amatic_sc</item>
+        <item name="android:textSize">@dimen/text_52</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
 </resources>
