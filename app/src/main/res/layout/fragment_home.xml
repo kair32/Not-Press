@@ -9,19 +9,75 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <include
+            android:id="@+id/bt_gifts"
+            layout="@layout/help_button_teddy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
         <Button
-            android:id="@+id/textView"
+            android:id="@+id/bt_days"
             style="@style/Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_20"
-            android:layout_marginTop="@dimen/margin_45"
-            android:layout_marginEnd="@dimen/margin_20"
-
-            android:text="Привет"
+            android:layout_margin="@dimen/margin_20"
+            android:text="@string/free_day"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/bt_gifts"
+            bind:buttonBackground="@{@color/colorYellow}"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_youtube"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bt_days"
+            app:layout_constraintBottom_toTopOf="@+id/ll_insta"/>
+
+        <LinearLayout
+            android:id="@+id/ll_insta"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="@dimen/margin_45"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_insta_icon"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_10"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_36"
+                android:text="@string/instagram"/>
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_20"
+            style="@style/Switch"
+            android:switchPadding="8dp"
+            app:switchPadding="10dp"
+            app:thumbTextPadding="10dp"
+            bind:switchWidth="@{@dimen/margin_20}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:switchMinWidth="300dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,22 +1,27 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:fontFamily">@font/amatic_sc</item>
+        <item name="android:windowBackground">@drawable/ic_background</item>
+
     </style>
 
     <style name="Button">
         <item name="android:background">@drawable/ic_button</item>
         <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/margin_20</item>
         <item name="android:lines">1</item>
         <item name="android:ellipsize">end</item>
-        <item name="android:fontFamily">@font/amatic_sc</item>
         <item name="android:textSize">@dimen/text_52</item>
         <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="Switch">
+        <item name="track">@drawable/ic_switch_background</item>
+        <item name="android:thumb">@drawable/ic_switch</item>
     </style>
 
 </resources>
