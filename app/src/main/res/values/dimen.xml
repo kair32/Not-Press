@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="text_52">52sp</dimen>
+    <dimen name="text_28">28sp</dimen>
     <dimen name="text_36">36sp</dimen>
+    <dimen name="text_52">52sp</dimen>
 
     <dimen name="margin_10">10dp</dimen>
     <dimen name="margin_20">20dp</dimen>
+    <dimen name="margin_25">25dp</dimen>
+    <dimen name="margin_40">40dp</dimen>
     <dimen name="margin_45">45dp</dimen>
 </resources>

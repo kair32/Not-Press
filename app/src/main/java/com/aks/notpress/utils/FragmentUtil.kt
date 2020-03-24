@@ -5,6 +5,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.aks.notpress.R
 import com.aks.notpress.ui.home.FragmentHome
+import com.aks.notpress.ui.pay.PayFragment
 
 
 class FragmentUtil() {
@@ -50,6 +51,7 @@ class FragmentUtil() {
 
         else -> when(event.type) {
             FragmentType.HOME -> FragmentHome.newInstance()
+            FragmentType.PAY -> PayFragment.newInstance()
             else                    -> null
         }
     }
@@ -74,6 +76,7 @@ enum class FragmentType(val title: Int = -1,
                         val animation: AnimationType = AnimationType.NONE
 ) {
     HOME,
+    PAY,
 
     DEFAULT
 }

@@ -5,6 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:bind="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.aks.notpress.ui.home.HomeViewModel" />
+    </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -16,7 +21,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            bind:viewModel="@{viewModel}"/>
 
         <Button
             android:id="@+id/bt_days"
@@ -30,14 +36,12 @@
             app:layout_constraintTop_toBottomOf="@+id/bt_gifts"
             bind:buttonBackground="@{@color/colorYellow}"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_youtube"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bt_days"
-            app:layout_constraintBottom_toTopOf="@+id/ll_insta"/>
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            layout="@layout/help_youtube"
+            app:layout_constraintBottom_toTopOf="@+id/ll_insta"
+            app:layout_constraintTop_toBottomOf="@+id/bt_days" />
 
         <LinearLayout
             android:id="@+id/ll_insta"
@@ -64,20 +68,6 @@
                 android:text="@string/instagram"/>
 
         </LinearLayout>
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_20"
-            style="@style/Switch"
-            android:switchPadding="8dp"
-            app:switchPadding="10dp"
-            app:thumbTextPadding="10dp"
-            bind:switchWidth="@{@dimen/margin_20}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:switchMinWidth="300dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

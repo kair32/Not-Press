@@ -6,3 +6,6 @@ import com.aks.notpress.utils.FragmentEvent
 interface FragmentViewModel {
     val fragmentLiveData: LiveData<FragmentEvent>
 }
+interface TeddyViewModel{
+    fun onClickTeddy()
+}
