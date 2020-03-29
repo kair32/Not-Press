@@ -9,3 +9,7 @@ interface FragmentViewModel {
 interface TeddyViewModel{
     fun onClickTeddy()
 }
+
+interface ActivityStartViewModel{
+    val activityStartLiveData: LiveData<ActivityStartEvent>
+}
