@@ -5,10 +5,12 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.aks.notpress.R
 import com.aks.notpress.ui.home.FragmentHome
+import com.aks.notpress.ui.password.PasswordFragment
 import com.aks.notpress.ui.pay.PayFragment
+import com.aks.notpress.utils.FragmentType.*
 
 
-class FragmentUtil() {
+class FragmentUtil {
     fun observe(owner: LifecycleOwner, viewModel: FragmentViewModel, manager: FragmentManager?,
                 consumer: (FragmentEvent) -> Unit = {}) {
         viewModel.fragmentLiveData.observe(owner, Observer {
@@ -50,8 +52,9 @@ class FragmentUtil() {
     private fun createFragment(event: FragmentEvent) = when (event) {
 
         else -> when(event.type) {
-            FragmentType.HOME -> FragmentHome.newInstance()
-            FragmentType.PAY -> PayFragment.newInstance()
+            HOME        -> FragmentHome.newInstance()
+            PAY         -> PayFragment.newInstance()
+            PASSWORD    -> PasswordFragment.newInstance()
             else                    -> null
         }
     }
@@ -75,8 +78,9 @@ enum class FragmentType(val title: Int = -1,
                         val addToStack: Boolean = true,
                         val animation: AnimationType = AnimationType.NONE
 ) {
-    HOME,
+    HOME(addToStack = false),
     PAY,
+    PASSWORD,
 
     DEFAULT
 }

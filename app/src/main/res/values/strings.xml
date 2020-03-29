@@ -5,4 +5,9 @@
     <string name="free_day">7 дней бесплатно</string>
     <string name="instagram">VARENIK_VPUZE</string>
     <string name="pay">Купить подписку</string>
+    <string name="enter_password">Введите пароль</string>
+    <string name="repeat_image">Повторите рисунок</string>
+    <string name="repeat">Повторите</string>
+    <string name="save">Сохранить</string>
+    <string name="delete">Удалить</string>
 </resources>

@@ -7,15 +7,17 @@ import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import kotlin.math.cos
 import kotlin.math.sqrt
 
 
-@BindingAdapter("buttonBackground")
+@BindingAdapter("background")
 fun setButtonBackground(view: View, color: Int){
     view.background?.let {
         if (it is LayerDrawable) {
@@ -24,6 +26,24 @@ fun setButtonBackground(view: View, color: Int){
         }
     }
 }
+
+@BindingAdapter("isVisible")
+fun setVisibility(view: View, isVisible: Boolean) {
+    view.visibility = if (isVisible) View.VISIBLE else View.GONE
+}
+
+@BindingAdapter("backgroundIv")
+fun setIvBackground(view: ImageView, color: Int){
+    view.drawable?.let {
+        if (it is LayerDrawable) {
+            val drawable = (it.findDrawableByLayerId(R.id.password_background))
+            drawable.mutate().colorFilter = PorterDuffColorFilter(ContextCompat.getColor(view.context, color), PorterDuff.Mode.SRC_IN)
+        }
+    }
+}
+
+@BindingAdapter("text")
+fun setText(view: TextView, res: Int?) = if (res!=null && res != 0) view.setText(res) else Unit
 
 @BindingAdapter("switchWidth")
 fun setSwitchWidth(view: SwitchCompat, margin: Float){
