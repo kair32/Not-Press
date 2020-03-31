@@ -45,7 +45,7 @@ class ServiceOverlay: LifecycleService() {
     private fun onClick(v: View) {
         i++
         when (i) {
-            1 -> {
+            1,2,3 -> {
                 Handler().postDelayed({ i = 0 }, DOUBLE_CLICK_INTERVAL)
                 Handler().postDelayed({ isTextVisible.value = false }, TEXT_VISIBLE_INTERVAL)
                 isTextVisible.value = true

@@ -2,7 +2,7 @@
     <string name="app_name">Не нажимай</string>
 
     <string name="on_gifts">Варе на подарки</string>
-    <string name="free_day">7 дней бесплатно</string>
+    <string name="free_day">%s дней бесплатно</string>
     <string name="instagram">VARENIK_VPUZE</string>
     <string name="pay">Купить подписку</string>
     <string name="enter_password">Введите пароль</string>
@@ -10,6 +10,10 @@
     <string name="repeat">Повторите</string>
     <string name="save">Сохранить</string>
     <string name="delete">Удалить</string>
+    <string name="description_pay">Если вы здесь, значит успели опробовать наше чудесное приложение.
+        Мы создали его с любовью, исходя из личного опыта и потребностей.
+        Нам оно кажется идеальным!
+        Если ваш пробный период закончился, то есть возможность договориться с Варюшей о продлении пользования ее любимым приложением. Просто помоги ей накопить на новую игрушку! Подними настроение!</string>
 
     <!--УВЕДОМЛЕНИЯ -->
     <string name="touch">Нажмите для блокировки экрана</string>

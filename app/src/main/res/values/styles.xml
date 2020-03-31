@@ -20,7 +20,7 @@
     </style>
 
     <style name="Switch">
-        <item name="track">@drawable/ic_switch_background</item>
+        <item name="track">@android:color/transparent</item>
         <item name="android:thumb">@drawable/ic_switch</item>
     </style>
 

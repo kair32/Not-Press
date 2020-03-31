@@ -8,17 +8,18 @@ import com.aks.notpress.databinding.FragmentPasswordBinding
 import com.aks.notpress.utils.FragmentUtil
 import com.aks.notpress.utils.PasswordView
 import com.aks.notpress.utils.PreferencesBasket
+import com.aks.notpress.utils.ViewModelFactory
 
 class PasswordFragment: Fragment(){
     private val fragmentUtil = FragmentUtil()
-    private lateinit var factory: PasswordFactory
+    private lateinit var factory: ViewModelFactory
 
     private lateinit var viewModel: PasswordViewModel
     private lateinit var binding: FragmentPasswordBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        factory = PasswordFactory(PreferencesBasket(context?:return))
+        factory = ViewModelFactory(PreferencesBasket(context ?: return))
         viewModel = ViewModelProvider(this, factory).get(PasswordViewModelImpl::class.java)
         fragmentUtil.observe(this, viewModel, activity?.supportFragmentManager)
     }

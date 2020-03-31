@@ -9,15 +9,12 @@ import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 import com.aks.notpress.R
 import com.aks.notpress.ui.service.ServiceOverlay
-import kotlin.math.acos
 
-
+const val ID_NOTIFICATION = 102
 class Notification {
     private val tag = "Notification"
 
@@ -26,10 +23,13 @@ class Notification {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             createChannel(activity)
-        statNotification(activity)
     }
 
-    private fun statNotification(context: Context?){
+    fun stopNotification(context: Context?) =
+        (context?.getSystemService(NOTIFICATION_SERVICE) as NotificationManager?)
+            ?.cancel(ID_NOTIFICATION)
+
+    fun statNotification(context: Context?){
         if (context == null) return
 
         val resultIntent = Intent(context, ServiceOverlay::class.java)
@@ -49,7 +49,7 @@ class Notification {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setOngoing(true)
 
-        mNotificationManager?.notify(1, mBuilder.build())
+        mNotificationManager?.notify(ID_NOTIFICATION, mBuilder.build())
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

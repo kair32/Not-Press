@@ -1,5 +1,6 @@
 package com.aks.notpress.utils
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -18,7 +19,7 @@ class ActivityUtil {
 
     private fun startActivity(activity: Activity, event: ActivityStartEvent) {
         val intent = when (event.type) {
-            OVERLAY_PERMISSION  -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + activity.packageName)) else null
+            OVERLAY_PERMISSION  -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(activity.baseContext)) Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + activity.packageName)) else null
             OVERLAY_ACTIVITY    -> ServiceOverlay.newIntent(activity)
             else -> null
         }?: return

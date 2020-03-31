@@ -6,13 +6,17 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="com.aks.notpress.ui.home.HomeViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        bind:transactionHaveSubscription="@{viewModel.isHaveSubscription}"
+        bind:transactionFreeSubscription="@{!viewModel.isFreeDayVisible}"
+        bind:isHavePermission="@{viewModel.isHavePermissionOverlay}">
 
         <include
             android:id="@+id/bt_gifts"
@@ -24,20 +28,48 @@
             app:layout_constraintTop_toTopOf="parent"
             bind:viewModel="@{viewModel}"/>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/switch_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_20"
+            android:padding="@dimen/margin_10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/ic_button"
+            android:visibility="gone"
+            bind:switchWidth="@{@dimen/margin_10}"
+            bind:background="@{viewModel.isChecked? @color/colorGreen : @android:color/white}"
+            tools:visibility="visible">
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch_varenik"
+                style="@style/Switch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:onCheckedChanged="@{(_, checked) -> viewModel.onCheckedChanged(checked)}" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <Button
             android:id="@+id/bt_days"
             style="@style/Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_20"
-            android:text="@string/free_day"
-            android:onClick="@{()->viewModel.onPassword()}"
+            android:text="@{String.format(@string/free_day, viewModel.daySubscription)}"
+            android:onClick="@{()->viewModel.onFreeDays()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/bt_gifts"
-            bind:background="@{@color/colorYellow}"/>
+            bind:background="@{@color/colorYellow}"
+            bind:isVisible="@{viewModel.isFreeDayVisible}"
+            tools:text="@string/free_day"/>
 
         <include
+            android:id="@+id/butterfly"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             layout="@layout/help_youtube"
@@ -53,7 +85,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="@dimen/margin_45"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:onClick="@{()->viewModel.onVarenikClick()}">
 
             <ImageView
                 android:layout_width="wrap_content"

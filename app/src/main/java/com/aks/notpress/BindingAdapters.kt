@@ -3,8 +3,10 @@ package com.aks.notpress
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.LayerDrawable
+import android.transition.TransitionManager
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.TextView
@@ -31,6 +33,14 @@ fun setButtonBackground(view: View, color: Int){
 fun setVisibility(view: View, isVisible: Boolean) {
     view.visibility = if (isVisible) View.VISIBLE else View.GONE
 }
+
+@BindingAdapter("transitionManager")
+fun setTransition(view: View, ignor: Boolean) {
+    try { val viewGroup = view.rootView as ViewGroup
+        TransitionManager.beginDelayedTransition(viewGroup)
+    } catch (ignored: NullPointerException) { }
+}
+
 @BindingAdapter("isAlpha")
 fun setAlpha(view: View, isAlpha: Boolean) {
     view.alpha = if (isAlpha) 0.5f else 1.0f
@@ -49,11 +59,6 @@ fun setIvBackground(view: ImageView, color: Int){
 
 @BindingAdapter("text")
 fun setText(view: TextView, res: Int?) = if (res!=null && res != 0) view.setText(res) else Unit
-
-@BindingAdapter("switchWidth")
-fun setSwitchWidth(view: SwitchCompat, margin: Float){
-    view.switchMinWidth = view.rootView.width - (margin * 2).toInt()
-}
 
 @BindingAdapter("youtubeSize")
 fun setYoutubeSize(view: ConstraintLayout, ignore: Boolean){
