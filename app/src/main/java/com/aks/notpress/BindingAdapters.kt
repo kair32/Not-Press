@@ -31,9 +31,14 @@ fun setButtonBackground(view: View, color: Int){
 fun setVisibility(view: View, isVisible: Boolean) {
     view.visibility = if (isVisible) View.VISIBLE else View.GONE
 }
+@BindingAdapter("isAlpha")
+fun setAlpha(view: View, isAlpha: Boolean) {
+    view.alpha = if (isAlpha) 0.5f else 1.0f
+}
 
 @BindingAdapter("backgroundIv")
 fun setIvBackground(view: ImageView, color: Int){
+    if (color==0)return
     view.drawable?.let {
         if (it is LayerDrawable) {
             val drawable = (it.findDrawableByLayerId(R.id.password_background))

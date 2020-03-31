@@ -8,7 +8,7 @@ interface HomeViewModel: FragmentViewModel, ActivityStartViewModel, TeddyViewMod
 
 class HomeViewModelImpl: ViewModelBase(),
     HomeViewModel {
-    override fun onPassword() = startActivity(ActivityStartEvent(ActivityType.OVERLAY_PERMISSION))// replaceFragment(FragmentEvent(FragmentType.PASSWORD))
+    override fun onPassword() =  replaceFragment(FragmentEvent(FragmentType.PASSWORD))
 
     override fun onClickTeddy() = replaceFragment(FragmentEvent(FragmentType.PAY))
 }

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.aks.notpress.databinding.FragmentHomeBinding
+import com.aks.notpress.service.notification.Notification
 import com.aks.notpress.ui.main.MainViewModelImpl
 import com.aks.notpress.utils.ActivityUtil
 import com.aks.notpress.utils.FragmentUtil
@@ -27,6 +28,7 @@ class FragmentHome: Fragment(){
         val binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
 
+        Notification().init(activity)
         return binding.root
     }
     companion object {

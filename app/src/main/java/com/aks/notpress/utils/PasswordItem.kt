@@ -1,7 +1,6 @@
 package com.aks.notpress.utils
 
 import androidx.lifecycle.LiveData
-import com.aks.notpress.ui.password.Password
 
 
 interface PasswordEnterViewModel{

@@ -1,6 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="viewModel"
+            type="com.aks.notpress.ui.service.ServiceOverlay" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:background="@android:color/white">
+
+        <ImageView
+            android:id="@+id/iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_10"
+            android:padding="@dimen/margin_10"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/ic_icon"
+            bind:isVisible="@{!viewModel.isPasswordVisible}"
+            bind:isAlpha="@{!viewModel.isTextVisible}" />
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constrainedWidth="true"
+            android:layout_margin="@dimen/margin_10"
+            android:padding="@dimen/margin_10"
+            android:gravity="end"
+            android:fontFamily="@font/amatic_sc"
+            android:text="@string/touch_unlock"
+            android:textSize="@dimen/text_28"
+            android:textColor="@android:color/black"
+            android:alpha="0.8"
+            android:background="@drawable/ic_help_background"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintTop_toTopOf="@id/iv"
+            app:layout_constraintBottom_toBottomOf="@+id/iv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/iv"
+            bind:isVisible="@{viewModel.isTextVisible}"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

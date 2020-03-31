@@ -3,10 +3,7 @@ package com.aks.notpress.ui.password
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.aks.notpress.R
-import com.aks.notpress.utils.FragmentViewModel
-import com.aks.notpress.utils.PasswordEnterViewModel
-import com.aks.notpress.utils.PreferencesBasket
-import com.aks.notpress.utils.ViewModelBase
+import com.aks.notpress.utils.*
 
 interface PasswordViewModel: FragmentViewModel, PasswordEnterViewModel{
     val textTitle: LiveData<Int>

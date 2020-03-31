@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Not Press</string>
+    <string name="app_name">Не нажимай</string>
 
     <string name="on_gifts">Варе на подарки</string>
     <string name="free_day">7 дней бесплатно</string>
@@ -10,4 +10,11 @@
     <string name="repeat">Повторите</string>
     <string name="save">Сохранить</string>
     <string name="delete">Удалить</string>
+
+    <!--УВЕДОМЛЕНИЯ -->
+    <string name="touch">Нажмите для блокировки экрана</string>
+    <string name="touch_unlock">Для разблокировки нажмите 4 раза</string>
+    <string name="notification_channel_id" translatable="false">notification_channel_id</string>
+    <string name="notification_channel_name">Активация сервиса</string>
+    <string name="notification_channel_description">Уведомления для активации сервиса блокировки экрана, не отключайте это уведомления, для стабильной работы сервиса</string>
 </resources>
