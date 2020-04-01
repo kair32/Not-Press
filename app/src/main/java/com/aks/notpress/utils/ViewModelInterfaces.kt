@@ -13,3 +13,7 @@ interface TeddyViewModel{
 interface ActivityStartViewModel{
     val activityStartLiveData: LiveData<ActivityStartEvent>
 }
+interface FinishViewModel{
+    val finishLiveData: LiveData<FinishEvent>
+    fun onBackPressed()
+}
