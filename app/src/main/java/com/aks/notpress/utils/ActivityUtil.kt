@@ -1,6 +1,5 @@
 package com.aks.notpress.utils
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -8,7 +7,7 @@ import android.os.Build
 import android.provider.Settings
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import com.aks.notpress.ui.service.ServiceOverlay
+import com.aks.notpress.service.service.ServiceOverlay
 import com.aks.notpress.utils.ActivityType.*
 
 class ActivityUtil {

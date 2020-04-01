@@ -1,4 +1,4 @@
-package com.aks.notpress.ui.service
+package com.aks.notpress.service.service
 
 import android.content.Context
 import android.content.Intent
@@ -7,9 +7,10 @@ import android.os.Handler
 import android.view.*
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
+import com.aks.notpress.R
 import com.aks.notpress.databinding.OverlayBinding
 
-const val DOUBLE_CLICK_INTERVAL: Long = 750
+const val DOUBLE_CLICK_INTERVAL: Long = 1250
 const val TEXT_VISIBLE_INTERVAL: Long = 1500
 
 class ServiceOverlay: LifecycleService() {
@@ -17,7 +18,7 @@ class ServiceOverlay: LifecycleService() {
     private lateinit var manager: WindowManager
 
     val isTextVisible = MutableLiveData<Boolean>(false)
-    val isPasswordVisible = MutableLiveData<Boolean>(false)
+    val textClick = MutableLiveData<String>("3")
 
     override fun onCreate() {
         super.onCreate()
@@ -44,12 +45,14 @@ class ServiceOverlay: LifecycleService() {
     private var i = 0
     private fun onClick(v: View) {
         i++
+        textClick.postValue((4-i).toString())
         when (i) {
-            1,2,3 -> {
+            1 -> {
                 Handler().postDelayed({ i = 0 }, DOUBLE_CLICK_INTERVAL)
                 Handler().postDelayed({ isTextVisible.value = false }, TEXT_VISIBLE_INTERVAL)
                 isTextVisible.value = true
             }
+            3 -> textClick.postValue(baseContext.getString(R.string.just_little))
             4 -> {
                 i = 0
                 isTextVisible.value = false

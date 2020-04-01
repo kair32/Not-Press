@@ -9,7 +9,7 @@
         <import type="android.view.View"/>
         <variable
             name="viewModel"
-            type="com.aks.notpress.ui.service.ServiceOverlay" />
+            type="com.aks.notpress.service.service.ServiceOverlay" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,7 +26,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:src="@drawable/ic_icon"
-            bind:isVisible="@{!viewModel.isPasswordVisible}"
             bind:isAlpha="@{!viewModel.isTextVisible}" />
 
         <TextView
@@ -38,7 +37,7 @@
             android:padding="@dimen/margin_10"
             android:gravity="end"
             android:fontFamily="@font/amatic_sc"
-            android:text="@string/touch_unlock"
+            android:text="@{viewModel.textClick}"
             android:textSize="@dimen/text_28"
             android:textColor="@android:color/black"
             android:alpha="0.8"

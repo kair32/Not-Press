@@ -12,7 +12,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.aks.notpress.R
-import com.aks.notpress.ui.service.ServiceOverlay
+import com.aks.notpress.service.service.ServiceOverlay
 
 const val ID_NOTIFICATION = 102
 class Notification {
