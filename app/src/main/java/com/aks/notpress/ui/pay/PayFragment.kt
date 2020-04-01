@@ -2,6 +2,7 @@ package com.aks.notpress.ui.pay
 
 import android.content.Context
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +30,7 @@ class PayFragment: Fragment(){
         val binding = FragmentPayBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
 
+        binding.tv.movementMethod = ScrollingMovementMethod()
         binding.setLifecycleOwner(this)
         return binding.root
     }

@@ -15,10 +15,12 @@
         android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/tv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:padding="@dimen/margin_20"
             android:gravity="center_horizontal"
+            android:scrollbars="vertical"
             android:layout_margin="@dimen/margin_25"
             android:background="@drawable/ic_help_background"
             android:textColor="@android:color/black"
