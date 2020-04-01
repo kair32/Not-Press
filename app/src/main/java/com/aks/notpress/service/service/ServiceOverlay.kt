@@ -3,6 +3,7 @@ package com.aks.notpress.service.service
 import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
+import android.os.Build
 import android.os.Handler
 import android.view.*
 import androidx.lifecycle.LifecycleService
@@ -23,7 +24,9 @@ class ServiceOverlay: LifecycleService() {
     override fun onCreate() {
         super.onCreate()
         manager = getSystemService(WINDOW_SERVICE) as WindowManager
-        val params = WindowManager.LayoutParams(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+        val type  = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+                    else WindowManager.LayoutParams.TYPE_PHONE
+        val params = WindowManager.LayoutParams(type,
             WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
             PixelFormat.TRANSLUCENT)
 
