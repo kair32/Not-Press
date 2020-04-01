@@ -15,8 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         bind:transactionHaveSubscription="@{viewModel.isHaveSubscription}"
-        bind:transactionFreeSubscription="@{!viewModel.isFreeDayVisible}"
-        bind:isHavePermission="@{viewModel.isHavePermissionOverlay}">
+        bind:transactionFreeSubscription="@{!viewModel.isFreeDayVisible}">
 
         <include
             android:id="@+id/bt_gifts"

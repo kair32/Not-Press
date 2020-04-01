@@ -11,8 +11,8 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.databinding.BindingAdapter
 import com.aks.notpress.R
 
-@BindingAdapter(value = ["transactionHaveSubscription","transactionFreeSubscription", "isHavePermission"], requireAll = false)
-fun setHaveSubscription(root: ConstraintLayout, isHaveSubscription: Boolean?, isFreeSubscription: Boolean?, isHavePermission: Boolean?){
+@BindingAdapter(value = ["transactionHaveSubscription","transactionFreeSubscription"], requireAll = false)
+fun setHaveSubscription(root: ConstraintLayout, isHaveSubscription: Boolean?, isFreeSubscription: Boolean?){
     if (isHaveSubscription?:return)
         ConstraintSet().apply {
             clone(root)
@@ -36,8 +36,6 @@ fun setHaveSubscription(root: ConstraintLayout, isHaveSubscription: Boolean?, is
             TransitionManager.beginDelayedTransition(root)
             applyTo(root)
         }
-    if (!(isHavePermission?:return)) root.findViewById<ConstraintLayout>(R.id.switch_container).visibility = View.INVISIBLE
-    else root.findViewById<FrameLayout>(R.id.switch_container).visibility = View.VISIBLE
 }
 
 

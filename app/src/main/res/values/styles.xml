@@ -24,4 +24,10 @@
         <item name="android:thumb">@drawable/ic_switch</item>
     </style>
 
+    <style name="CompositeDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowNoDisplay">true</item>
+        <item name="android:backgroundDimAmount">0.5</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 </resources>

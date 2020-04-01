@@ -1,9 +1,11 @@
 package com.aks.notpress.utils
 
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.aks.notpress.R
+import com.aks.notpress.ui.dialog.CustomDialogFragment
 import com.aks.notpress.ui.home.FragmentHome
 import com.aks.notpress.ui.password.PasswordFragment
 import com.aks.notpress.ui.pay.PayFragment
@@ -23,7 +25,7 @@ class FragmentUtil {
         val type = event.type
         val fragment = createFragment(event) ?: return
 
-        //if (fragment is DialogFragment) return fragment.show(manager, type.name)
+        if (fragment is DialogFragment) return fragment.show(manager, type.name)
         val transaction = manager.beginTransaction()
         when(event.type.animation){
             AnimationType.BOTTOM_TO_TOP -> {  if (event.isBack)transaction.setCustomAnimations(
@@ -50,7 +52,7 @@ class FragmentUtil {
     }
     //creat
     private fun createFragment(event: FragmentEvent) = when (event) {
-
+        is DialogFragmentEvent -> CustomDialogFragment.newInstance(event.resText, event.callBack)
         else -> when(event.type) {
             HOME        -> FragmentHome.newInstance()
             PAY         -> PayFragment.newInstance()
@@ -73,14 +75,17 @@ open class FragmentEvent(
     val isBack: Boolean = true
 )
 
-enum class FragmentType(val title: Int = -1,
-                        val id: Int = R.id.container,
+class DialogFragmentEvent(val resText: Int, val callBack: CustomDialogFragment.CallBack) :
+    FragmentEvent(DIALOG)
+
+enum class FragmentType(val id: Int = R.id.container,
                         val addToStack: Boolean = true,
                         val animation: AnimationType = AnimationType.NONE
 ) {
     HOME(addToStack = false),
     PAY,
     PASSWORD,
+    DIALOG,
 
     DEFAULT
 }
