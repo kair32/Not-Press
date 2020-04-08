@@ -3,6 +3,7 @@ package com.aks.notpress.utils
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import com.android.billingclient.api.*
 
 interface Preference{
     fun getPassword():List<Boolean>
@@ -16,10 +17,19 @@ interface Preference{
     fun setHaveSubscription(isHave: Boolean)
 
     fun clearPreference()
+
+    //billing
+    fun billing()
 }
 
 class PreferencesBasket(context: Context): Preference{
     private val preferences: SharedPreferences = context.getSharedPreferences(javaClass.simpleName, Context.MODE_PRIVATE)
+    private val billingClient: BillingClient = BillingClient
+        .newBuilder(context)
+        .enablePendingPurchases()
+        .setListener(::onPurchasesUpdated)
+        .build()
+
     private val tag = "PreferencesBasket"
 
 
@@ -64,6 +74,47 @@ class PreferencesBasket(context: Context): Preference{
         setHaveSubscription(false)
     }
 
+    //region billing
+    override fun billing() {
+        //https://support.google.com/googleplay/android-developer/answer/140504
+        //https://developer.android.com/google/play/billing/billing_library_overview
+        //https://habr.com/ru/post/444072/
+
+        billingClient.startConnection(object : BillingClientStateListener {
+            override fun onBillingSetupFinished(billingResult: BillingResult) {
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    ///здесь мы можем запросить информацию о товарах и покупках
+                    querySkuDetails()                    //запрос о товарах
+                    val purchasesList = queryPurchases() //запрос о покупках
+                    Log.d("tag", "success")
+                }
+            }
+            override fun onBillingServiceDisconnected() {
+                Log.d("tag", "error")
+                //сюда мы попадем если что-то пойдет не так
+            }
+        })
+    }
+    private fun querySkuDetails() {
+        val skuDetailsParamsBuilder = SkuDetailsParams.newBuilder()
+        val skuList: MutableList<String> = ArrayList()
+        skuList.add("sku_id_1")// здесь мы добавили id товара из Play Consol
+        skuDetailsParamsBuilder.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
+        billingClient.querySkuDetailsAsync(skuDetailsParamsBuilder.build()) { responseCode, skuDetailsList ->
+
+        }
+    }
+    private fun queryPurchases(): List<Purchase?>? = billingClient.queryPurchases(BillingClient.SkuType.INAPP).purchasesList
+    private fun onPurchasesUpdated(billingResult: BillingResult?, purchases: MutableList<Purchase>?) {
+        if (billingResult?.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
+            //сюда мы попадем когда будет осуществлена покупка
+        } else if (billingResult?.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
+            //отменил покупку
+        } else {
+            //прочие ошибки
+        }
+    }
+    //endregion
     companion object {
         const val KEY_PASSWORD = "password"
         const val KEY_SUBSCRIPTION = "KEY_SUBSCRIPTION"
