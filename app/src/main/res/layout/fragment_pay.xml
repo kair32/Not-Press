@@ -28,19 +28,60 @@
             android:textSize="@dimen/text_28"
             android:text="@string/description_pay"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/bt_pay"/>
+            app:layout_constraintBottom_toTopOf="@+id/ll"/>
 
-        <Button
-            android:id="@+id/bt_pay"
-            style="@style/Button"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/ll"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_20"
-            android:text="@string/pay"
-            android:onClick="@{()->viewModel.onBaySubscription()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/bt_days"/>
+            app:layout_constraintBottom_toTopOf="@+id/bt_days">
+
+            <TextView
+                android:id="@+id/tv_subscription"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_36"
+                android:text="@string/subscribe_now"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10">
+
+                <Button
+                    android:id="@+id/bt_pay_month"
+                    style="@style/Button"
+                    android:textSize="@dimen/text_36"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="@dimen/margin_10"
+                    android:text="@{viewModel.textSubMonth}"
+                    android:onClick="@{()->viewModel.onBaySubMonth()}"
+                    tools:text="@string/month_subscription"/>
+
+                <Button
+                    android:id="@+id/bt_pay_year"
+                    style="@style/Button"
+                    android:textSize="@dimen/text_36"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:text="@{viewModel.textSubYear}"
+                    android:onClick="@{()->viewModel.onBaySubYear()}"
+                    tools:text="@string/year_subscription"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/bt_days"

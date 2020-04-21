@@ -13,7 +13,7 @@
     <style name="Button">
         <item name="android:background">@drawable/ic_button</item>
         <item name="android:gravity">center</item>
-        <item name="android:padding">@dimen/margin_20</item>
+        <item name="android:padding">@dimen/margin_10</item>
         <item name="android:lines">1</item>
         <item name="android:ellipsize">end</item>
         <item name="android:textSize">@dimen/text_52</item>

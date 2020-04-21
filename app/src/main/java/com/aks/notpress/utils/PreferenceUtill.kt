@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.aks.notpress.R
 import com.android.billingclient.api.*
 
 interface Preference{
@@ -13,7 +14,6 @@ interface Preference{
     fun setPassword(list: List<Boolean>)
 
     fun getSubscriptionDay(): Int
-    //fun getIsSubscription(): Boolean
     val isSubscription: LiveData<Boolean>
     fun setIsSubscription()
 
@@ -24,6 +24,8 @@ interface Preference{
     fun clearPreference()
 
     //billing
+    val textSubMonth: LiveData<String>
+    val textSubYear: LiveData<String>
     fun billing()
     fun launchBillingMonth()
     fun launchBillingYear()
@@ -36,6 +38,8 @@ class PreferencesBasket(private val activity: Activity): Preference{
         .enablePendingPurchases()
         .setListener(::onPurchasesUpdated)
         .build()
+    override var textSubMonth = MutableLiveData<String>(activity.getString(R.string.month_subscription))
+    override var textSubYear = MutableLiveData<String>(activity.getString(R.string.year_subscription))
 
     override val isSubscription = MutableLiveData<Boolean>(getIsSubscription())
     override val isHaveSubscription = MutableLiveData<Boolean>(getHaveSubscription())
@@ -125,6 +129,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
             }
             override fun onBillingServiceDisconnected() {
                 Log.d(tag, "error")
+                setHaveSubscription(false)
                 //сюда мы попадем если что-то пойдет не так
             }
         })
@@ -140,6 +145,9 @@ class PreferencesBasket(private val activity: Activity): Preference{
             Log.d(tag,"queryS $responseCode, $skuDetailsList")
             for (skuDetails in skuDetailsList)
                 mSkuDetailsMap[skuDetails.sku] = skuDetails
+
+            mSkuDetailsMap[BILLING_MONTH]?.price?.let { textSubMonth.value = it }
+            mSkuDetailsMap[BILLING_YEAR]?.price?.let { textSubYear.value  =  it}
         }
     }
     private fun queryPurchases(): List<Purchase?>? = billingClient.queryPurchases(BillingClient.SkuType.SUBS).purchasesList
