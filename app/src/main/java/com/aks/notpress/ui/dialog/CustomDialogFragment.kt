@@ -15,29 +15,27 @@ import com.aks.notpress.utils.ActivityUtil
 import com.aks.notpress.utils.FinishUtil
 import com.aks.notpress.utils.FragmentUtil
 
-class CustomDialogFragment(private val callBack: CallBack): DialogFragment(){
+class CustomDialogFragment(private val callBack: CallBack?): DialogFragment(){
     private val fragmentUtil = FragmentUtil()
-    private val activityUtil = ActivityUtil()
     private val finishUtil = FinishUtil()
 
     private lateinit var viewModel: DialogViewModel
-    private lateinit var binding: FragmentDialogBinding
 
     interface CallBack{
         fun cancelDialog()
-        //fun okDialog()
+        fun okDialog()
     }
     override fun onAttach(context: Context) {
         super.onAttach(context)
         viewModel = ViewModelProvider(this).get(DialogViewModelImpl::class.java)
         fragmentUtil.observe(this, viewModel, activity?.supportFragmentManager)
-        activityUtil.observe(this, viewModel, activity)
         finishUtil.observe(this, viewModel, this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentDialogBinding.inflate(LayoutInflater.from(activity))
         binding.viewModel = viewModel
+        viewModel.callBack = callBack
 
         viewModel.initText(context?.getString(arguments?.getInt(ARG_TEXT) ?: 0)?:"")
         binding.setLifecycleOwner(this)
@@ -45,7 +43,7 @@ class CustomDialogFragment(private val callBack: CallBack): DialogFragment(){
     }
 
     override fun onCancel(dialog: DialogInterface) {
-        callBack.cancelDialog()
+        viewModel.onCancel()
         super.onCancel(dialog)
     }
     override fun onCreateDialog(savedInstanceState: Bundle?)
@@ -55,7 +53,7 @@ class CustomDialogFragment(private val callBack: CallBack): DialogFragment(){
 
     companion object {
         private const val ARG_TEXT = "ARG_TEXT"
-        fun newInstance(resText: Int, callBack: CallBack) = CustomDialogFragment(callBack)
+        fun newInstance(resText: Int, callBack: CallBack?) = CustomDialogFragment(callBack)
             .apply { arguments = Bundle().apply {
                     putInt(ARG_TEXT, resText)
             } }

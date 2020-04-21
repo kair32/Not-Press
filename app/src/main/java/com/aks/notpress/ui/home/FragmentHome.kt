@@ -28,7 +28,7 @@ class FragmentHome: Fragment(){
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        factory = ViewModelFactory(PreferencesBasket(context ?: return))
+        factory = ViewModelFactory(PreferencesBasket(activity?: return))
         viewModel = ViewModelProvider(this, factory).get(HomeViewModelImpl::class.java)
         fragmentUtil.observe(this, viewModel, activity?.supportFragmentManager)
         activityUtil.observe(this, viewModel, activity)
@@ -37,6 +37,7 @@ class FragmentHome: Fragment(){
     override fun onResume() {
         super.onResume()
         checkPermission()
+        viewModel.onUpdate()
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -44,15 +45,15 @@ class FragmentHome: Fragment(){
 
         binding.setLifecycleOwner(this)
         Notification().init(activity)
+        viewModel.initChecked(Notification().isActiveNotification(context))
 
         viewModel.isChecked.observe(viewLifecycleOwner, Observer {
             if (it) Notification().statNotification(context)
             else    Notification().stopNotification(context)
         })
-        viewModel.isCheckPermissionOverlay.observe(viewLifecycleOwner, Observer {
-            checkPermission()
-        })
-
+        viewModel.isCheckPermissionOverlay.observe(viewLifecycleOwner, Observer { checkPermission() })
+        viewModel.isFreeDayVisible.observe(viewLifecycleOwner, Observer{viewModel.onUpdateCheck() })
+        viewModel.isHaveSubscription.observe(viewLifecycleOwner, Observer{ viewModel.onUpdateCheck() })
         return binding.root
     }
 

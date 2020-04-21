@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.aks.notpress.R
 import com.aks.notpress.service.service.ServiceOverlay
+import com.aks.notpress.ui.main.MainActivity
 
 const val ID_NOTIFICATION = 102
 class Notification {
@@ -23,6 +24,12 @@ class Notification {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             createChannel(activity)
+    }
+
+    fun isActiveNotification(context: Context?): Boolean{
+        //return (context?.getSystemService(NOTIFICATION_SERVICE) as NotificationManager?)?.activeNotifications.any { it.id ==  ID_NOTIFICATION}
+        val test = PendingIntent.getActivity(context, ID_NOTIFICATION, Intent(context, MainActivity::class.java), PendingIntent.FLAG_NO_CREATE)
+        return test != null
     }
 
     fun stopNotification(context: Context?) =

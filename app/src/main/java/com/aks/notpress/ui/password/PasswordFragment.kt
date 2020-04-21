@@ -19,7 +19,7 @@ class PasswordFragment: Fragment(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        factory = ViewModelFactory(PreferencesBasket(context ?: return))
+        factory = ViewModelFactory(PreferencesBasket(activity ?: return))
         viewModel = ViewModelProvider(this, factory).get(PasswordViewModelImpl::class.java)
         fragmentUtil.observe(this, viewModel, activity?.supportFragmentManager)
     }

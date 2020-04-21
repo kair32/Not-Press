@@ -3,10 +3,12 @@ package com.aks.notpress.ui.pay
 import android.content.Context
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.aks.notpress.databinding.FragmentPayBinding
 import com.aks.notpress.utils.FragmentUtil
@@ -21,7 +23,7 @@ class PayFragment: Fragment(){
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        factory = ViewModelFactory(PreferencesBasket(context))
+        factory = ViewModelFactory(PreferencesBasket(activity?: return))
         viewModel = ViewModelProvider(this, factory).get(PayViewModelImpl::class.java)
         fragmentUtil.observe(this, viewModel, activity?.supportFragmentManager)
     }
@@ -32,6 +34,10 @@ class PayFragment: Fragment(){
 
         binding.tv.movementMethod = ScrollingMovementMethod()
         binding.setLifecycleOwner(this)
+
+        viewModel.isHaveSubscription.observe(viewLifecycleOwner, Observer {
+            if (it) activity?.onBackPressed()
+        })
         return binding.root
     }
 

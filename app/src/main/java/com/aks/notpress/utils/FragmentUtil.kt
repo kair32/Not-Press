@@ -28,14 +28,8 @@ class FragmentUtil {
         if (fragment is DialogFragment) return fragment.show(manager, type.name)
         val transaction = manager.beginTransaction()
         when(event.type.animation){
-            AnimationType.BOTTOM_TO_TOP -> {  if (event.isBack)transaction.setCustomAnimations(
-                R.anim.slide_out_bottom,
-                R.anim.slide_out_bottom
-            )
-            else  transaction.setCustomAnimations(
-                R.anim.slide_in_bottom,
-                R.anim.slide_in_bottom
-            )}
+            AnimationType.BOTTOM_TO_TOP-> {  if (event.isBack)transaction.setCustomAnimations(R.anim.slide_in_bottom,R.anim.slide_out_bottom, R.anim.slide_in_bottom,R.anim.slide_out_bottom)
+            else  transaction.setCustomAnimations(R.anim.slide_in_bottom,R.anim.slide_out_bottom)}
             AnimationType.NONE -> {}
         }
 
@@ -75,12 +69,12 @@ open class FragmentEvent(
     val isBack: Boolean = true
 )
 
-class DialogFragmentEvent(val resText: Int, val callBack: CustomDialogFragment.CallBack) :
+class DialogFragmentEvent(val resText: Int, val callBack: CustomDialogFragment.CallBack? = null) :
     FragmentEvent(DIALOG)
 
 enum class FragmentType(val id: Int = R.id.container,
                         val addToStack: Boolean = true,
-                        val animation: AnimationType = AnimationType.NONE
+                        val animation: AnimationType = AnimationType.BOTTOM_TO_TOP
 ) {
     HOME(addToStack = false),
     PAY,

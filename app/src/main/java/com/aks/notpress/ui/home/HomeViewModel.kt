@@ -1,5 +1,6 @@
 package com.aks.notpress.ui.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.aks.notpress.R
@@ -15,6 +16,9 @@ interface HomeViewModel: FragmentViewModel, ActivityStartViewModel, TeddyViewMod
     val isChecked: LiveData<Boolean>
     val isClicked: LiveData<Boolean>
 
+    fun initChecked(isCheck: Boolean)
+    fun onUpdate()
+    fun onUpdateCheck()
     fun onFreeDays()
     fun onVarenikClick()
     fun onCheckedChanged(checked: Boolean)
@@ -26,19 +30,19 @@ class HomeViewModelImpl(
 ): ViewModelBase(), HomeViewModel {
 
     override val daySubscription = MutableLiveData(preferencesBasket.getSubscriptionDay())
-    override val isFreeDayVisible = MutableLiveData<Boolean>(preferencesBasket.getIsSubscription())
-    override val isHaveSubscription = MutableLiveData<Boolean>(preferencesBasket.getHaveSubscription())
+    override val isFreeDayVisible = preferencesBasket.isSubscription
+    override val isHaveSubscription = preferencesBasket.isHaveSubscription
     override val isCheckPermissionOverlay = MutableLiveData<Boolean>(false)
     override val isChecked = MutableLiveData<Boolean>(false)
-    override val isClicked = MutableLiveData<Boolean>(false)
+    override val isClicked = MutableLiveData<Boolean>(true)
 
     init {
-        preferencesBasket.clearPreference()
+        preferencesBasket.billing()
+        onUpdate()
     }
 
+    override fun initChecked(isCheck: Boolean) = isChecked.postValue(isCheck)
     override fun onVarenikClick() {
-        preferencesBasket.setHaveSubscription(true)
-        isHaveSubscription.value = true
     }
 
     override fun onCheckedChanged(checked: Boolean) {
@@ -50,8 +54,24 @@ class HomeViewModelImpl(
         isFreeDayVisible.value = false
     }
 
-    override fun onClickTeddy() = replaceFragment(FragmentEvent(FragmentType.PAY))
+    override fun onClickTeddy() {
+        replaceFragment(FragmentEvent(FragmentType.PAY))
+    }
+
+    override fun onUpdateCheck() {
+        if (isHaveSubscription.value != true) {
+            isClicked.value = daySubscription.value ?: 0 > 0
+            if (daySubscription.value?: 0 <= 0) {
+                replaceFragment(DialogFragmentEvent(R.string.error_subscription))
+            }
+        }
+    }
+    override fun onUpdate() {
+        preferencesBasket.update()
+        onUpdateCheck()
+    }
 
     override fun checkPermissionDialog() = replaceFragment(DialogFragmentEvent(R.string.warning_permission, this))
     override fun cancelDialog() = isCheckPermissionOverlay.postValue(!isCheckPermissionOverlay.value!!)
+    override fun okDialog() = startActivity(ActivityStartEvent(ActivityType.OVERLAY_PERMISSION))
 }
