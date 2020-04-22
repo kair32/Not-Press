@@ -107,6 +107,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
     override fun launchBillingMonth() = launch(BILLING_MONTH)
 
     private fun launch(skuId: String){
+        Log.d(tag,"launch $skuId")
         val billingFlowParams = BillingFlowParams.newBuilder()
             .setSkuDetails(mSkuDetailsMap[skuId])
             .build()
@@ -146,8 +147,8 @@ class PreferencesBasket(private val activity: Activity): Preference{
             for (skuDetails in skuDetailsList)
                 mSkuDetailsMap[skuDetails.sku] = skuDetails
 
-            mSkuDetailsMap[BILLING_MONTH]?.price?.let { textSubMonth.value = it }
-            mSkuDetailsMap[BILLING_YEAR]?.price?.let { textSubYear.value  =  it}
+            mSkuDetailsMap[BILLING_MONTH]?.price?.let { textSubMonth.value = it + activity.getString(R.string.month)}
+            mSkuDetailsMap[BILLING_YEAR]?.price?.let { textSubYear.value  =  it + activity.getString(R.string.year)}
         }
     }
     private fun queryPurchases(): List<Purchase?>? = billingClient.queryPurchases(BillingClient.SkuType.SUBS).purchasesList

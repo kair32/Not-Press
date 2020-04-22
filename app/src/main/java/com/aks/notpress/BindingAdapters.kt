@@ -8,6 +8,8 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
@@ -41,9 +43,24 @@ fun setTransition(view: View, ignor: Boolean) {
     } catch (ignored: NullPointerException) { }
 }
 
-@BindingAdapter("isAlpha")
+@BindingAdapter("alphaAnimation")
 fun setAlpha(view: View, isAlpha: Boolean) {
-    view.alpha = if (isAlpha) 0.5f else 1.0f
+    val start = 0.3f
+    val fadeOut = if (isAlpha)
+    AlphaAnimation(start, 1f).apply {
+        duration = 1500
+        repeatMode = Animation.REVERSE
+        repeatCount = 1
+        this.fillAfter = true
+    }
+    else AlphaAnimation(1f, start).apply {
+        duration = 1500
+        repeatMode = Animation.REVERSE
+        repeatCount = 1
+        this.fillAfter = true
+    }
+    //view.alpha = if (isAlpha) start else 1.0f
+    view.startAnimation(fadeOut)
 }
 
 @BindingAdapter("backgroundIv")

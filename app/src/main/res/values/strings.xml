@@ -16,6 +16,8 @@
     <string name="subscribe_now">Оформить подписку сейчас</string>
     <string name="month_subscription">99 р/месяц</string>
     <string name="year_subscription">990 р/год</string>
+    <string name="month">/месяц</string>
+    <string name="year">/год</string>
     <string name="description_pay">Если вы здесь, значит успели опробовать наше чудесное приложение.
         Мы создали его с любовью, исходя из личного опыта и потребностей.
         Нам оно кажется идеальным!

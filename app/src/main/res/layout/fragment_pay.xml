@@ -40,14 +40,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/bt_days">
 
-            <TextView
+            <me.biubiubiu.justifytext.library.JustifyTextView
                 android:id="@+id/tv_subscription"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_horizontal"
+                android:gravity="center"
+                android:text="@string/subscribe_now"
                 android:textColor="@android:color/black"
-                android:textSize="@dimen/text_36"
-                android:text="@string/subscribe_now"/>
+                android:textSize="@dimen/text_36" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -59,6 +59,7 @@
                     android:id="@+id/bt_pay_month"
                     style="@style/Button"
                     android:textSize="@dimen/text_36"
+                    android:padding="@dimen/margin_10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -71,6 +72,7 @@
                     android:id="@+id/bt_pay_year"
                     style="@style/Button"
                     android:textSize="@dimen/text_36"
+                    android:padding="@dimen/margin_10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

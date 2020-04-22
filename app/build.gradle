@@ -65,4 +65,6 @@ dependencies {
     //Billing
     implementation 'com.android.billingclient:billing:2.2.0'
     implementation 'com.android.billingclient:billing-ktx:2.2.0'//maybe
+
+    implementation 'me.biubiubiu.justifytext:library:1.1'
 }

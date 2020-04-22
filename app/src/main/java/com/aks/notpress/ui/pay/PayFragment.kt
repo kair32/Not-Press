@@ -1,7 +1,9 @@
 package com.aks.notpress.ui.pay
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.text.Layout.JUSTIFICATION_MODE_INTER_WORD
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
