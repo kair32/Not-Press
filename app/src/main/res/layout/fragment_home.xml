@@ -76,6 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             layout="@layout/help_youtube"
+            bind:viewModel="@{viewModel}"
             app:layout_constraintBottom_toTopOf="@+id/ll_insta"
             app:layout_constraintTop_toBottomOf="@+id/bt_days" />
 

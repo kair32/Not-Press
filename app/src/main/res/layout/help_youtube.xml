@@ -6,6 +6,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:bind="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.aks.notpress.ui.home.HomeViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,6 +26,7 @@
             android:layout_marginStart="@dimen/margin_40"
             android:layout_marginEnd="@dimen/margin_40"
             android:src="@drawable/ic_youtube"
+            android:onClick="@{()->viewModel.onButterflyClick()}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintDimensionRatio="1:0.8"
             app:layout_constraintBottom_toBottomOf="parent" />
