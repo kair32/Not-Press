@@ -147,10 +147,12 @@ class PreferencesBasket(private val activity: Activity): Preference{
             for (skuDetails in skuDetailsList)
                 mSkuDetailsMap[skuDetails.sku] = skuDetails
 
-            mSkuDetailsMap[BILLING_MONTH]?.price?.let { textSubMonth.value = it + activity.getString(R.string.month)}
-            mSkuDetailsMap[BILLING_YEAR]?.price?.let { textSubYear.value  =  it + activity.getString(R.string.year)}
+            mSkuDetailsMap[BILLING_MONTH]?.price?.let {
+                textSubMonth.value = it.deleteKopeck() + activity.getString(R.string.month)}
+            mSkuDetailsMap[BILLING_YEAR]?.price?.let { textSubYear.value  =  it.deleteKopeck() + activity.getString(R.string.year)}
         }
     }
+    private fun String.deleteKopeck() = this.substringBefore(",") + this.substringAfterLast("0")//990,00 ₽
     private fun queryPurchases(): List<Purchase?>? = billingClient.queryPurchases(BillingClient.SkuType.SUBS).purchasesList
     private fun onPurchasesUpdated(billingResult: BillingResult?, purchases: MutableList<Purchase>?) {
         if (billingResult?.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
