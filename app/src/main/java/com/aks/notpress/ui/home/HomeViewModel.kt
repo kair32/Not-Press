@@ -44,7 +44,8 @@ class HomeViewModelImpl(
 
     override fun initChecked(isCheck: Boolean) = isChecked.postValue(isCheck)
     override fun onVarenikClick() = startActivity(ActivityStartEvent(ActivityType.OPEN_INSTAGRAM))
-    override fun onButterflyClick() = startActivity(ActivityStartEvent(ActivityType.OPEN_YOUTUBE))
+    //override fun onButterflyClick() = startActivity(ActivityStartEvent(ActivityType.OPEN_YOUTUBE))
+    override fun onButterflyClick() = startActivity(ActivityStartEvent(ActivityType.VIDEO))
 
     override fun onCheckedChanged(checked: Boolean) {
         isChecked.postValue(checked)

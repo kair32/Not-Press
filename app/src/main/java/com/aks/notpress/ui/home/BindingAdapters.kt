@@ -13,16 +13,30 @@ import com.aks.notpress.R
 
 @BindingAdapter(value = ["transactionHaveSubscription","transactionFreeSubscription"], requireAll = false)
 fun setHaveSubscription(root: ConstraintLayout, isHaveSubscription: Boolean?, isFreeSubscription: Boolean?){
-    if (isHaveSubscription?:return)
+    Log.d("setHaveSubscription"," isHaveSubscription = $isHaveSubscription, isFreeSubscription = ${isFreeSubscription}")
+    if (isHaveSubscription == true) {
         ConstraintSet().apply {
             clone(root)
             setVisibility(R.id.switch_container, View.VISIBLE)
             setVisibility(R.id.bt_gifts, View.GONE)
             setVisibility(R.id.bt_days, View.GONE)
+            setVisibility(R.id.ll_insta, View.VISIBLE)
             connect(R.id.butterfly, ConstraintSet.TOP, R.id.switch_container, ConstraintSet.BOTTOM, 0)
             TransitionManager.beginDelayedTransition(root)
             applyTo(root)
         }
+        //return
+    }/*else{
+        ConstraintSet().apply {
+            clone(root)
+            setVisibility(R.id.switch_container, View.GONE)
+            setVisibility(R.id.bt_gifts, View.VISIBLE)
+            setVisibility(R.id.bt_days, View.GONE)
+            setVisibility(R.id.ll_insta, View.VISIBLE)
+            TransitionManager.beginDelayedTransition(root)
+            applyTo(root)
+        }
+    }*/
     if (isFreeSubscription?:return)
         ConstraintSet().apply {
             clone(root)

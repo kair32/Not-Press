@@ -3,6 +3,7 @@
     package="com.aks.notpress">
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="com.android.vending.BILLING"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -17,6 +18,11 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".ui.video.VideoActivity"
+            android:theme="@style/VideoTheme"
+            android:label=""
+            android:screenOrientation="landscape">
         </activity>
         <service
             android:enabled="true"
