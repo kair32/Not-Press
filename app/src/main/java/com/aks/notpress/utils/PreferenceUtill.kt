@@ -13,15 +13,11 @@ interface Preference{
     fun getPassword():List<Boolean>
     fun setPassword(list: List<Boolean>)
 
-    fun getSubscriptionDay(): Int
-    val isSubscription: LiveData<Boolean>
-    fun setIsSubscription()
-
-    val isHaveSubscription: LiveData<Boolean>
-    fun setHaveSubscription(isHave: Boolean)
-
-    fun update()
+    val stateSubscription: LiveData<StateSubscription>
+    fun getFreeDay():Int
+    fun startFreeDay()
     fun clearPreference()
+    fun update()
 
     //billing
     val textSubMonth: LiveData<String>
@@ -31,6 +27,17 @@ interface Preference{
     fun launchBillingYear()
 }
 
+enum class StateSubscription{
+    HAVE_SUB(),
+    ENDED(),
+    NOT_ACTIVE(),
+    FREE_DAY();
+
+    companion object{
+        fun getState(state: String?) = values().find { it.name.equals(state, ignoreCase = true) } ?: NOT_ACTIVE
+    }
+}
+
 class PreferencesBasket(private val activity: Activity): Preference{
     private val preferences: SharedPreferences = activity.getSharedPreferences(javaClass.simpleName, Context.MODE_PRIVATE)
     private val billingClient: BillingClient = BillingClient
@@ -38,19 +45,18 @@ class PreferencesBasket(private val activity: Activity): Preference{
         .enablePendingPurchases()
         .setListener(::onPurchasesUpdated)
         .build()
-    override var textSubMonth = MutableLiveData<String>(activity.getString(R.string.month_subscription))
-    override var textSubYear = MutableLiveData<String>(activity.getString(R.string.year_subscription))
-
-    override val isSubscription = MutableLiveData<Boolean>(getIsSubscription())
-    override val isHaveSubscription = MutableLiveData<Boolean>(getHaveSubscription())
+    override val textSubMonth = MutableLiveData<String>(activity.getString(R.string.month_subscription))
+    override val textSubYear = MutableLiveData<String>(activity.getString(R.string.year_subscription))
+    override val stateSubscription = MutableLiveData<StateSubscription>(getStateSubscription())
 
     private val tag = "PreferencesBasket"
 
     init {
         preferences.registerOnSharedPreferenceChangeListener { _, key ->
             when (key) {
-                KEY_IS_SUBSCRIPTION -> {isSubscription.value = getIsSubscription()}
-                KEY_HAVE_SUBSCRIPTION -> {isHaveSubscription.value = getHaveSubscription()}
+                KEY_STATE_SUBSCRIPTION -> {
+                    Log.d(tag, " KEY_STATE_SUBSCRIPTION ${stateSubscription.value}, ${getStateSubscription()}")
+                    stateSubscription.postValue(getStateSubscription())}
             }
         }
     }
@@ -64,41 +70,50 @@ class PreferencesBasket(private val activity: Activity): Preference{
         preferences.edit().putString(KEY_PASSWORD, s).apply()
     }
 
-    override fun setIsSubscription() = preferences.edit().putBoolean(KEY_IS_SUBSCRIPTION, false).apply()
-    private fun getIsSubscription(): Boolean = preferences.getBoolean(KEY_IS_SUBSCRIPTION, true)
+    private fun setStateSubscription(state: StateSubscription) = preferences.edit().putString(KEY_STATE_SUBSCRIPTION, state.name).apply()
+    private fun setEndedSubByBilling(){
+        if (getStateSubscription() == StateSubscription.HAVE_SUB )
+            setStateSubscription(StateSubscription.ENDED)
+    }
+    private fun setEndedSubByFreeDay(){
+        if (getStateSubscription() == StateSubscription.FREE_DAY )
+            setStateSubscription(StateSubscription.ENDED)
+    }
+    private fun getStateSubscription() = StateSubscription.getState(preferences.getString(KEY_STATE_SUBSCRIPTION,null))
+    override fun update(){stateSubscription.value = getStateSubscription()}
 
-    private fun getHaveSubscription(): Boolean = preferences.getBoolean(KEY_HAVE_SUBSCRIPTION, false)
-    override fun setHaveSubscription(isHave: Boolean) = preferences.edit().putBoolean(KEY_HAVE_SUBSCRIPTION, isHave).apply()
+    override fun getFreeDay(): Int{
+        val startSubscriptionDate: Long = preferences.getLong(KEY_SUBSCRIPTION, 0)
+        return if (startSubscriptionDate > 0)
+             startAndGetSubscriptionDay()
+        else FREE_DAY
+    }
+    override fun startFreeDay(){
+        startAndGetSubscriptionDay()
+        setStateSubscription(StateSubscription.FREE_DAY)
+    }
 
-    override fun getSubscriptionDay(): Int{
+    private fun startAndGetSubscriptionDay(): Int{
         val startSubscriptionDate: Long = preferences.getLong(KEY_SUBSCRIPTION, System.currentTimeMillis() / DAY)
-        val sizeSubscription: Int = preferences.getInt(KEY_SIZE_SUBSCRIPTION, 7)
+        val sizeSubscription: Int = preferences.getInt(KEY_SIZE_SUBSCRIPTION, FREE_DAY)
 
         val day = ((startSubscriptionDate + sizeSubscription - System.currentTimeMillis() / DAY)).toInt()
         val s = if (sizeSubscription - day >= 0 && day >= 0) day else 0
 
         Log.d(tag, " day = $day, s = $s, sizeSubscription = $sizeSubscription, startSubscriptionDate = $startSubscriptionDate, realTime = ${ System.currentTimeMillis()/ DAY}")
-        if (s <= 0) setIsSubscription()
+        if (s <= 0)  setEndedSubByFreeDay()
         startSubscriptionDate(System.currentTimeMillis() / DAY)
         setSizeSubscription(s)
         return  s
     }
-    private fun startSubscriptionDate(date: Long){
-        preferences.edit().putLong(KEY_SUBSCRIPTION, date).apply()
-    }
-    private fun setSizeSubscription(size: Int){
-        preferences.edit().putInt(KEY_SIZE_SUBSCRIPTION, size).apply()
-    }
+    private fun startSubscriptionDate(date: Long)   = preferences.edit().putLong(KEY_SUBSCRIPTION, date).apply()
+    private fun setSizeSubscription(size: Int)      = preferences.edit().putInt(KEY_SIZE_SUBSCRIPTION, size).apply()
 
     @Suppress("ONLY_DEBUG") override fun clearPreference() {
         preferences.edit().putBoolean(KEY_IS_SUBSCRIPTION, true).apply()
         setSizeSubscription(7)
         startSubscriptionDate(System.currentTimeMillis() / DAY)
-        setHaveSubscription(false)
-    }
-    @Suppress("crutch") override fun update() {
-        isSubscription.value = getIsSubscription()
-        isHaveSubscription.value = getHaveSubscription()
+        setStateSubscription(StateSubscription.NOT_ACTIVE)
     }
 
     //region billing
@@ -124,13 +139,15 @@ class PreferencesBasket(private val activity: Activity): Preference{
                     ///здесь мы можем запросить информацию о товарах и покупках
                     querySkuDetails()                    //запрос о товарах
                     val purchasesList = queryPurchases() //запрос о покупках
-                    setHaveSubscription(purchasesList?.isNotEmpty() == true)
+                    if (purchasesList?.isNotEmpty() == true)
+                        setStateSubscription(StateSubscription.HAVE_SUB)
+                    else setEndedSubByBilling()
                     Log.d(tag, "success $purchasesList")
                 }
             }
             override fun onBillingServiceDisconnected() {
                 Log.d(tag, "error")
-                setHaveSubscription(false)
+                setEndedSubByBilling()
                 //сюда мы попадем если что-то пойдет не так
             }
         })
@@ -156,7 +173,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
     private fun queryPurchases(): List<Purchase?>? = billingClient.queryPurchases(BillingClient.SkuType.SUBS).purchasesList
     private fun onPurchasesUpdated(billingResult: BillingResult?, purchases: MutableList<Purchase>?) {
         if (billingResult?.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
-            setHaveSubscription(true)
+            setStateSubscription(StateSubscription.HAVE_SUB)
             Log.d(tag,"сюда мы попадем когда будет осуществлена покупка")
             //сюда мы попадем когда будет осуществлена покупка
         } else if (billingResult?.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
@@ -170,11 +187,13 @@ class PreferencesBasket(private val activity: Activity): Preference{
     //endregion
 
     companion object {
+        const val FREE_DAY = 7
         const val DAY = 86400000
         const val BILLING_MONTH = "month"
         const val BILLING_YEAR = "year"
 
         const val KEY_PASSWORD = "password"
+        const val KEY_STATE_SUBSCRIPTION = "KEY_STATE_SUBSCRIPTION"
         const val KEY_SUBSCRIPTION = "KEY_SUBSCRIPTION"
         const val KEY_SIZE_SUBSCRIPTION = "KEY_SIZE_SUBSCRIPTION"
         const val KEY_IS_SUBSCRIPTION = "KEY_IS_SUBSCRIPTION"

@@ -37,7 +37,10 @@ class CustomDialogFragment(private val callBack: CallBack?): DialogFragment(){
         binding.viewModel = viewModel
         viewModel.callBack = callBack
 
-        viewModel.initText(context?.getString(arguments?.getInt(ARG_TEXT) ?: 0)?:"")
+        val intRes = arguments?.getInt(ARG_TEXT_INT)?:0
+        val text =  if (intRes!=0)  context?.getString(intRes)?:""
+                    else            arguments?.getString(ARG_TEXT)?:""
+        viewModel.initText(text)
         binding.setLifecycleOwner(this)
         return binding.root
     }
@@ -52,10 +55,12 @@ class CustomDialogFragment(private val callBack: CallBack?): DialogFragment(){
     }
 
     companion object {
+        private const val ARG_TEXT_INT = "ARG_TEXT_INT"
         private const val ARG_TEXT = "ARG_TEXT"
-        fun newInstance(resText: Int, callBack: CallBack?) = CustomDialogFragment(callBack)
+        fun newInstance(resText: Int?, text: String?, callBack: CallBack?) = CustomDialogFragment(callBack)
             .apply { arguments = Bundle().apply {
-                    putInt(ARG_TEXT, resText)
+                    putInt(ARG_TEXT_INT, resText?:0)
+                    putString(ARG_TEXT, text)
             } }
     }
 }

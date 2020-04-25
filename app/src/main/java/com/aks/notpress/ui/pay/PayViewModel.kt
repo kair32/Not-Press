@@ -4,14 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.aks.notpress.utils.FragmentViewModel
 import com.aks.notpress.utils.PreferencesBasket
+import com.aks.notpress.utils.StateSubscription
 import com.aks.notpress.utils.ViewModelBase
 
 interface PayViewModel: FragmentViewModel{
+    val stateSubscription: LiveData<StateSubscription>
     val textSubMonth: LiveData<String>
     val textSubYear: LiveData<String>
     val daySubscription: LiveData<Int>
-    val isFreeDayVisible: LiveData<Boolean>
-    val isHaveSubscription: LiveData<Boolean>
 
     fun onBaySubMonth()
     fun onBaySubYear()
@@ -21,9 +21,8 @@ interface PayViewModel: FragmentViewModel{
 class PayViewModelImpl(
     private val preferencesBasket: PreferencesBasket
 ): ViewModelBase(),PayViewModel{
-    override val isHaveSubscription = preferencesBasket.isHaveSubscription
-    override val daySubscription = MutableLiveData(preferencesBasket.getSubscriptionDay())
-    override val isFreeDayVisible = preferencesBasket.isSubscription
+    override val stateSubscription = preferencesBasket.stateSubscription
+    override val daySubscription = MutableLiveData(preferencesBasket.getFreeDay())
 
     override val textSubMonth = preferencesBasket.textSubMonth
     override val textSubYear = preferencesBasket.textSubYear
@@ -34,9 +33,6 @@ class PayViewModelImpl(
     override fun onBaySubMonth() = preferencesBasket.launchBillingMonth()
     override fun onBaySubYear() = preferencesBasket.launchBillingYear()
 
-    override fun onFreeDays() {
-        preferencesBasket.setIsSubscription()
-        isFreeDayVisible.value = false
-    }
+    override fun onFreeDays() = preferencesBasket.startFreeDay()
 
 }

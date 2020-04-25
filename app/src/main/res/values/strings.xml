@@ -13,6 +13,7 @@
     <string name="just_little">Осталось совсем чуть-чуть</string>
     <string name="warning_permission">Для работы приложения необходимо получить разрешение</string>
     <string name="error_subscription">Подписка закончилась. Пожалуйста продлите подписку</string>
+    <string name="value_free_day">До конца пробного периода осталось %d дней</string>
     <string name="subscribe_now">Оформить подписку сейчас</string>
     <string name="month_subscription">99 р/месяц</string>
     <string name="year_subscription">990 р/год</string>

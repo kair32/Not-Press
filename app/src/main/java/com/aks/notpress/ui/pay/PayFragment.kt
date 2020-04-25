@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.aks.notpress.databinding.FragmentPayBinding
 import com.aks.notpress.utils.FragmentUtil
 import com.aks.notpress.utils.PreferencesBasket
+import com.aks.notpress.utils.StateSubscription
 import com.aks.notpress.utils.ViewModelFactory
 
 class PayFragment: Fragment(){
@@ -37,8 +38,8 @@ class PayFragment: Fragment(){
         binding.tv.movementMethod = ScrollingMovementMethod()
         binding.setLifecycleOwner(this)
 
-        viewModel.isHaveSubscription.observe(viewLifecycleOwner, Observer {
-            if (it) activity?.onBackPressed()
+        viewModel.stateSubscription.observe(viewLifecycleOwner, Observer {
+            if (it == StateSubscription.HAVE_SUB) activity?.onBackPressed()
         })
         return binding.root
     }

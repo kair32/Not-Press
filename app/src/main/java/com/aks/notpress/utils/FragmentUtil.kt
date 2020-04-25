@@ -46,7 +46,7 @@ class FragmentUtil {
     }
     //creat
     private fun createFragment(event: FragmentEvent) = when (event) {
-        is DialogFragmentEvent -> CustomDialogFragment.newInstance(event.resText, event.callBack)
+        is DialogFragmentEvent -> CustomDialogFragment.newInstance(event.resText, event.text, event.callBack)
         else -> when(event.type) {
             HOME        -> FragmentHome.newInstance()
             PAY         -> PayFragment.newInstance()
@@ -69,7 +69,7 @@ open class FragmentEvent(
     val isBack: Boolean = true
 )
 
-class DialogFragmentEvent(val resText: Int, val callBack: CustomDialogFragment.CallBack? = null) :
+class DialogFragmentEvent(val resText: Int? = null, val text: String? = null, val callBack: CustomDialogFragment.CallBack? = null) :
     FragmentEvent(DIALOG)
 
 enum class FragmentType(val id: Int = R.id.container,

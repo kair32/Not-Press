@@ -12,12 +12,10 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.aks.notpress.R
 import com.aks.notpress.databinding.FragmentHomeBinding
 import com.aks.notpress.service.notification.Notification
-import com.aks.notpress.utils.ActivityUtil
-import com.aks.notpress.utils.FragmentUtil
-import com.aks.notpress.utils.PreferencesBasket
-import com.aks.notpress.utils.ViewModelFactory
+import com.aks.notpress.utils.*
 
 class FragmentHome: Fragment(){
     private val fragmentUtil = FragmentUtil()
@@ -43,8 +41,9 @@ class FragmentHome: Fragment(){
         val binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
 
-        binding.setLifecycleOwner(this)
         Notification().init(activity)
+        viewModel.textFreeDay = String.format(context?.getString(R.string.value_free_day)?:"",
+                viewModel.daySubscription.value!!)
         viewModel.initChecked(Notification().isActiveNotification(context))
 
         viewModel.isChecked.observe(viewLifecycleOwner, Observer {
@@ -52,8 +51,7 @@ class FragmentHome: Fragment(){
             else    Notification().stopNotification(context)
         })
         viewModel.isCheckPermissionOverlay.observe(viewLifecycleOwner, Observer { checkPermission() })
-        viewModel.isFreeDayVisible.observe(viewLifecycleOwner, Observer{viewModel.onUpdateCheck() })
-        viewModel.isHaveSubscription.observe(viewLifecycleOwner, Observer{ viewModel.onUpdateCheck() })
+        binding.setLifecycleOwner(this)
         return binding.root
     }
 

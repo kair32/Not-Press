@@ -14,8 +14,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        bind:transactionHaveSubscription="@{viewModel.isHaveSubscription}"
-        bind:transactionFreeSubscription="@{!viewModel.isFreeDayVisible}">
+        bind:stateSubscription="@{viewModel.stateSubscription}">
 
         <include
             android:id="@+id/bt_gifts"
@@ -68,7 +67,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/bt_gifts"
             bind:background="@{@color/colorYellow}"
-            bind:isVisible="@{viewModel.isFreeDayVisible}"
             tools:text="@string/free_day"/>
 
         <include

@@ -6,6 +6,7 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="com.aks.notpress.utils.StateSubscription"/>
         <variable
             name="viewModel"
             type="com.aks.notpress.ui.pay.PayViewModel" />
@@ -13,7 +14,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        bind:transitionManager="@{viewModel.isFreeDayVisible}">
+        bind:transitionManager="@{viewModel.stateSubscription!=null}">
 
         <TextView
             android:id="@+id/tv"
@@ -97,7 +98,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             bind:background="@{@color/colorYellow}"
-            bind:isVisible="@{viewModel.isFreeDayVisible}"
+            bind:isVisible="@{viewModel.stateSubscription == StateSubscription.NOT_ACTIVE}"
             tools:text="@string/free_day"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
