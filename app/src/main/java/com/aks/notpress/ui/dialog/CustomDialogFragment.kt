@@ -15,6 +15,14 @@ import com.aks.notpress.utils.ActivityUtil
 import com.aks.notpress.utils.FinishUtil
 import com.aks.notpress.utils.FragmentUtil
 
+enum class CustomDialog{
+    DIALOG_ONE,
+    DIALOG_TWO,
+    DIALOG_THREE;
+    companion object{
+        fun getStateDialog(state: String?) = values().find { it.name.equals(state, ignoreCase = true) }
+    }
+}
 class CustomDialogFragment(private val callBack: CallBack?): DialogFragment(){
     private val fragmentUtil = FragmentUtil()
     private val finishUtil = FinishUtil()
@@ -22,8 +30,8 @@ class CustomDialogFragment(private val callBack: CallBack?): DialogFragment(){
     private lateinit var viewModel: DialogViewModel
 
     interface CallBack{
-        fun cancelDialog()
-        fun okDialog()
+        fun cancelDialog(state: CustomDialog?)
+        fun okDialog(state: CustomDialog?)
     }
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -36,6 +44,8 @@ class CustomDialogFragment(private val callBack: CallBack?): DialogFragment(){
         val binding = FragmentDialogBinding.inflate(LayoutInflater.from(activity))
         binding.viewModel = viewModel
         viewModel.callBack = callBack
+
+        viewModel.initState(CustomDialog.getStateDialog(arguments?.getString(ARG_STATE_DIALOG)))
 
         val intRes = arguments?.getInt(ARG_TEXT_INT)?:0
         val text =  if (intRes!=0)  context?.getString(intRes)?:""
@@ -57,10 +67,12 @@ class CustomDialogFragment(private val callBack: CallBack?): DialogFragment(){
     companion object {
         private const val ARG_TEXT_INT = "ARG_TEXT_INT"
         private const val ARG_TEXT = "ARG_TEXT"
-        fun newInstance(resText: Int?, text: String?, callBack: CallBack?) = CustomDialogFragment(callBack)
+        private const val ARG_STATE_DIALOG = "ARG_STATE_DIALOG"
+        fun newInstance(resText: Int?, text: String?, state: CustomDialog? = null, callBack: CallBack?) = CustomDialogFragment(callBack)
             .apply { arguments = Bundle().apply {
                     putInt(ARG_TEXT_INT, resText?:0)
                     putString(ARG_TEXT, text)
+                    putString(ARG_STATE_DIALOG, state?.name)
             } }
     }
 }

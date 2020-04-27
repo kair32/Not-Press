@@ -12,6 +12,8 @@
     <string name="ok">ОК</string>
     <string name="just_little">Осталось совсем чуть-чуть</string>
     <string name="warning_permission">Для работы приложения необходимо получить разрешение</string>
+    <string name="warning_permission2">Для ние</string>
+    <string name="error_permission">Разрешение не получено</string>
     <string name="error_subscription">Подписка закончилась. Пожалуйста продлите подписку</string>
     <string name="value_free_day">До конца пробного периода осталось %d дней</string>
     <string name="subscribe_now">Оформить подписку сейчас</string>

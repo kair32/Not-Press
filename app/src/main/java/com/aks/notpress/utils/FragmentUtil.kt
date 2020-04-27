@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.aks.notpress.R
+import com.aks.notpress.ui.dialog.CustomDialog
 import com.aks.notpress.ui.dialog.CustomDialogFragment
 import com.aks.notpress.ui.home.FragmentHome
 import com.aks.notpress.ui.password.PasswordFragment
@@ -17,10 +18,14 @@ class FragmentUtil {
                 consumer: (FragmentEvent) -> Unit = {}) {
         viewModel.fragmentLiveData.observe(owner, Observer {
             manager ?: return@Observer
+            findFragment(manager, it).takeIf { it }?.run {return@Observer }
             if (it.isRemove) removeFragment(manager, it)
             else replaceFragment(manager, it)
         })
     }
+
+    private fun findFragment(manager: FragmentManager, event: FragmentEvent) : Boolean = manager.findFragmentByTag(event.type.name)?.run{ true }?:false
+
     private fun replaceFragment(manager: FragmentManager, event: FragmentEvent) {
         val type = event.type
         val fragment = createFragment(event) ?: return
@@ -46,7 +51,7 @@ class FragmentUtil {
     }
     //creat
     private fun createFragment(event: FragmentEvent) = when (event) {
-        is DialogFragmentEvent -> CustomDialogFragment.newInstance(event.resText, event.text, event.callBack)
+        is DialogFragmentEvent -> CustomDialogFragment.newInstance(event.resText, event.text, event.state, event.callBack)
         else -> when(event.type) {
             HOME        -> FragmentHome.newInstance()
             PAY         -> PayFragment.newInstance()
@@ -69,7 +74,8 @@ open class FragmentEvent(
     val isBack: Boolean = true
 )
 
-class DialogFragmentEvent(val resText: Int? = null, val text: String? = null, val callBack: CustomDialogFragment.CallBack? = null) :
+class DialogFragmentEvent(val resText: Int? = null, val text: String? = null, val state: CustomDialog? = null,
+                          val callBack: CustomDialogFragment.CallBack? = null) :
     FragmentEvent(DIALOG)
 
 enum class FragmentType(val id: Int = R.id.container,
