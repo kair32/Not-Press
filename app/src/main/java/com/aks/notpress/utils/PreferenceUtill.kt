@@ -1,13 +1,23 @@
 package com.aks.notpress.utils
 
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.aks.notpress.R
 import com.android.billingclient.api.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
+
 
 interface Preference{
     fun getPassword():List<Boolean>
@@ -94,7 +104,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
     }
 
     private fun startAndGetSubscriptionDay(): Int{
-        val startSubscriptionDate: Long = preferences.getLong(KEY_SUBSCRIPTION, System.currentTimeMillis() / DAY)
+        val startSubscriptionDate = getStartSubscriptionDate()
         val sizeSubscription: Int = preferences.getInt(KEY_SIZE_SUBSCRIPTION, FREE_DAY)
 
         val day = ((startSubscriptionDate + sizeSubscription - System.currentTimeMillis() / DAY)).toInt()
@@ -106,8 +116,93 @@ class PreferencesBasket(private val activity: Activity): Preference{
         setSizeSubscription(s)
         return  s
     }
-    private fun startSubscriptionDate(date: Long)   = preferences.edit().putLong(KEY_SUBSCRIPTION, date).apply()
+    private fun getStartSubscriptionDate(): Long = preferences.getLong(KEY_SUBSCRIPTION, readFile()?:System.currentTimeMillis() / DAY)
+    private fun startSubscriptionDate(date: Long){
+        writeToFile(date)
+        preferences.edit().putLong(KEY_SUBSCRIPTION, date).apply()
+    }
     private fun setSizeSubscription(size: Int)      = preferences.edit().putInt(KEY_SIZE_SUBSCRIPTION, size).apply()
+
+    //region file
+    private fun writeToFile(date: Long){
+        if (ContextCompat.checkSelfPermission(activity, PermissionType.READ_STORAGE.permission) ==  PackageManager.PERMISSION_DENIED  ||
+            ContextCompat.checkSelfPermission(activity, PermissionType.WRITE_EXTERNAL_STORAGE.permission) ==  PackageManager.PERMISSION_DENIED )
+            return
+        try {
+            Log.d(tag, "file pre write")
+            val outputStream = if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
+                val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                val file = File(directory, FILENAME)
+                FileOutputStream(file)
+            } else {
+                val resolver = activity.contentResolver
+                val contentValues = ContentValues().apply {
+                    put(MediaStore.MediaColumns.DISPLAY_NAME, "test.txt")
+                    put(MediaStore.MediaColumns.MIME_TYPE, "txt/plain")
+                    put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+                }
+                resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)?.let {
+                    resolver.openOutputStream(it)
+                }
+            }
+            outputStream?.use { stream ->
+                stream.write(date.toString().toByteArray())
+                stream.close()
+            }
+
+            Log.d(tag, "file Файл записан")
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun readFile():Long? {
+        Log.d(tag, "file pre read")
+        if (ContextCompat.checkSelfPermission(activity, PermissionType.READ_STORAGE.permission) ==  PackageManager.PERMISSION_DENIED  ||
+            ContextCompat.checkSelfPermission(activity, PermissionType.WRITE_EXTERNAL_STORAGE.permission) ==  PackageManager.PERMISSION_DENIED )
+            return null
+        try {
+        val inputStream = if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
+            val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            val file = File(directory, FILENAME)
+            FileInputStream(file)
+        } else {
+
+            val resolver = activity.contentResolver
+            val contentValues = arrayOf(
+                MediaStore.MediaColumns.DISPLAY_NAME,
+                MediaStore.MediaColumns.RELATIVE_PATH,
+                MediaStore.MediaColumns.DATA
+            )
+
+            var inputStream: FileInputStream? = null
+            val audioCursor = resolver.query(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues, null, null)
+            if (audioCursor != null) {
+                if (audioCursor.moveToFirst()) {
+                    do {
+                        val s = audioCursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME)
+                        if (audioCursor.getString(s) == "test.txt") {
+                            val patch = audioCursor.getString(audioCursor.getColumnIndexOrThrow(MediaStore.MediaColumns.RELATIVE_PATH))
+                            val data = audioCursor.getString(audioCursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA))
+                            inputStream = FileInputStream( File(data))
+                        }
+                    } while (audioCursor.moveToNext())
+                }
+            }
+            assert(audioCursor != null)
+            audioCursor?.close()
+            inputStream
+        }
+        val byteArray = ByteArray(inputStream?.available()?:return null)
+        inputStream.use { stream ->
+            stream.read(byteArray)
+        }
+        Log.d(tag, "file ${String(byteArray)}")
+        return String(byteArray).toLongOrNull()
+        } catch (e: IOException) { e.printStackTrace() }
+        return null
+    }
+    //endregion
 
     @Suppress("ONLY_DEBUG") override fun clearPreference() {
         preferences.edit().putBoolean(KEY_IS_SUBSCRIPTION, true).apply()
@@ -189,6 +284,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
     companion object {
         const val FREE_DAY = 7
         const val DAY = 86400000
+        const val FILENAME = "detail.txt"
         const val BILLING_MONTH = "month"
         const val BILLING_YEAR = "year"
 
