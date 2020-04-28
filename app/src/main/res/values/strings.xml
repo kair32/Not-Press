@@ -1,3 +1,34 @@
 <resources>
-    <string name="app_name">Not Press</string>
+    <string name="app_name">Не нажимай</string>
+
+    <string name="on_gifts">Варе на подарки</string>
+    <string name="free_day">%s дней бесплатно</string>
+    <string name="instagram">VARENIK_VPUZE</string>
+    <string name="pay">Купить подписку</string>
+    <string name="enter_password">Введите пароль</string>
+    <string name="repeat_image">Повторите рисунок</string>
+    <string name="save">Сохранить</string>
+    <string name="delete">Удалить</string>
+    <string name="ok">ОК</string>
+    <string name="just_little">Осталось совсем чуть-чуть</string>
+    <string name="warning_permission">Для работы приложения необходимо получить разрешение</string>
+    <string name="warning_permission2">Для ние</string>
+    <string name="error_permission">Разрешение не получено</string>
+    <string name="error_subscription">Подписка закончилась. Пожалуйста продлите подписку</string>
+    <string name="value_free_day">До конца пробного периода осталось %d дней</string>
+    <string name="subscribe_now">Оформить подписку сейчас</string>
+    <string name="month_subscription">99 р/месяц</string>
+    <string name="year_subscription">990 р/год</string>
+    <string name="month">/месяц</string>
+    <string name="year">/год</string>
+    <string name="description_pay">Если вы здесь, значит успели опробовать наше чудесное приложение.
+        Мы создали его с любовью, исходя из личного опыта и потребностей.
+        Нам оно кажется идеальным!
+        Если ваш пробный период закончился, то есть возможность договориться с Варюшей о продлении пользования ее любимым приложением. Просто помоги ей накопить на новую игрушку! Подними настроение!</string>
+
+    <!--УВЕДОМЛЕНИЯ -->
+    <string name="touch">Нажмите для блокировки экрана</string>
+    <string name="notification_channel_id" translatable="false">notification_channel_id</string>
+    <string name="notification_channel_name">Активация сервиса</string>
+    <string name="notification_channel_description">Уведомления для активации сервиса блокировки экрана, не отключайте это уведомления, для стабильной работы сервиса</string>
 </resources>

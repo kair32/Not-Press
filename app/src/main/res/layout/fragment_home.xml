@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="viewModel"
+            type="com.aks.notpress.ui.home.HomeViewModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        bind:stateSubscription="@{viewModel.stateSubscription}">
+
+        <include
+            android:id="@+id/bt_gifts"
+            layout="@layout/help_button_teddy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:viewModel="@{viewModel}"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/switch_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_20"
+            android:padding="@dimen/margin_10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/ic_button"
+            android:visibility="gone"
+            bind:switchWidth="@{@dimen/margin_10}"
+            bind:background="@{viewModel.isChecked? @color/colorGreen : @android:color/white}"
+            tools:visibility="visible">
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch_varenik"
+                style="@style/Switch"
+                android:checked="false"
+                android:clickable="@{viewModel.isClicked}"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                android:onCheckedChanged="@{(_, checked) -> viewModel.onCheckedChanged(checked)}" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/bt_days"
+            style="@style/Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_20"
+            android:text="@{String.format(@string/free_day, viewModel.daySubscription)}"
+            android:onClick="@{()->viewModel.onFreeDays()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bt_gifts"
+            bind:background="@{@color/colorYellow}"
+            tools:text="@string/free_day"/>
+
+        <include
+            android:id="@+id/butterfly"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            layout="@layout/help_youtube"
+            bind:viewModel="@{viewModel}"
+            app:layout_constraintBottom_toTopOf="@+id/ll_insta"
+            app:layout_constraintTop_toBottomOf="@+id/bt_days" />
+
+        <LinearLayout
+            android:id="@+id/ll_insta"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="@dimen/margin_45"
+            android:gravity="center_vertical"
+            android:onClick="@{()->viewModel.onVarenikClick()}">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_insta_icon"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_10"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_36"
+                android:text="@string/instagram"/>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

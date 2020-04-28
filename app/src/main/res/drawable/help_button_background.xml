@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+  <item
+      android:bottom="@dimen/border_weight"
+      android:left="@dimen/border_weight"
+      android:right="@dimen/border_weight"
+      android:top="@dimen/border_weight"
+      android:id="@+id/button_background">
+    <shape
+        android:shape="rectangle">
+      <solid
+          android:color="@color/colorGreen"/>
+      <corners android:radius="@dimen/border_radius"/>
+    </shape>
+  </item>
+
+</layer-list>
