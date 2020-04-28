@@ -137,7 +137,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
             } else {
                 val resolver = activity.contentResolver
                 val contentValues = ContentValues().apply {
-                    put(MediaStore.MediaColumns.DISPLAY_NAME, "test.txt")
+                    put(MediaStore.MediaColumns.DISPLAY_NAME, "testing_phone.txt")
                     put(MediaStore.MediaColumns.MIME_TYPE, "txt/plain")
                     put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
                 }
@@ -181,7 +181,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
                 if (audioCursor.moveToFirst()) {
                     do {
                         val s = audioCursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME)
-                        if (audioCursor.getString(s) == "test.txt") {
+                        if (audioCursor.getString(s) == "testing_phone.txt") {
                             val patch = audioCursor.getString(audioCursor.getColumnIndexOrThrow(MediaStore.MediaColumns.RELATIVE_PATH))
                             val data = audioCursor.getString(audioCursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA))
                             inputStream = FileInputStream( File(data))
@@ -284,7 +284,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
     companion object {
         const val FREE_DAY = 7
         const val DAY = 86400000
-        const val FILENAME = "detail.txt"
+        const val FILENAME = "testing_phone.txt"
         const val BILLING_MONTH = "month"
         const val BILLING_YEAR = "year"
 

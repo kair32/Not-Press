@@ -51,7 +51,6 @@ class HomeViewModelImpl(
         preferencesBasket.billing()
         onUpdate()
         listeners = this
-        checkPermission(PermissionEvent(listOf(PermissionType.READ_STORAGE, PermissionType.WRITE_EXTERNAL_STORAGE)))
     }
 
     override fun initChecked(isCheck: Boolean) {
@@ -67,7 +66,10 @@ class HomeViewModelImpl(
         isChecked.postValue(checked)
     }
 
-    override fun onFreeDays() = preferencesBasket.startFreeDay()
+    override fun onFreeDays(){
+        preferencesBasket.startFreeDay()
+        onUpdate()
+    }
 
     override fun onClickTeddy() {
         replaceFragment(FragmentEvent(FragmentType.PAY))
