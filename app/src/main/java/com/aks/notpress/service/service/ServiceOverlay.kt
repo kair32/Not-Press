@@ -10,6 +10,7 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.aks.notpress.R
 import com.aks.notpress.databinding.OverlayBinding
+import java.lang.reflect.Method
 
 const val DOUBLE_CLICK_INTERVAL: Long = 1250
 const val TEXT_VISIBLE_INTERVAL: Long = 1500
@@ -83,6 +84,11 @@ class ServiceOverlay: LifecycleService() {
                 // Hide the nav bar and status bar
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_FULLSCREEN)
+
+        Handler().postDelayed({
+            hideSystemUI()
+            binding.root.context.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
+        }, TEXT_VISIBLE_INTERVAL)
     }
 
     private fun showSystemUI() {

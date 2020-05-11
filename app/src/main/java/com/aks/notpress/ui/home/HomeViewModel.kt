@@ -40,7 +40,7 @@ class HomeViewModelImpl(
 
     override var textFreeDay: String =""
     override val stateSubscription = preferencesBasket.stateSubscription
-    override val daySubscription = MutableLiveData(preferencesBasket.getFreeDay())
+    override val daySubscription = preferencesBasket.freeDay
     override val isCheckPermissionOverlay = MutableLiveData<Boolean>(false)
     override val isGrantedPermission = MutableLiveData<Boolean>(false)
     override val isChecked = MutableLiveData<Boolean>(false)

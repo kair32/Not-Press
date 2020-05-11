@@ -24,6 +24,7 @@ interface Preference{
     fun setPassword(list: List<Boolean>)
 
     val stateSubscription: LiveData<StateSubscription>
+    val freeDay: LiveData<Int>
     fun getFreeDay():Int
     fun startFreeDay()
     fun clearPreference()
@@ -58,6 +59,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
     override val textSubMonth = MutableLiveData<String>(activity.getString(R.string.month_subscription))
     override val textSubYear = MutableLiveData<String>(activity.getString(R.string.year_subscription))
     override val stateSubscription = MutableLiveData<StateSubscription>(getStateSubscription())
+    override val freeDay = MutableLiveData<Int>(getFreeDay())
 
     private val tag = "PreferencesBasket"
 
@@ -89,11 +91,19 @@ class PreferencesBasket(private val activity: Activity): Preference{
         if (getStateSubscription() == StateSubscription.FREE_DAY )
             setStateSubscription(StateSubscription.ENDED)
     }
-    private fun getStateSubscription() = StateSubscription.getState(preferences.getString(KEY_STATE_SUBSCRIPTION,null))
-    override fun update(){stateSubscription.value = getStateSubscription()}
+    private fun getStateSubscription(): StateSubscription{
+        val state = preferences.getString(KEY_STATE_SUBSCRIPTION,null)
+        val startSubscriptionDate = getStartSubscriptionDate()
+        if (startSubscriptionDate < System.currentTimeMillis() / DAY && state == null ) startFreeDay()
+        return StateSubscription.getState(state)
+    }
+    override fun update(){
+        stateSubscription.value = getStateSubscription()
+        freeDay.value = getFreeDay()
+    }
 
     override fun getFreeDay(): Int{
-        val startSubscriptionDate: Long = preferences.getLong(KEY_SUBSCRIPTION, 0)
+        val startSubscriptionDate: Long = readFile()?:preferences.getLong(KEY_SUBSCRIPTION, 0)
         return if (startSubscriptionDate > 0)
              startAndGetSubscriptionDay()
         else FREE_DAY
@@ -105,29 +115,31 @@ class PreferencesBasket(private val activity: Activity): Preference{
 
     private fun startAndGetSubscriptionDay(): Int{
         val startSubscriptionDate = getStartSubscriptionDate()
-        val sizeSubscription: Int = preferences.getInt(KEY_SIZE_SUBSCRIPTION, FREE_DAY)
+        val sizeSubscription: Int = FREE_DAY
+        val realTime = System.currentTimeMillis() / DAY
 
-        val day = ((startSubscriptionDate + sizeSubscription - System.currentTimeMillis() / DAY)).toInt()
+        val day = ((startSubscriptionDate + sizeSubscription - realTime)).toInt()
         val s = if (sizeSubscription - day >= 0 && day >= 0) day else 0
 
-        Log.d(tag, " day = $day, s = $s, sizeSubscription = $sizeSubscription, startSubscriptionDate = $startSubscriptionDate, realTime = ${ System.currentTimeMillis()/ DAY}")
+        Log.d(tag, " day = $day, s = $s, sizeSubscription = $sizeSubscription, startSubscriptionDate = $startSubscriptionDate, realTime = $realTime")
         if (s <= 0)  setEndedSubByFreeDay()
-        startSubscriptionDate(System.currentTimeMillis() / DAY)
+        startSubscriptionDate(startSubscriptionDate)
         setSizeSubscription(s)
         return  s
     }
-    private fun getStartSubscriptionDate(): Long = preferences.getLong(KEY_SUBSCRIPTION, readFile()?:System.currentTimeMillis() / DAY)
+    private fun getStartSubscriptionDate(): Long = readFile()?:preferences.getLong(KEY_SUBSCRIPTION, System.currentTimeMillis() / DAY)
     private fun startSubscriptionDate(date: Long){
         writeToFile(date)
         preferences.edit().putLong(KEY_SUBSCRIPTION, date).apply()
     }
-    private fun setSizeSubscription(size: Int)      = preferences.edit().putInt(KEY_SIZE_SUBSCRIPTION, size).apply()
+    private fun setSizeSubscription(size: Int) = preferences.edit().putInt(KEY_SIZE_SUBSCRIPTION, size).apply()
 
     //region file
     private fun writeToFile(date: Long){
         if (ContextCompat.checkSelfPermission(activity, PermissionType.READ_STORAGE.permission) ==  PackageManager.PERMISSION_DENIED  ||
             ContextCompat.checkSelfPermission(activity, PermissionType.WRITE_EXTERNAL_STORAGE.permission) ==  PackageManager.PERMISSION_DENIED )
             return
+        if (readFile() == null)
         try {
             Log.d(tag, "file pre write")
             val outputStream = if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
