@@ -10,7 +10,6 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.aks.notpress.R
 import com.aks.notpress.databinding.OverlayBinding
-import java.lang.reflect.Method
 
 const val DOUBLE_CLICK_INTERVAL: Long = 1250
 const val TEXT_VISIBLE_INTERVAL: Long = 1500
@@ -28,7 +27,9 @@ class ServiceOverlay: LifecycleService() {
         val type  = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
                     else WindowManager.LayoutParams.TYPE_PHONE
         val params = WindowManager.LayoutParams(type,
-            WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+            (WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH or
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
+                    WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED),
             PixelFormat.TRANSLUCENT)
 
         params.gravity = Gravity.TOP or Gravity.START
