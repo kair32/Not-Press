@@ -109,8 +109,8 @@ class PreferencesBasket(private val activity: Activity): Preference{
         else FREE_DAY
     }
     override fun startFreeDay(){
-        startAndGetSubscriptionDay()
         setStateSubscription(StateSubscription.FREE_DAY)
+        startAndGetSubscriptionDay()
     }
 
     private fun startAndGetSubscriptionDay(): Int{

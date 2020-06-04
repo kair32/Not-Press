@@ -77,6 +77,7 @@ class ServiceOverlay: LifecycleService() {
         return false
     }
 
+    private val handler = Handler()
     private fun hideSystemUI() {
         binding.root.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
                 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -86,7 +87,7 @@ class ServiceOverlay: LifecycleService() {
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_FULLSCREEN)
 
-        Handler().postDelayed({
+        handler.postDelayed({
             hideSystemUI()
             binding.root.context.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
         }, TEXT_VISIBLE_INTERVAL)
@@ -96,6 +97,7 @@ class ServiceOverlay: LifecycleService() {
         binding.root.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+        handler.removeCallbacksAndMessages(null)
     }
 
     companion object {
