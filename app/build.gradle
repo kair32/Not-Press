@@ -19,8 +19,8 @@ android {
         applicationId "com.aks.notpress"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 9
-        versionName "1.7"
+        versionCode 10
+        versionName "1.8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -50,7 +50,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.2.0'
+    implementation 'androidx.core:core-ktx:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
@@ -62,8 +62,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
 
     //Billing
-    implementation 'com.android.billingclient:billing:2.2.0'
-    implementation 'com.android.billingclient:billing-ktx:2.2.0'//maybe
+    implementation 'com.android.billingclient:billing:2.2.1'
+    implementation 'com.android.billingclient:billing-ktx:2.2.1'//maybe
 
     implementation 'me.biubiubiu.justifytext:library:1.1'
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'//youtube video
