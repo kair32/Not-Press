@@ -13,14 +13,14 @@ android {
         }
     }
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.aks.notpress"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 8
-        versionName "1.6"
+        versionCode 9
+        versionName "1.7"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
