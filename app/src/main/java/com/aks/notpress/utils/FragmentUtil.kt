@@ -10,6 +10,7 @@ import com.aks.notpress.ui.dialog.CustomDialog
 import com.aks.notpress.ui.dialog.CustomDialogFragment
 import com.aks.notpress.ui.everyday.EverydayFragment
 import com.aks.notpress.ui.home.FragmentHome
+import com.aks.notpress.ui.offer.OfferFragment
 import com.aks.notpress.ui.password.PasswordFragment
 import com.aks.notpress.ui.pay.PayFragment
 import com.aks.notpress.ui.present.PresentFragment
@@ -59,6 +60,7 @@ class FragmentUtil {
             HOME        -> FragmentHome.newInstance()
             BOOK        -> PayBookFragment.newInstance()
             EVERYDAY    -> EverydayFragment.newInstance()
+            OFFER       -> OfferFragment.newInstance()
             PRESENT     -> PresentFragment.newInstance()
             PAY         -> PayFragment.newInstance()
             PASSWORD    -> PasswordFragment.newInstance()
@@ -92,6 +94,7 @@ enum class FragmentType(val id: Int = R.id.container,
     PAY,
     BOOK,
     EVERYDAY,
+    OFFER,
     PRESENT,
     PASSWORD,
     DIALOG,

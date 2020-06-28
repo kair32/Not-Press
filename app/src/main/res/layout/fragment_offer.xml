@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.aks.notpress.ui.offer.OfferViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/offer_background_gradient">
+
+        <ImageView
+            android:id="@+id/iv_varenik"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_vareniki"/>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:text="@string/advantageous_offer"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_36"
+            android:shadowColor="@color/Black25"
+            android:shadowDx="0"
+            android:shadowDy="4"
+            android:shadowRadius="8"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:text="@string/end_promotion"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_28"
+            android:shadowColor="@color/Black25"
+            android:shadowDx="0"
+            android:shadowDy="4"
+            android:shadowRadius="8"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_25"
+            android:text="@string/further"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_28"
+            android:shadowColor="@color/Black25"
+            android:shadowDx="0"
+            android:shadowDy="4"
+            android:shadowRadius="8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

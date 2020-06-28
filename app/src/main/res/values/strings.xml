@@ -49,6 +49,8 @@
     <string name="new_user">новым пользователям</string>
     <string name="seven_days">7 дней</string>
 
+    <string name="advantageous_offer">ВЫГОДНОЕ ПРЕДЛОЖЕНИЕ</string>
+    <string name="end_promotion">ОСТАЛОСЬ ДО КОНЦА АКЦИИ</string>
     <!--УВЕДОМЛЕНИЯ -->
     <string name="touch">Нажмите для блокировки экрана</string>
     <string name="notification_channel_id" translatable="false">notification_channel_id</string>

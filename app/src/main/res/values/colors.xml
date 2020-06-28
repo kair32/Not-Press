@@ -7,9 +7,12 @@
     <color name="colorYellow">#FFDC5F</color>
     <color name="colorGreen">#A4C400</color>
     <color name="colorRed">#FF312E</color>
+    <color name="colorLightRed">#F85D5D</color>
+    <color name="colorDeepRed">#AB0000</color>
     <color name="colorBlue">#601BF3</color>
     <color name="colorLilac">#972DEA</color>
     <color name="colorViolet">#BC00EB</color>
     <color name="colorLightBlue">#389CE4</color>
     <color name="Black25">#40000000</color>
+    <color name="colorDeepGreen">#458B4B</color>
 </resources>
