@@ -62,10 +62,11 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
 
     //Billing
-    implementation 'com.android.billingclient:billing:2.2.1'
-    implementation 'com.android.billingclient:billing-ktx:2.2.1'//maybe
+    implementation 'com.android.billingclient:billing:3.0.0'
+    implementation 'com.android.billingclient:billing-ktx:3.0.0'//maybe
 
     implementation 'me.biubiubiu.justifytext:library:1.1'
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'//youtube video
     implementation 'com.karumi:dexter:4.2.0'
+    implementation 'jp.wasabeef:blurry:3.0.0'
 }

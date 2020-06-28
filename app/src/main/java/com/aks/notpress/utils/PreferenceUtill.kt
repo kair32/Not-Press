@@ -239,7 +239,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
     private fun launch(skuId: String){
         Log.d(tag,"launch $skuId")
         val billingFlowParams = BillingFlowParams.newBuilder()
-            .setSkuDetails(mSkuDetailsMap[skuId])
+            .setSkuDetails(mSkuDetailsMap[skuId]?:return)
             .build()
         billingClient.launchBillingFlow(activity, billingFlowParams)
     }
@@ -280,6 +280,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
         skuDetailsParamsBuilder.setSkusList(skuList).setType(BillingClient.SkuType.SUBS)
         billingClient.querySkuDetailsAsync(skuDetailsParamsBuilder.build()) { responseCode, skuDetailsList ->
             Log.d(tag,"skuDetails subs $responseCode, $skuDetailsList")
+            if (skuDetailsList == null) return@querySkuDetailsAsync
             for (skuDetails in skuDetailsList)
                 mSkuDetailsMap[skuDetails.sku] = skuDetails
 
@@ -290,6 +291,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
         skuDetailsParamsBuilder.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
         billingClient.querySkuDetailsAsync(skuDetailsParamsBuilder.build()) { responseCode, skuDetailsList ->
             Log.d(tag,"skuDetails inapp $responseCode, $skuDetailsList")
+            if (skuDetailsList == null) return@querySkuDetailsAsync
             for (skuDetails in skuDetailsList)
                 mSkuDetailsMap[skuDetails.sku] = skuDetails
 

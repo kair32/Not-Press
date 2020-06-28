@@ -10,6 +10,7 @@
     <dimen name="margin_25">25dp</dimen>
     <dimen name="margin_40">40dp</dimen>
     <dimen name="margin_45">45dp</dimen>
+    <dimen name="margin_60">60dp</dimen>
 
     <dimen name="border_weight">2dp</dimen>
     <dimen name="border_radius">50dp</dimen>

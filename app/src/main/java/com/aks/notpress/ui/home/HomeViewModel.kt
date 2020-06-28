@@ -72,7 +72,7 @@ class HomeViewModelImpl(
     }
 
     override fun onClickTeddy() {
-        replaceFragment(FragmentEvent(FragmentType.BOOK))
+        replaceFragment(FragmentEvent(FragmentType.EVERYDAY))
         //replaceFragment(FragmentEvent(FragmentType.PAY))
     }
 

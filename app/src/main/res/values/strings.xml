@@ -38,6 +38,13 @@
     <string name="listen_book">СЛУШАТЬ КНИГУ</string>
     <string name="audio_book">АУДИОКНИГА</string>
 
+    <string name="everyday_text">Запусти приложение 4 дня подряд и получи месяц БЕСПЛАТНОГО доступа</string>
+    <string name="free_ten">10 мин в день</string>
+    <string name="free_twenty">20 мин</string>
+    <string name="free_hour">1 час</string>
+    <string name="free_month">месяц бесплатно</string>
+    <string name="further"><u>Дальше</u></string>
+
     <!--УВЕДОМЛЕНИЯ -->
     <string name="touch">Нажмите для блокировки экрана</string>
     <string name="notification_channel_id" translatable="false">notification_channel_id</string>

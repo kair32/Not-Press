@@ -8,6 +8,7 @@ import com.aks.notpress.R
 import com.aks.notpress.ui.book.PayBookFragment
 import com.aks.notpress.ui.dialog.CustomDialog
 import com.aks.notpress.ui.dialog.CustomDialogFragment
+import com.aks.notpress.ui.everyday.EverydayFragment
 import com.aks.notpress.ui.home.FragmentHome
 import com.aks.notpress.ui.password.PasswordFragment
 import com.aks.notpress.ui.pay.PayFragment
@@ -56,6 +57,7 @@ class FragmentUtil {
         else -> when(event.type) {
             HOME        -> FragmentHome.newInstance()
             BOOK        -> PayBookFragment.newInstance()
+            EVERYDAY    -> EverydayFragment.newInstance()
             PAY         -> PayFragment.newInstance()
             PASSWORD    -> PasswordFragment.newInstance()
             else                    -> null
@@ -87,6 +89,7 @@ enum class FragmentType(val id: Int = R.id.container,
     HOME(addToStack = false),
     PAY,
     BOOK,
+    EVERYDAY,
     PASSWORD,
     DIALOG,
 
