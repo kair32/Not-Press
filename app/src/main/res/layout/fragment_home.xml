@@ -14,7 +14,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        bind:stateSubscription="@{viewModel.stateSubscription}">
+        bind:stateSubscription="@{viewModel.stateSubscription}"
+        android:fitsSystemWindows="true">
 
         <include
             android:id="@+id/bt_gifts"

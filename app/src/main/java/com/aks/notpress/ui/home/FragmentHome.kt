@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.aks.notpress.R
 import com.aks.notpress.databinding.FragmentHomeBinding
 import com.aks.notpress.service.notification.Notification
+import com.aks.notpress.setStyle
 import com.aks.notpress.utils.*
 
 class FragmentHome: Fragment(){
@@ -58,6 +59,7 @@ class FragmentHome: Fragment(){
         })
         viewModel.isCheckPermissionOverlay.observe(viewLifecycleOwner, Observer { checkPermission() })
         viewModel.isGrantedPermission.observe(viewLifecycleOwner, Observer { checkGrantedPermission() })
+        activity?.setStyle(translucent = true)
         binding.setLifecycleOwner(this)
         return binding.root
     }

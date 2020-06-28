@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.aks.notpress.R
 import com.aks.notpress.databinding.FragmentPayBookBinding
+import com.aks.notpress.setStyle
 import com.aks.notpress.utils.*
 
 class PayBookFragment: Fragment(){
@@ -33,6 +35,7 @@ class PayBookFragment: Fragment(){
         val binding = FragmentPayBookBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
 
+        activity?.setStyle(R.color.colorBlue, R.color.colorViolet)
         binding.setLifecycleOwner(this)
         return binding.root
     }
