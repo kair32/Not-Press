@@ -37,7 +37,11 @@
                 android:textStyle="bold"
                 android:text="@string/app_name"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/text_52" />
+                android:textSize="@dimen/text_52"
+                android:shadowColor="@color/Black25"
+                android:shadowDx="0"
+                android:shadowDy="4"
+                android:shadowRadius="8"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -49,7 +53,11 @@
                 android:text="@string/everyday_text"
                 android:textAlignment="center"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/text_36" />
+                android:textSize="@dimen/text_36"
+                android:shadowColor="@color/Black25"
+                android:shadowDx="0"
+                android:shadowDy="4"
+                android:shadowRadius="8"/>
 
             <CheckBox
                 android:layout_width="wrap_content"
@@ -110,7 +118,10 @@
             android:textStyle="bold"
             android:textColor="@android:color/white"
             android:textSize="@dimen/text_28"
-
+            android:shadowColor="@color/Black25"
+            android:shadowDx="0"
+            android:shadowDy="4"
+            android:shadowRadius="8"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>

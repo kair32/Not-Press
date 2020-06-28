@@ -12,6 +12,7 @@ import com.aks.notpress.ui.everyday.EverydayFragment
 import com.aks.notpress.ui.home.FragmentHome
 import com.aks.notpress.ui.password.PasswordFragment
 import com.aks.notpress.ui.pay.PayFragment
+import com.aks.notpress.ui.present.PresentFragment
 import com.aks.notpress.utils.FragmentType.*
 
 
@@ -58,6 +59,7 @@ class FragmentUtil {
             HOME        -> FragmentHome.newInstance()
             BOOK        -> PayBookFragment.newInstance()
             EVERYDAY    -> EverydayFragment.newInstance()
+            PRESENT     -> PresentFragment.newInstance()
             PAY         -> PayFragment.newInstance()
             PASSWORD    -> PasswordFragment.newInstance()
             else                    -> null
@@ -90,6 +92,7 @@ enum class FragmentType(val id: Int = R.id.container,
     PAY,
     BOOK,
     EVERYDAY,
+    PRESENT,
     PASSWORD,
     DIALOG,
 

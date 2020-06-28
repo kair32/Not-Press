@@ -45,6 +45,10 @@
     <string name="free_month">месяц бесплатно</string>
     <string name="further"><u>Дальше</u></string>
 
+    <string name="as_present">В подарок</string>
+    <string name="new_user">новым пользователям</string>
+    <string name="seven_days">7 дней</string>
+
     <!--УВЕДОМЛЕНИЯ -->
     <string name="touch">Нажмите для блокировки экрана</string>
     <string name="notification_channel_id" translatable="false">notification_channel_id</string>
