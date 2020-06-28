@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.aks.notpress.R
+import com.aks.notpress.ui.book.PayBookFragment
 import com.aks.notpress.ui.dialog.CustomDialog
 import com.aks.notpress.ui.dialog.CustomDialogFragment
 import com.aks.notpress.ui.home.FragmentHome
@@ -54,6 +55,7 @@ class FragmentUtil {
         is DialogFragmentEvent -> CustomDialogFragment.newInstance(event.resText, event.text, event.state, event.callBack)
         else -> when(event.type) {
             HOME        -> FragmentHome.newInstance()
+            BOOK        -> PayBookFragment.newInstance()
             PAY         -> PayFragment.newInstance()
             PASSWORD    -> PasswordFragment.newInstance()
             else                    -> null
@@ -84,6 +86,7 @@ enum class FragmentType(val id: Int = R.id.container,
 ) {
     HOME(addToStack = false),
     PAY,
+    BOOK,
     PASSWORD,
     DIALOG,
 

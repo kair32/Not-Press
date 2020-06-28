@@ -10,18 +10,6 @@
         </shape>
     </item>
 
-    <item
-        android:bottom="2dp"
-        android:left="2dp"
-        android:right="2dp"
-        android:top="2dp">
-        <shape android:shape="rectangle">
-            <solid
-                android:width="2dp"
-                android:color="@android:color/white"/>
-            <corners android:radius="13dp"/>
-        </shape>
-    </item>
-
+    <item android:drawable="@drawable/help_background"/>
 
 </layer-list>
