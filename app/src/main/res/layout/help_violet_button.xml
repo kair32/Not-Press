@@ -9,12 +9,16 @@
         <variable
             name="price"
             type="String" />
+        <variable
+            name="viewModel"
+            type="com.aks.notpress.ui.book.PayBookViewModel" />
     </data>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_button_violet_border">
+        android:background="@drawable/ic_button_violet_border"
+        android:onClick="@{()->viewModel.onPayBook(price)}">
 
         <ImageView
             android:id="@+id/main_background"
@@ -35,7 +39,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/margin_10"
-            android:paddingStart="@dimen/margin_10"
             android:text="@{price}"
             android:includeFontPadding="false"
             android:gravity="center"

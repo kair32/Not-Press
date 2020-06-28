@@ -5,6 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:bind="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.aks.notpress.ui.book.PayBookViewModel" />
+    </data>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,6 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                android:onClick="@{()->viewModel.onBackPressed()}"
                 android:layout_marginTop="@dimen/margin_25"
                 android:layout_marginEnd="@dimen/margin_20"
                 android:src="@drawable/ic_close"/>
@@ -34,14 +41,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_10"
                 layout="@layout/help_violet_button"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                bind:price="@{viewModel.priceBook}"
+                bind:viewModel="@{viewModel}"/>
 
             <include
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_20"
                 layout="@layout/help_violet_button"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                bind:price="@{viewModel.priceBookVIP}"
+                bind:viewModel="@{viewModel}"/>
 
             <TextView
                 android:layout_width="wrap_content"

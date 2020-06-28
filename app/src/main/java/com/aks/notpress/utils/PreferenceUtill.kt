@@ -33,7 +33,11 @@ interface Preference{
     //billing
     val textSubMonth: LiveData<String>
     val textSubYear: LiveData<String>
+    val textBook: LiveData<String>
+    val textBookVIP: LiveData<String>
     fun billing()
+    fun launchBillingBook()
+    fun launchBillingBookVIP()
     fun launchBillingMonth()
     fun launchBillingYear()
 }
@@ -58,6 +62,8 @@ class PreferencesBasket(private val activity: Activity): Preference{
         .build()
     override val textSubMonth = MutableLiveData<String>(activity.getString(R.string.month_subscription))
     override val textSubYear = MutableLiveData<String>(activity.getString(R.string.year_subscription))
+    override val textBook = MutableLiveData<String>("")
+    override val textBookVIP = MutableLiveData<String>("")
     override val stateSubscription = MutableLiveData<StateSubscription>(getStateSubscription())
     override val freeDay = MutableLiveData<Int>(getFreeDay())
 
@@ -227,6 +233,8 @@ class PreferencesBasket(private val activity: Activity): Preference{
     private var mSkuDetailsMap: MutableMap<String, SkuDetails> = HashMap()
     override fun launchBillingYear() = launch(BILLING_YEAR)
     override fun launchBillingMonth() = launch(BILLING_MONTH)
+    override fun launchBillingBook() = launch(BILLING_BOOK)
+    override fun launchBillingBookVIP() = launch(BILLING_BOOK_VIP)
 
     private fun launch(skuId: String){
         Log.d(tag,"launch $skuId")
@@ -265,15 +273,28 @@ class PreferencesBasket(private val activity: Activity): Preference{
         val skuList: MutableList<String> = ArrayList()
         skuList.add(BILLING_MONTH)// здесь мы добавили id товара из Play Consol
         skuList.add(BILLING_YEAR)
+        skuList.add(BILLING_BOOK)
+        skuList.add(BILLING_BOOK_VIP)
+        skuList.add(BILLING_SALE_MONTH)
+        skuList.add(BILLING_SALE_YEAR)
         skuDetailsParamsBuilder.setSkusList(skuList).setType(BillingClient.SkuType.SUBS)
         billingClient.querySkuDetailsAsync(skuDetailsParamsBuilder.build()) { responseCode, skuDetailsList ->
-            Log.d(tag,"queryS $responseCode, $skuDetailsList")
+            Log.d(tag,"skuDetails subs $responseCode, $skuDetailsList")
             for (skuDetails in skuDetailsList)
                 mSkuDetailsMap[skuDetails.sku] = skuDetails
 
             mSkuDetailsMap[BILLING_MONTH]?.price?.let {
                 textSubMonth.value = it.deleteKopeck() + activity.getString(R.string.month)}
             mSkuDetailsMap[BILLING_YEAR]?.price?.let { textSubYear.value  =  it.deleteKopeck() + activity.getString(R.string.year)}
+        }
+        skuDetailsParamsBuilder.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
+        billingClient.querySkuDetailsAsync(skuDetailsParamsBuilder.build()) { responseCode, skuDetailsList ->
+            Log.d(tag,"skuDetails inapp $responseCode, $skuDetailsList")
+            for (skuDetails in skuDetailsList)
+                mSkuDetailsMap[skuDetails.sku] = skuDetails
+
+            mSkuDetailsMap[BILLING_BOOK]?.price?.let { textBook.value = it.deleteKopeck() }
+            mSkuDetailsMap[BILLING_BOOK_VIP]?.price?.let { textBookVIP.value = it.deleteKopeck() }
         }
     }
     private fun String.deleteKopeck() = this.substringBefore(",") + this.substringAfterLast("0")//990,00 ₽
@@ -299,6 +320,10 @@ class PreferencesBasket(private val activity: Activity): Preference{
         const val FILENAME = "testing_phone.txt"
         const val BILLING_MONTH = "month"
         const val BILLING_YEAR = "year"
+        const val BILLING_SALE_MONTH = "sale_month"
+        const val BILLING_SALE_YEAR = "sale_year"
+        const val BILLING_BOOK_VIP = "book_vip"
+        const val BILLING_BOOK = "book"
 
         const val KEY_PASSWORD = "password"
         const val KEY_STATE_SUBSCRIPTION = "KEY_STATE_SUBSCRIPTION"

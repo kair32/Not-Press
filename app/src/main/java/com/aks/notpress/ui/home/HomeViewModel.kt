@@ -72,7 +72,8 @@ class HomeViewModelImpl(
     }
 
     override fun onClickTeddy() {
-        replaceFragment(FragmentEvent(FragmentType.PAY))
+        replaceFragment(FragmentEvent(FragmentType.BOOK))
+        //replaceFragment(FragmentEvent(FragmentType.PAY))
     }
 
     override fun onUpdateCheck() {
