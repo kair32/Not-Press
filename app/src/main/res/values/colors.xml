@@ -6,7 +6,7 @@
 
     <color name="colorYellow">#FFDC5F</color>
     <color name="colorIntenseYellow">#FFC237</color>
-    <color name="colorGreen">#A4C400</color>
+    <color name="colorDimGreen">#A4C400</color>
     <color name="colorRed">#FF312E</color>
     <color name="colorLightRed">#F85D5D</color>
     <color name="colorDeepRed">#AB0000</color>
@@ -16,4 +16,6 @@
     <color name="colorLightBlue">#389CE4</color>
     <color name="Black25">#40000000</color>
     <color name="colorDeepGreen">#458B4B</color>
+    <color name="colorGreen">#168105</color>
+    <color name="colorDarkGreen">#015318</color>
 </resources>

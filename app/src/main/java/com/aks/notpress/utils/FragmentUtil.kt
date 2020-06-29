@@ -15,6 +15,7 @@ import com.aks.notpress.ui.offer.OfferFragment
 import com.aks.notpress.ui.password.PasswordFragment
 import com.aks.notpress.ui.pay.PayFragment
 import com.aks.notpress.ui.present.PresentFragment
+import com.aks.notpress.ui.purchase.PurchaseFragment
 import com.aks.notpress.utils.FragmentType.*
 
 
@@ -66,6 +67,7 @@ class FragmentUtil {
             PRESENT     -> PresentFragment.newInstance()
             PAY         -> PayFragment.newInstance()
             PASSWORD    -> PasswordFragment.newInstance()
+            PURCHASE    -> PurchaseFragment.newInstance()
             else                    -> null
         }
     }
@@ -99,6 +101,7 @@ enum class FragmentType(val id: Int = R.id.container,
     EVERYDAY,
     OFFER,
     PRESENT,
+    PURCHASE,
     PASSWORD,
     DIALOG,
 

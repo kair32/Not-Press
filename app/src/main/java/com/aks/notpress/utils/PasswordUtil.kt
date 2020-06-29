@@ -29,7 +29,7 @@ class PasswordView: View {
 
 
     init{
-        pen.color = ContextCompat.getColor(context, R.color.colorGreen)
+        pen.color = ContextCompat.getColor(context, R.color.colorDimGreen)
         pen.strokeWidth = 10f
     }
 

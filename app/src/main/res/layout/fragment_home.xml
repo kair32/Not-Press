@@ -39,7 +39,7 @@
             android:background="@drawable/ic_button"
             android:visibility="gone"
             bind:switchWidth="@{@dimen/margin_10}"
-            bind:background="@{viewModel.isChecked? @color/colorGreen : @android:color/white}"
+            bind:background="@{viewModel.isChecked? @color/colorDimGreen : @android:color/white}"
             tools:visibility="visible">
 
             <androidx.appcompat.widget.SwitchCompat

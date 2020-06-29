@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.aks.notpress.ui.purchase.PurchaseViewModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/green_background_gradient">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/iv_varenik"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_vareniki"/>
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_45"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="@string/purchase_access"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_36"
+                android:shadowColor="@color/Black25"
+                android:shadowDx="0"
+                android:shadowDy="4"
+                android:shadowRadius="8"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <include
+                android:id="@+id/bt_month"
+                layout="@layout/help_green_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_45"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                bind:offer="@{viewModel.offers[0]}"
+                bind:viewModel="@{viewModel}"
+                />
+
+            <include
+                android:id="@+id/bt_year"
+                layout="@layout/help_green_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_40"
+                app:layout_constraintTop_toBottomOf="@+id/bt_month"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                bind:offer="@{viewModel.offers[1]}"
+                bind:viewModel="@{viewModel}"
+                />
+
+            <include
+                android:id="@+id/bt_vip"
+                layout="@layout/help_green_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_40"
+                app:layout_constraintTop_toBottomOf="@+id/bt_year"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                bind:offer="@{viewModel.offers[2]}"
+                bind:viewModel="@{viewModel}"
+                />
+
+            <TextView
+                android:id="@+id/tv_plus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/plus"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_36"
+                android:textColor="@color/colorIntenseYellow"
+                android:shadowColor="@color/Black25"
+                android:shadowDx="0"
+                android:shadowDy="4"
+                android:shadowRadius="8"
+                app:layout_constraintTop_toBottomOf="@+id/bt_vip"
+                app:layout_constraintBottom_toBottomOf="@+id/bt_vip"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <LinearLayout
+                android:id="@+id/ll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/tv_plus"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_plus"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_book"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->viewModel.onAudionBook()}"
+                    android:text="@string/audio_book_underline"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_36"
+                    android:textColor="@color/colorIntenseYellow"
+                    android:shadowColor="@color/Black25"
+                    android:shadowDx="0"
+                    android:shadowDy="4"
+                    android:shadowRadius="8"/>
+
+                <TextView
+                    android:id="@+id/tv_present"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:text="@string/as_present_big"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_36"
+                    android:textColor="@color/colorIntenseYellow"
+                    android:shadowColor="@color/Black25"
+                    android:shadowDx="0"
+                    android:shadowDy="4"
+                    android:shadowRadius="8"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_25"
+                android:text="@string/further"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_28"
+                android:shadowColor="@color/Black25"
+                android:shadowDx="0"
+                android:shadowDy="4"
+                android:shadowRadius="8"
+                app:layout_constraintTop_toBottomOf="@+id/ll"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintVertical_bias="1.0"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>
