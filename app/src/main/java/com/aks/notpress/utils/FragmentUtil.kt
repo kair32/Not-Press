@@ -9,6 +9,7 @@ import com.aks.notpress.ui.book.PayBookFragment
 import com.aks.notpress.ui.dialog.CustomDialog
 import com.aks.notpress.ui.dialog.CustomDialogFragment
 import com.aks.notpress.ui.everyday.EverydayFragment
+import com.aks.notpress.ui.hello.HelloFragment
 import com.aks.notpress.ui.home.FragmentHome
 import com.aks.notpress.ui.offer.OfferFragment
 import com.aks.notpress.ui.password.PasswordFragment
@@ -58,6 +59,7 @@ class FragmentUtil {
         is DialogFragmentEvent -> CustomDialogFragment.newInstance(event.resText, event.text, event.state, event.callBack)
         else -> when(event.type) {
             HOME        -> FragmentHome.newInstance()
+            HELLO       -> HelloFragment.newInstance()
             BOOK        -> PayBookFragment.newInstance()
             EVERYDAY    -> EverydayFragment.newInstance()
             OFFER       -> OfferFragment.newInstance()
@@ -91,6 +93,7 @@ enum class FragmentType(val id: Int = R.id.container,
                         val animation: AnimationType = AnimationType.BOTTOM_TO_TOP
 ) {
     HOME(addToStack = false),
+    HELLO,
     PAY,
     BOOK,
     EVERYDAY,

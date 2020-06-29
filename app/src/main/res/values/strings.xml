@@ -50,6 +50,8 @@
     <string name="for_year">НА ГОД</string>
     <string name="colon">:</string>
 
+    <string name="block_touch">блокирует касания по экрану! Малыш не сможет случайно выключить мультики, стереть данные или позвонить</string>
+
     <string name="as_present_big">В ПОДАРОК</string>
     <string name="as_present">В подарок</string>
     <string name="new_user">новым пользователям</string>

@@ -1,0 +1,87 @@
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/present_background_gradient">
+
+        <TextView
+            android:id="@+id/tv_present"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_25"
+            android:text="@string/app_name"
+            android:textSize="@dimen/text_52"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:shadowColor="@color/Black25"
+            android:shadowDx="0"
+            android:shadowDy="4"
+            android:shadowRadius="8"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/iv_animation_phone"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/phone_animation"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_text"
+            app:layout_constraintTop_toBottomOf="@+id/tv_present"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_shadow_phone"
+            app:layout_constraintTop_toBottomOf="@+id/iv_animation_phone"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_animation_phone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_25"
+            android:layout_marginEnd="@dimen/margin_25"
+            android:layout_marginBottom="@dimen/margin_25"
+            android:text="@string/block_touch"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_28"
+            android:shadowColor="@color/Black25"
+            android:shadowDx="0"
+            android:shadowDy="4"
+            android:shadowRadius="8"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_next"/>
+
+        <TextView
+            android:id="@+id/tv_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_25"
+            android:text="@string/further"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_28"
+            android:shadowColor="@color/Black25"
+            android:shadowDx="0"
+            android:shadowDy="4"
+            android:shadowRadius="8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
