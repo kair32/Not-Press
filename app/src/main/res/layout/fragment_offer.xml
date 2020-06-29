@@ -11,64 +11,159 @@
             type="com.aks.notpress.ui.offer.OfferViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/offer_background_gradient">
 
-        <ImageView
-            android:id="@+id/iv_varenik"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_vareniki"/>
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:text="@string/advantageous_offer"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_36"
-            android:shadowColor="@color/Black25"
-            android:shadowDx="0"
-            android:shadowDy="4"
-            android:shadowRadius="8"
-            app:layout_constraintTop_toTopOf="parent"/>
+            <ImageView
+                android:id="@+id/iv_varenik"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_vareniki"/>
 
-        <TextView
-            android:id="@+id/tv_end"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:text="@string/end_promotion"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_28"
-            android:shadowColor="@color/Black25"
-            android:shadowDx="0"
-            android:shadowDy="4"
-            android:shadowRadius="8"
-            app:layout_constraintTop_toBottomOf="@+id/tv_title"/>
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="@string/advantageous_offer"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_36"
+                android:shadowColor="@color/Black25"
+                android:shadowDx="0"
+                android:shadowDy="4"
+                android:shadowRadius="8"
+                app:layout_constraintTop_toTopOf="parent"/>
 
+            <TextView
+                android:id="@+id/tv_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="@string/end_promotion"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_28"
+                android:shadowColor="@color/Black25"
+                android:shadowDx="0"
+                android:shadowDy="4"
+                android:shadowRadius="8"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_25"
-            android:text="@string/further"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_28"
-            android:shadowColor="@color/Black25"
-            android:shadowDx="0"
-            android:shadowDy="4"
-            android:shadowRadius="8"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            <include
+                android:id="@+id/bt_month"
+                layout="@layout/help_orange_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/tv_end"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                bind:offer="@{viewModel.offers[0]}"
+                bind:viewModel="@{viewModel}"
+                />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <include
+                android:id="@+id/bt_year"
+                layout="@layout/help_orange_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/bt_month"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                bind:offer="@{viewModel.offers[1]}"
+                bind:viewModel="@{viewModel}"
+                />
+
+            <include
+                android:id="@+id/bt_vip"
+                layout="@layout/help_orange_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/bt_year"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                bind:offer="@{viewModel.offers[2]}"
+                bind:viewModel="@{viewModel}"
+                />
+
+            <TextView
+                android:id="@+id/tv_plus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/plus"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_36"
+                android:textColor="@color/colorIntenseYellow"
+                android:shadowColor="@color/Black25"
+                android:shadowDx="0"
+                android:shadowDy="4"
+                android:shadowRadius="8"
+                app:layout_constraintTop_toBottomOf="@+id/bt_vip"
+                app:layout_constraintBottom_toBottomOf="@+id/bt_vip"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/tv_plus"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_plus"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_book"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/audio_book_underline"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_36"
+                    android:textColor="@color/colorIntenseYellow"
+                    android:shadowColor="@color/Black25"
+                    android:shadowDx="0"
+                    android:shadowDy="4"
+                    android:shadowRadius="8"/>
+
+                <TextView
+                    android:id="@+id/tv_present"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:text="@string/as_present_big"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_36"
+                    android:textColor="@color/colorIntenseYellow"
+                    android:shadowColor="@color/Black25"
+                    android:shadowDx="0"
+                    android:shadowDy="4"
+                    android:shadowRadius="8"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_25"
+                android:text="@string/further"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_28"
+                android:shadowColor="@color/Black25"
+                android:shadowDx="0"
+                android:shadowDy="4"
+                android:shadowRadius="8"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </layout>

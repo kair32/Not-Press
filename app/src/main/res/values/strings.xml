@@ -34,9 +34,10 @@
         и заслуживает, чтобы его помнили. Хочу навсегда сохранить память о человеке,
         который научил меня мечтать, летать, любить, быть той, кем я сейчас являюсь.
         Я благодарна ему за все — он изменил мой мир и мою жизнь!</string>
-    <string name="vip_forever">+ VIP НАВСЕГДА</string>
+    <string name="vip_forever">VIP НАВСЕГДА</string>
     <string name="listen_book">СЛУШАТЬ КНИГУ</string>
     <string name="audio_book">АУДИОКНИГА</string>
+    <string name="audio_book_underline"><u>АУДИОКНИГА</u></string>
 
     <string name="everyday_text">Запусти приложение 4 дня подряд и получи месяц БЕСПЛАТНОГО доступа</string>
     <string name="free_ten">10 мин в день</string>
@@ -44,7 +45,11 @@
     <string name="free_hour">1 час</string>
     <string name="free_month">месяц бесплатно</string>
     <string name="further"><u>Дальше</u></string>
+    <string name="plus">+</string>
+    <string name="for_month">НА МЕСЯЦ</string>
+    <string name="for_year">НА ГОД</string>
 
+    <string name="as_present_big">В ПОДАРОК</string>
     <string name="as_present">В подарок</string>
     <string name="new_user">новым пользователям</string>
     <string name="seven_days">7 дней</string>

@@ -35,11 +35,17 @@ interface Preference{
     val textSubYear: LiveData<String>
     val textBook: LiveData<String>
     val textBookVIP: LiveData<String>
+    val textSaleSubMonth: LiveData<String>
+    val textSaleSubYear: LiveData<String>
+    val textSaleBookVIP: LiveData<String>
     fun billing()
     fun launchBillingBook()
     fun launchBillingBookVIP()
     fun launchBillingMonth()
     fun launchBillingYear()
+    fun launchSaleBillingBookVIP()
+    fun launchSaleBillingMonth()
+    fun launchSaleBillingYear()
 }
 
 enum class StateSubscription{
@@ -64,6 +70,9 @@ class PreferencesBasket(private val activity: Activity): Preference{
     override val textSubYear = MutableLiveData<String>(activity.getString(R.string.year_subscription))
     override val textBook = MutableLiveData<String>("")
     override val textBookVIP = MutableLiveData<String>("")
+    override val textSaleSubMonth = MutableLiveData<String>("")
+    override val textSaleSubYear = MutableLiveData<String>("")
+    override val textSaleBookVIP = MutableLiveData<String>("")
     override val stateSubscription = MutableLiveData<StateSubscription>(getStateSubscription())
     override val freeDay = MutableLiveData<Int>(getFreeDay())
 
@@ -235,6 +244,9 @@ class PreferencesBasket(private val activity: Activity): Preference{
     override fun launchBillingMonth() = launch(BILLING_MONTH)
     override fun launchBillingBook() = launch(BILLING_BOOK)
     override fun launchBillingBookVIP() = launch(BILLING_BOOK_VIP)
+    override fun launchSaleBillingBookVIP() = launch(BILLING_SALE_BOOK_VIP)
+    override fun launchSaleBillingMonth() = launch(BILLING_SALE_MONTH)
+    override fun launchSaleBillingYear() = launch(BILLING_SALE_YEAR)
 
     private fun launch(skuId: String){
         Log.d(tag,"launch $skuId")
@@ -275,6 +287,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
         skuList.add(BILLING_YEAR)
         skuList.add(BILLING_BOOK)
         skuList.add(BILLING_BOOK_VIP)
+        skuList.add(BILLING_SALE_BOOK_VIP)
         skuList.add(BILLING_SALE_MONTH)
         skuList.add(BILLING_SALE_YEAR)
         skuDetailsParamsBuilder.setSkusList(skuList).setType(BillingClient.SkuType.SUBS)
@@ -284,9 +297,10 @@ class PreferencesBasket(private val activity: Activity): Preference{
             for (skuDetails in skuDetailsList)
                 mSkuDetailsMap[skuDetails.sku] = skuDetails
 
-            mSkuDetailsMap[BILLING_MONTH]?.price?.let {
-                textSubMonth.value = it.deleteKopeck() + activity.getString(R.string.month)}
+            mSkuDetailsMap[BILLING_MONTH]?.price?.let { textSubMonth.value = it.deleteKopeck() + activity.getString(R.string.month)}
             mSkuDetailsMap[BILLING_YEAR]?.price?.let { textSubYear.value  =  it.deleteKopeck() + activity.getString(R.string.year)}
+            mSkuDetailsMap[BILLING_SALE_MONTH]?.price?.let { textSaleSubMonth.value = it.deleteKopeck() }
+            mSkuDetailsMap[BILLING_SALE_YEAR]?.price?.let { textSaleSubYear.value = it.deleteKopeck() }
         }
         skuDetailsParamsBuilder.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
         billingClient.querySkuDetailsAsync(skuDetailsParamsBuilder.build()) { responseCode, skuDetailsList ->
@@ -297,6 +311,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
 
             mSkuDetailsMap[BILLING_BOOK]?.price?.let { textBook.value = it.deleteKopeck() }
             mSkuDetailsMap[BILLING_BOOK_VIP]?.price?.let { textBookVIP.value = it.deleteKopeck() }
+            mSkuDetailsMap[BILLING_SALE_BOOK_VIP]?.price?.let { textSaleBookVIP.value = it.deleteKopeck() }
         }
     }
     private fun String.deleteKopeck() = this.substringBefore(",") + this.substringAfterLast("0")//990,00 ₽
@@ -324,6 +339,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
         const val BILLING_YEAR = "year"
         const val BILLING_SALE_MONTH = "sale_month"
         const val BILLING_SALE_YEAR = "sale_year"
+        const val BILLING_SALE_BOOK_VIP = "sale_book_vip"
         const val BILLING_BOOK_VIP = "book_vip"
         const val BILLING_BOOK = "book"
 
