@@ -41,6 +41,16 @@
                 android:shadowRadius="8"
                 app:layout_constraintTop_toTopOf="parent"/>
 
+            <include
+                android:id="@+id/end_time"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                layout="@layout/help_end_time"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title"
+                bind:viewModel="@{viewModel}"/>
+
             <TextView
                 android:id="@+id/tv_end"
                 android:layout_width="match_parent"
@@ -54,7 +64,7 @@
                 android:shadowDx="0"
                 android:shadowDy="4"
                 android:shadowRadius="8"
-                app:layout_constraintTop_toBottomOf="@+id/tv_title"/>
+                app:layout_constraintTop_toBottomOf="@+id/end_time"/>
 
             <include
                 android:id="@+id/bt_month"
@@ -110,6 +120,7 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <LinearLayout
+                android:id="@+id/ll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/tv_plus"
@@ -121,6 +132,7 @@
                     android:id="@+id/tv_book"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:onClick="@{()->viewModel.onAudionBook()}"
                     android:text="@string/audio_book_underline"
                     android:textStyle="bold"
                     android:textSize="@dimen/text_36"
@@ -158,9 +170,11 @@
                 android:shadowDx="0"
                 android:shadowDy="4"
                 android:shadowRadius="8"
+                app:layout_constraintTop_toBottomOf="@+id/ll"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintVertical_bias="1.0"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

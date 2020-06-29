@@ -48,6 +48,7 @@
     <string name="plus">+</string>
     <string name="for_month">НА МЕСЯЦ</string>
     <string name="for_year">НА ГОД</string>
+    <string name="colon">:</string>
 
     <string name="as_present_big">В ПОДАРОК</string>
     <string name="as_present">В подарок</string>

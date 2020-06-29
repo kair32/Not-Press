@@ -31,7 +31,6 @@ class OfferViewModelImpl(
     override fun onAudionBook() = replaceFragment(FragmentEvent(FragmentType.BOOK))
 
     override fun onPayOffer(text: Int) {
-        Log.d("tag","${offers.map { it.oldPrice }}")
         when(text){
             R.string.for_month -> preferencesBasket.launchSaleBillingMonth()
             R.string.for_year -> preferencesBasket.launchSaleBillingYear()
