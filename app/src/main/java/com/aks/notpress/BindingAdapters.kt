@@ -2,6 +2,7 @@ package com.aks.notpress
 
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.transition.TransitionManager
 import android.util.Log
@@ -101,4 +102,31 @@ fun setYoutubeSize(view: ConstraintLayout, ignore: Boolean){
         }
     })
 }
+
+@BindingAdapter(value = ["buttonBackgroundRounded", "buttonRadius", "buttonRadiusFloat"], requireAll = false)
+fun setButtonBackground(view: View, color: Int?, radius: Int?, radiusFloat: Float?){
+    fun edit(it: LayerDrawable, id: Int){
+        (it.findDrawableByLayerId(id).mutate() as GradientDrawable ?: null)?.let { drawable ->
+            color?.let {
+                when {
+                    it > 0 -> drawable.setColor(ContextCompat.getColor(view.context, it))
+                    it < 0 -> drawable.setColor(it)
+                }
+            }
+            radius?.let { drawable.cornerRadius = view.context.resources.getDimension(it) }
+            radiusFloat?.let { drawable.cornerRadius = it }
+        }
+    }
+    view.background?.let {
+        if (it is LayerDrawable) {
+            edit(it, R.id.stroke)
+            (it.findDrawableByLayerId(R.id.background).mutate() ?:null)?.let { draw ->
+                edit((draw as LayerDrawable), R.id.button_background)
+            }
+        }
+    }
+
+}
+
+
 

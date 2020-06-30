@@ -101,21 +101,13 @@
                 bind:offer="@{viewModel.offers[2]}"
                 bind:viewModel="@{viewModel}"
                 />
-
-            <TextView
-                android:id="@+id/tv_plus"
+            
+            <ImageView
+                android:id="@+id/iv_plus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/plus"
-                android:textStyle="bold"
-                android:textSize="@dimen/text_36"
-                android:textColor="@color/colorIntenseYellow"
-                android:shadowColor="@color/Black25"
-                android:shadowDx="0"
-                android:shadowDy="4"
-                android:shadowRadius="8"
+                android:src="@drawable/ic_plus"
                 app:layout_constraintTop_toBottomOf="@+id/bt_vip"
-                app:layout_constraintBottom_toBottomOf="@+id/bt_vip"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -123,8 +115,7 @@
                 android:id="@+id/ll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/tv_plus"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_plus"
+                app:layout_constraintTop_toBottomOf="@+id/iv_plus"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 

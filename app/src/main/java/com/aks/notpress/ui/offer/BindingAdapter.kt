@@ -16,6 +16,13 @@ fun setTextPrice(tv: TextView, price: String){
     tv.text = priceNew
 }
 
+@BindingAdapter("textNewPrice")
+fun setTextNewPrice(tv: TextView, price: String){
+    val priceNew = price.filter { !it.isWhitespace() }
+    Log.d("textNewPrice", "Price = $price, $priceNew")
+    tv.text = priceNew
+}
+
 @BindingAdapter("numberPickerTime")
 fun setNumberPickerTime(ll: LinearLayout, viewModel: OfferViewModel){
     val time = 1800000

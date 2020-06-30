@@ -22,11 +22,10 @@
             android:id="@+id/rl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_button_violet_border"
-            android:backgroundTint="@android:color/black"
             android:onClick="@{()->viewModel.onPayOffer(offer.text)}"
-            app:layout_constraintBottom_toBottomOf="@+id/fl_old"
-            app:layout_constraintTop_toBottomOf="@+id/fl_old">
+            app:layout_constraintVertical_bias="1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <ImageView
                 android:id="@+id/main_background"
@@ -43,6 +42,12 @@
                 android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"/>
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_button_violet_border"
+                android:tint="@android:color/black"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -51,7 +56,9 @@
                 android:lines="1"
                 android:textStyle="bold"
                 android:ellipsize="end"
-                android:textSize="@dimen/text_36"
+                android:textSize="@dimen/text_24"
+                android:includeFontPadding="false"
+                android:fontFamily="@font/myth_busters"
                 android:textColor="@android:color/black"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
@@ -88,22 +95,25 @@
             android:id="@+id/fl_old"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_20"
+            android:layout_marginStart="@dimen/margin_45"
             android:background="@drawable/ic_old_price"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_stop"
-            app:layout_constraintEnd_toEndOf="@+id/iv_stop"
-            tools:visibility="invisible">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{offer.price}"
-                android:layout_gravity="center"
+                bind:textNewPrice="@{offer.price}"
                 android:includeFontPadding="false"
+                android:fontFamily="@font/myth_busters"
+                android:layout_gravity="center"
                 android:rotation="-23"
                 android:gravity="center"
                 android:textStyle="bold"
-                android:textSize="@dimen/text_28"
+                android:textSize="@dimen/text_30"
                 android:textColor="@color/colorDeepGreen"
                 tools:text="123P"/>
         </FrameLayout>

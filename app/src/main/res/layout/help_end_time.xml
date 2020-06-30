@@ -26,6 +26,7 @@
             android:textStyle="bold"
             android:gravity="center"
             android:background="@drawable/ic_help_background"
+            bind:buttonRadiusFloat="@{@dimen/timer_radius}"
             tools:text="2"/>
 
         <TextView
@@ -36,6 +37,7 @@
             android:textStyle="bold"
             android:gravity="center"
             android:background="@drawable/ic_help_background"
+            bind:buttonRadiusFloat="@{@dimen/timer_radius}"
             tools:text="9"/>
 
         <TextView
@@ -57,6 +59,7 @@
             android:textStyle="bold"
             android:gravity="center"
             android:background="@drawable/ic_help_background"
+            bind:buttonRadiusFloat="@{@dimen/timer_radius}"
             tools:text="5"/>
 
         <TextView
@@ -67,6 +70,7 @@
             android:textStyle="bold"
             android:gravity="center"
             android:background="@drawable/ic_help_background"
+            bind:buttonRadiusFloat="@{@dimen/timer_radius}"
             tools:text="9"/>
 
 

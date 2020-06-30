@@ -2,9 +2,11 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-    <item android:drawable="@drawable/help_background"/>
+    <item
+        android:id="@+id/background"
+        android:drawable="@drawable/help_background"/>
 
-    <item>
+    <item android:id="@+id/stroke">
         <shape android:shape="rectangle">
             <stroke
                 android:width="2dp"

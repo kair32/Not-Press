@@ -45,6 +45,7 @@
                 bind:price="@{viewModel.priceBook}"
                 bind:viewModel="@{viewModel}"/>
 
+
             <include
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,6 +54,14 @@
                 android:layout_gravity="center"
                 bind:price="@{viewModel.priceBookVIP}"
                 bind:viewModel="@{viewModel}"/>
+
+            <ImageView
+                android:id="@+id/iv_plus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:tint="@android:color/white"
+                android:src="@drawable/ic_plus"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -63,6 +72,10 @@
                 android:layout_gravity="center"
                 android:text="@string/vip_forever"
                 android:textColor="@android:color/white"
+                android:shadowColor="@color/Black25"
+                android:shadowDx="0"
+                android:shadowDy="4"
+                android:shadowRadius="8"
                 android:textSize="@dimen/text_36"/>
 
             <TextView
@@ -73,6 +86,10 @@
                 android:textStyle="bold"
                 android:text="@string/listen_book"
                 android:textColor="@android:color/white"
+                android:shadowColor="@color/Black25"
+                android:shadowDx="0"
+                android:shadowDy="4"
+                android:shadowRadius="8"
                 android:textSize="@dimen/text_36"/>
 
             <TextView
