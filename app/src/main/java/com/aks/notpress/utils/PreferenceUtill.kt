@@ -31,6 +31,9 @@ interface Preference{
     fun clearPreference()
     fun update()
 
+    fun isFirstStart(): Boolean
+    fun setFirst()
+
     //billing
     val isHaveBook: LiveData<Boolean>
     val textSubMonth: LiveData<String>
@@ -103,6 +106,10 @@ class PreferencesBasket(private val activity: Activity): Preference{
         val s = list.map { if (it) 1 else 0 }.joinToString()
         preferences.edit().putString(KEY_PASSWORD, s).apply()
     }
+
+    override fun setFirst() = preferences.edit().putBoolean(KEY_IS_FIRST_START, false).apply()
+    override fun isFirstStart() = preferences.getBoolean(KEY_IS_FIRST_START, true)
+
     override fun setHotOffer(isHave: Boolean) {preferences.edit().putBoolean(KEY_IS_HOT_OFFER, isHave).apply()}
     override fun getHotOffer(): Boolean {
         val time = HOT_OFFER_TIME // 30 минут в миллисекундах 1800000L
@@ -376,9 +383,11 @@ class PreferencesBasket(private val activity: Activity): Preference{
 
     companion object {
         const val FREE_DAY = 7
+        const val LONG_FREE_DAY = 30
         const val DAY = 86400000
         const val HOT_OFFER_TIME = 500000L// 30 минут в миллисекундах 1800000L
         const val FILENAME = "testing_phone.txt"
+
         const val BILLING_MONTH = "month"
         const val BILLING_YEAR = "year"
         const val BILLING_SALE_MONTH = "sale_month"
@@ -387,6 +396,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
         const val BILLING_BOOK_VIP = "book_vip"
         const val BILLING_BOOK = "book"
 
+        const val KEY_IS_FIRST_START = "KEY_IS_FIRST_START"
         const val KEY_PASSWORD = "password"
         const val KEY_STATE_SUBSCRIPTION = "KEY_STATE_SUBSCRIPTION"
         const val KEY_SUBSCRIPTION = "KEY_SUBSCRIPTION"

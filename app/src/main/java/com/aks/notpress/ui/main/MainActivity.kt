@@ -6,8 +6,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.aks.notpress.utils.FragmentUtil
 import com.aks.notpress.R
 import com.aks.notpress.utils.PreferencesBasket
+import com.aks.notpress.utils.ViewModelFactory
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var factory: ViewModelFactory
     private val fragmentUtil = FragmentUtil()
     lateinit var preference : PreferencesBasket
 
@@ -15,9 +17,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModelImpl::class.java)
+        preference = PreferencesBasket(this)
+        factory = ViewModelFactory(preference)
+        viewModel = ViewModelProvider(this, factory).get(MainViewModelImpl::class.java)
         fragmentUtil.observe(this, viewModel, supportFragmentManager)
         setContentView(R.layout.activity_main)
-        preference = PreferencesBasket(this)
     }
 }

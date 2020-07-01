@@ -15,6 +15,7 @@ interface OfferViewModel: FragmentViewModel, ActivityStartViewModel, PermissionV
     val offerTime: Long
     val isHaveBook: LiveData<Boolean>
 
+    fun onNext()
     fun onAudionBook()
     fun onPayOffer(text: Int)
 }
@@ -27,12 +28,15 @@ class OfferViewModelImpl(
     override val offers: List<SaleOffer> = listOf(SaleOffer(R.string.for_month, preferencesBasket.textSaleSubMonth, preferencesBasket.textSubMonth),
         SaleOffer(R.string.for_year, preferencesBasket.textSaleSubYear, preferencesBasket.textSubYear),
         SaleOffer(R.string.vip_forever, preferencesBasket.textSaleBookVIP, preferencesBasket.textBookVIP))
+    private val isFirstStart: Boolean = preferencesBasket.isFirstStart()
 
     init {
         preferencesBasket.billing()
     }
 
     override fun onAudionBook() = replaceFragment(FragmentEvent(FragmentType.BOOK))
+
+    override fun onNext() = replaceFragment(FragmentEvent(if (isFirstStart) FragmentType.PRESENT else FragmentType.HOME))
 
     override fun onPayOffer(text: Int) {
         when(text){
