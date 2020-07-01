@@ -272,6 +272,9 @@ class PreferencesBasket(private val activity: Activity): Preference{
     override fun launchSaleBillingMonth() = launch(BILLING_SALE_MONTH)
     override fun launchSaleBillingYear() = launch(BILLING_SALE_YEAR)
 
+    init {
+        Log.d(tag,"INITIALIZED")
+    }
     private fun launch(skuId: String){
         Log.d(tag,"launch $skuId")
         val billingFlowParams = BillingFlowParams.newBuilder()
@@ -289,22 +292,13 @@ class PreferencesBasket(private val activity: Activity): Preference{
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     ///здесь мы можем запросить информацию о товарах и покупках
                     querySkuDetails()                    //запрос о товарах
-                    val purchasesListSubs = queryPurchasesSUBS() //запрос о покупках
-                    val purchasesListInApp = queryPurchasesINAPP()//запрос о покупках
+                    val purchasesList = ArrayList<Purchase?>()
+                    queryPurchasesSUBS()?.let {purchasesList.addAll(it)}//запрос о покупках
+                    queryPurchasesINAPP()?.let {purchasesList.addAll(it)}//запрос о покупках
 
-                    when {
-                        purchasesListInApp?.any{ it?.sku == BILLING_BOOK_VIP || it?.sku == BILLING_SALE_BOOK_VIP} == true -> {
-                            isHaveBook.value = true
-                            setStateSubscription(StateSubscription.HAVE_SUB)
-                        }
-                        purchasesListSubs?.isNotEmpty() == true -> setStateSubscription(StateSubscription.HAVE_SUB)
-                        else -> setEndedSubByBilling()
-                    }
+                    updatePurchases(purchasesList)
 
-                    if (purchasesListInApp?.any{ it?.sku == BILLING_BOOK} == true){ isHaveBook.value = true}
-
-                    Log.d(tag, "success Subs $purchasesListSubs")
-                    Log.d(tag, "success InApp $purchasesListInApp")
+                    Log.d(tag, "success Subs $purchasesList")
                 }
             }
             override fun onBillingServiceDisconnected() {
@@ -313,6 +307,18 @@ class PreferencesBasket(private val activity: Activity): Preference{
                 //сюда мы попадем если что-то пойдет не так
             }
         })
+    }
+    private fun updatePurchases(purchasesList: List<Purchase?>?){
+        when {
+            purchasesList?.any{ it?.sku == BILLING_BOOK_VIP || it?.sku == BILLING_SALE_BOOK_VIP} == true -> {
+                isHaveBook.value = true
+                setStateSubscription(StateSubscription.HAVE_SUB)
+            }
+            purchasesList?.any{ it?.sku != BILLING_BOOK} == true -> setStateSubscription(StateSubscription.HAVE_SUB)
+            else -> setEndedSubByBilling()
+        }
+
+        if (purchasesList?.any{ it?.sku == BILLING_BOOK} == true){ isHaveBook.value = true}
     }
 
     private fun querySkuDetails() {
@@ -355,7 +361,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
 
     private fun onPurchasesUpdated(billingResult: BillingResult?, purchases: MutableList<Purchase>?) {
         if (billingResult?.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
-            setStateSubscription(StateSubscription.HAVE_SUB)
+            updatePurchases(purchases)
             Log.d(tag,"сюда мы попадем когда будет осуществлена покупка")
             //сюда мы попадем когда будет осуществлена покупка
         } else if (billingResult?.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {

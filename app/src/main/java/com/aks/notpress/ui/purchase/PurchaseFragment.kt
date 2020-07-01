@@ -13,6 +13,7 @@ import com.aks.notpress.databinding.FragmentOfferBinding
 import com.aks.notpress.databinding.FragmentPurchaseBinding
 import com.aks.notpress.setStyle
 import com.aks.notpress.ui.hello.HelloFragment
+import com.aks.notpress.ui.main.MainActivity
 import com.aks.notpress.ui.offer.OfferViewModel
 import com.aks.notpress.ui.offer.OfferViewModelImpl
 import com.aks.notpress.utils.*
@@ -29,7 +30,7 @@ class PurchaseFragment: Fragment(){
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        factory = ViewModelFactory(PreferencesBasket(activity?: return))
+        factory = ViewModelFactory((activity as? MainActivity)?.preference?:return)
         viewModel = ViewModelProvider(this, factory).get(PurchaseViewModelImpl::class.java)
         fragmentUtil.observe(this, viewModel, activity?.supportFragmentManager)
         activityUtil.observe(this, viewModel, activity)

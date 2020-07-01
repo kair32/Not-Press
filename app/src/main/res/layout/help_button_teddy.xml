@@ -30,7 +30,7 @@
                 android:layout_marginStart="@dimen/margin_20"
                 android:layout_marginTop="@dimen/margin_45"
                 android:layout_marginEnd="@dimen/margin_20"
-                android:text="@string/on_gifts" />
+                android:text="@string/vip_access" />
 
         </FrameLayout>
 

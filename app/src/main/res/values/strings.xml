@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Не нажимай</string>
 
-    <string name="on_gifts">Варе на подарки</string>
+    <string name="vip_access">VIP доступ</string>
+    <string name="switch_text">включи мультики потяни шторку сверху и активируй блок экрана </string>
     <string name="free_day">%s дней бесплатно</string>
     <string name="instagram">VARENIK_VPUZE</string>
     <string name="pay">Купить подписку</string>
@@ -10,6 +11,8 @@
     <string name="save">Сохранить</string>
     <string name="delete">Удалить</string>
     <string name="ok">ОК</string>
+    <string name="start_on">для начала свайпни тут</string>
+    <string name="off">Выключить</string>
     <string name="just_little">Осталось совсем чуть-чуть</string>
     <string name="warning_permission">Для работы приложения необходимо получить разрешение</string>
     <string name="warning_permission2">Для ние</string>

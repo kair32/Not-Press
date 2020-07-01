@@ -21,6 +21,7 @@ interface HomeViewModel: FragmentViewModel, ActivityStartViewModel, TeddyViewMod
     val isCheckPermissionOverlay: LiveData<Boolean>
     val isChecked: LiveData<Boolean>
     val isClicked: LiveData<Boolean>
+    val isHaveBook: LiveData<Boolean>
     var textFreeDay: String
 
     fun initChecked(isCheck: Boolean)
@@ -28,6 +29,7 @@ interface HomeViewModel: FragmentViewModel, ActivityStartViewModel, TeddyViewMod
     fun onUpdateCheck()
     fun onFreeDays()
     fun onVarenikClick()
+    fun onListenBook()
     fun onButterflyClick()
     fun onCheckedChanged(checked: Boolean)
     fun checkPermissionDialog()
@@ -39,6 +41,7 @@ class HomeViewModelImpl(
 ): ViewModelBase(), HomeViewModel, MultiplePermissionsListener {
 
     override var textFreeDay: String =""
+    override val isHaveBook = preferencesBasket.isHaveBook
     override val stateSubscription = preferencesBasket.stateSubscription
     override val daySubscription = preferencesBasket.freeDay
     override val isCheckPermissionOverlay = MutableLiveData<Boolean>(false)
@@ -60,6 +63,8 @@ class HomeViewModelImpl(
             replaceFragment(DialogFragmentEvent(null, textFreeDay))
     }
     override fun onVarenikClick() = startActivity(ActivityStartEvent(ActivityType.OPEN_INSTAGRAM))
+    override fun onListenBook() = startActivity(ActivityStartEvent(ActivityType.OPEN_BOOK))
+
     override fun onButterflyClick() = startActivity(ActivityStartEvent(ActivityType.VIDEO))
 
     override fun onCheckedChanged(checked: Boolean) {

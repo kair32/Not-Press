@@ -88,7 +88,8 @@
                 android:src="@drawable/ic_plus"
                 app:layout_constraintTop_toBottomOf="@+id/bt_vip"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                bind:isVisible="@{!viewModel.isHaveBook}"/>
 
             <LinearLayout
                 android:id="@+id/ll"
@@ -96,7 +97,8 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/iv_plus"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintEnd_toEndOf="parent"
+                bind:isVisible="@{!viewModel.isHaveBook}">
 
                 <TextView
                     android:id="@+id/tv_book"

@@ -13,6 +13,7 @@ class SaleOffer(val text: Int,
 interface OfferViewModel: FragmentViewModel, ActivityStartViewModel, PermissionViewModel, FinishViewModel{
     val offers: List<SaleOffer>
     val offerTime: Long
+    val isHaveBook: LiveData<Boolean>
 
     fun onAudionBook()
     fun onPayOffer(text: Int)
@@ -22,6 +23,7 @@ class OfferViewModelImpl(
     private val preferencesBasket: PreferencesBasket
 ): ViewModelBase(), OfferViewModel{
     override val offerTime = preferencesBasket.getHotOfferTime()
+    override val isHaveBook = preferencesBasket.isHaveBook
     override val offers: List<SaleOffer> = listOf(SaleOffer(R.string.for_month, preferencesBasket.textSaleSubMonth, preferencesBasket.textSubMonth),
         SaleOffer(R.string.for_year, preferencesBasket.textSaleSubYear, preferencesBasket.textSubYear),
         SaleOffer(R.string.vip_forever, preferencesBasket.textSaleBookVIP, preferencesBasket.textBookVIP))

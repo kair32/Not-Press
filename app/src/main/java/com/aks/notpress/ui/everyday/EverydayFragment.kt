@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.aks.notpress.R
 import com.aks.notpress.databinding.FragmentEverydayBinding
 import com.aks.notpress.setStyle
+import com.aks.notpress.ui.main.MainActivity
 import com.aks.notpress.utils.*
 import jp.wasabeef.blurry.Blurry
 
@@ -24,7 +25,7 @@ class EverydayFragment: Fragment(){
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        factory = ViewModelFactory(PreferencesBasket(activity?: return))
+        factory = ViewModelFactory((activity as? MainActivity)?.preference?:return)
         viewModel = ViewModelProvider(this, factory).get(EverydayViewModelImpl::class.java)
         fragmentUtil.observe(this, viewModel, activity?.supportFragmentManager)
         activityUtil.observe(this, viewModel, activity)

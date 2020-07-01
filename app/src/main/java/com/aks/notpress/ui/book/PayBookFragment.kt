@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.aks.notpress.R
 import com.aks.notpress.databinding.FragmentPayBookBinding
 import com.aks.notpress.setStyle
+import com.aks.notpress.ui.main.MainActivity
 import com.aks.notpress.utils.*
 
 class PayBookFragment: Fragment(){
@@ -23,7 +24,7 @@ class PayBookFragment: Fragment(){
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        factory = ViewModelFactory(PreferencesBasket(activity?: return))
+        factory = ViewModelFactory((activity as? MainActivity)?.preference?:return)
         viewModel = ViewModelProvider(this, factory).get(PayBookViewModelImpl::class.java)
         fragmentUtil.observe(this, viewModel, activity?.supportFragmentManager)
         activityUtil.observe(this, viewModel, activity)

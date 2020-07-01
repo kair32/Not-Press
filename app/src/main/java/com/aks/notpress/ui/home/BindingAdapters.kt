@@ -22,8 +22,7 @@ fun setStateSubscription(root: ConstraintLayout, stateSubscription: StateSubscri
                 setVisibility(R.id.switch_container, View.VISIBLE)
                 setVisibility(R.id.bt_gifts, View.GONE)
                 setVisibility(R.id.bt_days, View.GONE)
-                setVisibility(R.id.ll_insta, View.VISIBLE)
-                connect(R.id.butterfly, ConstraintSet.TOP, R.id.switch_container, ConstraintSet.BOTTOM, 0)
+                connect(R.id.butterfly, ConstraintSet.TOP, R.id.tv_switch_text, ConstraintSet.BOTTOM, 0)
                 TransitionManager.beginDelayedTransition(root)
                 applyTo(root)
             }
@@ -34,11 +33,10 @@ fun setStateSubscription(root: ConstraintLayout, stateSubscription: StateSubscri
                 clone(root)
                 setVisibility(R.id.switch_container, View.VISIBLE)
                 setVisibility(R.id.bt_days, View.GONE)
-                setVisibility(R.id.ll_insta, View.GONE)
-                connect(R.id.butterfly, ConstraintSet.TOP, R.id.switch_container, ConstraintSet.BOTTOM, 0)
+                connect(R.id.butterfly, ConstraintSet.TOP, R.id.tv_switch_text, ConstraintSet.BOTTOM, 0)
                 connect(R.id.butterfly, ConstraintSet.BOTTOM, R.id.bt_gifts, ConstraintSet.TOP, 0)
                 clear(R.id.bt_gifts, ConstraintSet.TOP)
-                connect(R.id.bt_gifts, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, root.context.resources.getDimension(R.dimen.margin_20).toInt())
+                connect(R.id.bt_gifts, ConstraintSet.BOTTOM, R.id.ll_book, ConstraintSet.TOP, root.context.resources.getDimension(R.dimen.margin_20).toInt())
                 TransitionManager.beginDelayedTransition(root)
                 applyTo(root)
             }
