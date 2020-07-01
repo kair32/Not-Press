@@ -17,6 +17,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
+import java.lang.Math.abs
 
 
 interface Preference{
@@ -31,6 +32,7 @@ interface Preference{
     fun update()
 
     //billing
+    val isHaveBook: LiveData<Boolean>
     val textSubMonth: LiveData<String>
     val textSubYear: LiveData<String>
     val textBook: LiveData<String>
@@ -46,6 +48,10 @@ interface Preference{
     fun launchSaleBillingBookVIP()
     fun launchSaleBillingMonth()
     fun launchSaleBillingYear()
+
+    fun setHotOffer(isHave: Boolean)
+    fun getHotOffer(): Boolean
+    fun getHotOfferTime(): Long
 }
 
 enum class StateSubscription{
@@ -66,6 +72,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
         .enablePendingPurchases()
         .setListener(::onPurchasesUpdated)
         .build()
+    override val isHaveBook = MutableLiveData<Boolean>(false)
     override val textSubMonth = MutableLiveData<String>(activity.getString(R.string.month_subscription))
     override val textSubYear = MutableLiveData<String>(activity.getString(R.string.year_subscription))
     override val textBook = MutableLiveData<String>("")
@@ -96,6 +103,23 @@ class PreferencesBasket(private val activity: Activity): Preference{
         val s = list.map { if (it) 1 else 0 }.joinToString()
         preferences.edit().putString(KEY_PASSWORD, s).apply()
     }
+    override fun setHotOffer(isHave: Boolean) {preferences.edit().putBoolean(KEY_IS_HOT_OFFER, isHave).apply()}
+    override fun getHotOffer(): Boolean {
+        val time = HOT_OFFER_TIME // 30 минут в миллисекундах 1800000L
+        val offerTime = getSettingHotOfferTime()
+        if (offerTime == -1L) setHotOfferTime()
+        else {
+            val s = System.currentTimeMillis() - offerTime
+            if (s > time){
+                setHotOffer(false)
+                return false
+            }
+        }
+        return preferences.getBoolean(KEY_IS_HOT_OFFER, true)
+    }
+    private fun setHotOfferTime() {preferences.edit().putLong(KEY_HOT_OFFER_TIME, System.currentTimeMillis()).apply()}
+    private fun getSettingHotOfferTime(): Long = preferences.getLong(KEY_HOT_OFFER_TIME, -1)
+    override fun getHotOfferTime(): Long = abs(System.currentTimeMillis() - preferences.getLong(KEY_HOT_OFFER_TIME, -1) - HOT_OFFER_TIME)
 
     private fun setStateSubscription(state: StateSubscription) = preferences.edit().putString(KEY_STATE_SUBSCRIPTION, state.name).apply()
     private fun setEndedSubByBilling(){
@@ -265,11 +289,22 @@ class PreferencesBasket(private val activity: Activity): Preference{
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     ///здесь мы можем запросить информацию о товарах и покупках
                     querySkuDetails()                    //запрос о товарах
-                    val purchasesList = queryPurchases() //запрос о покупках
-                    if (purchasesList?.isNotEmpty() == true)
-                        setStateSubscription(StateSubscription.HAVE_SUB)
-                    else setEndedSubByBilling()
-                    Log.d(tag, "success $purchasesList")
+                    val purchasesListSubs = queryPurchasesSUBS() //запрос о покупках
+                    val purchasesListInApp = queryPurchasesINAPP()//запрос о покупках
+
+                    when {
+                        purchasesListInApp?.any{ it?.sku == BILLING_BOOK_VIP || it?.sku == BILLING_SALE_BOOK_VIP} == true -> {
+                            isHaveBook.value = true
+                            setStateSubscription(StateSubscription.HAVE_SUB)
+                        }
+                        purchasesListSubs?.isNotEmpty() == true -> setStateSubscription(StateSubscription.HAVE_SUB)
+                        else -> setEndedSubByBilling()
+                    }
+
+                    if (purchasesListInApp?.any{ it?.sku == BILLING_BOOK} == true){ isHaveBook.value = true}
+
+                    Log.d(tag, "success Subs $purchasesListSubs")
+                    Log.d(tag, "success InApp $purchasesListInApp")
                 }
             }
             override fun onBillingServiceDisconnected() {
@@ -315,7 +350,9 @@ class PreferencesBasket(private val activity: Activity): Preference{
         }
     }
     private fun String.deleteKopeck() = this.substringBefore(",") + this.substringAfterLast("0")//990,00 ₽
-    private fun queryPurchases(): List<Purchase?>? = billingClient.queryPurchases(BillingClient.SkuType.SUBS).purchasesList
+    private fun queryPurchasesSUBS(): List<Purchase?>? = billingClient.queryPurchases(BillingClient.SkuType.SUBS).purchasesList
+    private fun queryPurchasesINAPP(): List<Purchase?>? = billingClient.queryPurchases(BillingClient.SkuType.INAPP).purchasesList
+
     private fun onPurchasesUpdated(billingResult: BillingResult?, purchases: MutableList<Purchase>?) {
         if (billingResult?.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
             setStateSubscription(StateSubscription.HAVE_SUB)
@@ -334,6 +371,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
     companion object {
         const val FREE_DAY = 7
         const val DAY = 86400000
+        const val HOT_OFFER_TIME = 500000L// 30 минут в миллисекундах 1800000L
         const val FILENAME = "testing_phone.txt"
         const val BILLING_MONTH = "month"
         const val BILLING_YEAR = "year"
@@ -349,5 +387,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
         const val KEY_SIZE_SUBSCRIPTION = "KEY_SIZE_SUBSCRIPTION"
         const val KEY_IS_SUBSCRIPTION = "KEY_IS_SUBSCRIPTION"
         const val KEY_HAVE_SUBSCRIPTION = "KEY_HAVE_SUBSCRIPTION"
+        const val KEY_IS_HOT_OFFER = "KEY_IS_HOT_OFFER"
+        const val KEY_HOT_OFFER_TIME = "KEY_HOT_OFFER_TIME"
     }
 }

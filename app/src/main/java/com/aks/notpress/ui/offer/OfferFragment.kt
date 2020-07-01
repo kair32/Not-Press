@@ -54,6 +54,11 @@ class OfferFragment: Fragment(){
         return binding.root
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+    }
+
     companion object {
         fun newInstance() = OfferFragment()
     }

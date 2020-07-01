@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.aks.notpress.R
+import com.aks.notpress.utils.PreferencesBasket
 
 
 @BindingAdapter("textPrice")
@@ -25,7 +26,7 @@ fun setTextNewPrice(tv: TextView, price: String){
 
 @BindingAdapter("numberPickerTime")
 fun setNumberPickerTime(ll: LinearLayout, viewModel: OfferViewModel){
-    val time = 1800000
+    val time = if (viewModel.offerTime == -1L) PreferencesBasket.HOT_OFFER_TIME else viewModel.offerTime + 1000
     var mTime = 0L
     val mHandler = Handler()
     val hour1 = ll.findViewById<TextView>(R.id.np_hour1)
@@ -44,9 +45,16 @@ fun setNumberPickerTime(ll: LinearLayout, viewModel: OfferViewModel){
             hour2.text = (min % 10).toString()
             min1.text = (second / 10).toString()
             min2.text = (second % 10).toString()
-            Handler().postDelayed(this, 200)
+            if ((time - millis) / 1000 <= 0) {
+                mHandler.removeCallbacks(this)
+                viewModel.onBackPressed()
+            }else {
+                Log.d("numberPickerTime","${(time - millis) / 1000}")
+                Handler().postDelayed(this, 200)
+            }
         }
     }
+
 
     if (mTime == 0L) {
         mTime = SystemClock.uptimeMillis()
