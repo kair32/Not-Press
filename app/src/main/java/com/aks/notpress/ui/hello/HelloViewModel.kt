@@ -12,9 +12,7 @@ class HelloViewModelImpl(
 ): ViewModelBase(), HelloViewModel{
     private var isHaveHotOffer = preferencesBasket.getHotOffer()
 
-    override fun onNext() {
-        replaceFragment(FragmentEvent(if (isHaveHotOffer) FragmentType.OFFER else FragmentType.PURCHASE))
-    }
+    override fun onNext() = replaceFragment(if (isHaveHotOffer) OfferEvent() else PurchaseEvent())
 
     override fun updateHaveOffer() {
         isHaveHotOffer = preferencesBasket.getHotOffer()

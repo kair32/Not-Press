@@ -42,6 +42,7 @@ class OfferFragment: Fragment(){
         val binding = FragmentOfferBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
 
+        viewModel.setNextVisible(arguments?.getBoolean(ARG_IS_NEXT_VISIBLE_OFFER)?:true)
         binding.ivVarenik.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener{
             override fun onGlobalLayout() {
                 Blurry.with(context)
@@ -55,12 +56,10 @@ class OfferFragment: Fragment(){
         return binding.root
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-    }
-
     companion object {
-        fun newInstance() = OfferFragment()
+        private const val ARG_IS_NEXT_VISIBLE_OFFER = "ARG_IS_NEXT_VISIBLE_OFFER"
+        fun newInstance(isNextVisible: Boolean) = OfferFragment()
+            .apply { arguments = Bundle()
+            .apply { putBoolean(ARG_IS_NEXT_VISIBLE_OFFER, isNextVisible) } }
     }
 }

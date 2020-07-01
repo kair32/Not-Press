@@ -2,7 +2,7 @@
     <string name="app_name">Не нажимай</string>
 
     <string name="vip_access">VIP доступ</string>
-    <string name="switch_text">включи мультики потяни шторку сверху и активируй блок экрана </string>
+    <string name="switch_text">включи мультики\nпотяни шторку сверху\nи активируй блок экрана </string>
     <string name="free_day">%s дней бесплатно</string>
     <string name="instagram">VARENIK_VPUZE</string>
     <string name="pay">Купить подписку</string>
@@ -18,7 +18,9 @@
     <string name="warning_permission2">Для ние</string>
     <string name="error_permission">Разрешение не получено</string>
     <string name="error_subscription">Подписка закончилась. Пожалуйста продлите подписку</string>
+    <string name="error_free_time">Время закончилось. До встречи завтра!</string>
     <string name="value_free_day">До конца пробного периода осталось %d дней</string>
+    <string name="value_free_minute">На сегодня, у вас осталось %d минут</string>
     <string name="subscribe_now">Оформить подписку сейчас</string>
     <string name="month_subscription">99 р/месяц</string>
     <string name="year_subscription">990 р/год</string>

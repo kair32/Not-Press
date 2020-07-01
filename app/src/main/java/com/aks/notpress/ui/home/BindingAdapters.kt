@@ -28,7 +28,7 @@ fun setStateSubscription(root: ConstraintLayout, stateSubscription: StateSubscri
             }
         }
         NOT_ACTIVE -> {}
-        FREE_DAY, ENDED -> {
+        FREE_DAY, ENDED, FREE_MINUTE, FREE_DAY_LARGE -> {
             ConstraintSet().apply {
                 clone(root)
                 setVisibility(R.id.switch_container, View.VISIBLE)

@@ -47,7 +47,10 @@ class FragmentHome: Fragment(){
         binding.viewModel = viewModel
 
         Notification().init(activity)
-        viewModel.textFreeDay = String.format(context?.getString(R.string.value_free_day)?:"",
+        viewModel.textFreeDay = String.format(
+            context?.getString(
+                if (viewModel.stateSubscription.value == StateSubscription.FREE_MINUTE) R.string.value_free_minute
+                else R.string.value_free_day)?:"",
                 viewModel.daySubscription.value!!)
         viewModel.initChecked(Notification().isActiveNotification(context))
 

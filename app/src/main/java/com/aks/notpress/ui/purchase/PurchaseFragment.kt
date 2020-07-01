@@ -14,6 +14,7 @@ import com.aks.notpress.databinding.FragmentPurchaseBinding
 import com.aks.notpress.setStyle
 import com.aks.notpress.ui.hello.HelloFragment
 import com.aks.notpress.ui.main.MainActivity
+import com.aks.notpress.ui.offer.OfferFragment
 import com.aks.notpress.ui.offer.OfferViewModel
 import com.aks.notpress.ui.offer.OfferViewModelImpl
 import com.aks.notpress.utils.*
@@ -42,6 +43,7 @@ class PurchaseFragment: Fragment(){
         val binding = FragmentPurchaseBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
 
+        viewModel.setNextVisible(arguments?.getBoolean(ARG_IS_NEXT_VISIBLE_PURCHASE)?:true)
         binding.ivVarenik.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener{
             override fun onGlobalLayout() {
                 Blurry.with(context)
@@ -56,6 +58,9 @@ class PurchaseFragment: Fragment(){
     }
 
     companion object {
-        fun newInstance() = PurchaseFragment()
+        private const val ARG_IS_NEXT_VISIBLE_PURCHASE = "ARG_IS_NEXT_VISIBLE_PURCHASE"
+        fun newInstance(isNextVisible: Boolean) = PurchaseFragment()
+            .apply { arguments = Bundle()
+                .apply { putBoolean(ARG_IS_NEXT_VISIBLE_PURCHASE, isNextVisible) } }
     }
 }

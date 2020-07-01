@@ -59,7 +59,9 @@ class HomeViewModelImpl(
     override fun initChecked(isCheck: Boolean) {
         isChecked.postValue(isCheck)
 
-        if (stateSubscription.value == StateSubscription.FREE_DAY)
+        if (stateSubscription.value == StateSubscription.FREE_DAY ||
+            stateSubscription.value == StateSubscription.FREE_DAY_LARGE ||
+            stateSubscription.value == StateSubscription.FREE_MINUTE)
             replaceFragment(DialogFragmentEvent(null, textFreeDay))
     }
     override fun onVarenikClick() = startActivity(ActivityStartEvent(ActivityType.OPEN_INSTAGRAM))
@@ -67,25 +69,25 @@ class HomeViewModelImpl(
 
     override fun onButterflyClick() = startActivity(ActivityStartEvent(ActivityType.VIDEO))
 
-    override fun onCheckedChanged(checked: Boolean) {
-        isChecked.postValue(checked)
-    }
+    override fun onCheckedChanged(checked: Boolean) = isChecked.postValue(checked)
 
     override fun onFreeDays(){
         preferencesBasket.startFreeDay()
         onUpdate()
     }
 
-    override fun onClickTeddy() {
-        replaceFragment(FragmentEvent(FragmentType.HELLO))
-        //replaceFragment(FragmentEvent(FragmentType.PAY))
-    }
+    override fun onClickTeddy() = replaceFragment(if (preferencesBasket.getHotOffer()) OfferEvent(false) else PurchaseEvent(false))
 
     override fun onUpdateCheck() {
         isClicked.value = true
         if (stateSubscription.value == StateSubscription.ENDED) {
             isClicked.value = false
             replaceFragment(DialogFragmentEvent(R.string.error_subscription))
+        }
+        if (stateSubscription.value == StateSubscription.FREE_MINUTE && preferencesBasket.getFreeMinute() < 15000L){
+            isClicked.value = false
+            isChecked.value = false
+            replaceFragment(DialogFragmentEvent(R.string.error_free_time))
         }
     }
     override fun onUpdate() {

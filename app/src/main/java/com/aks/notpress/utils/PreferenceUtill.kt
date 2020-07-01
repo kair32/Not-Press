@@ -28,11 +28,16 @@ interface Preference{
     val freeDay: LiveData<Int>
     fun getFreeDay():Int
     fun startFreeDay()
-    fun clearPreference()
     fun update()
 
     fun isFirstStart(): Boolean
     fun setFirst()
+
+    fun setFreeMinute(mils: Long)
+    fun getFreeMinute(): Long
+
+    fun getEveryDayCount():Int
+    fun setEveryDayCount(count: Int)
 
     //billing
     val isHaveBook: LiveData<Boolean>
@@ -58,10 +63,12 @@ interface Preference{
 }
 
 enum class StateSubscription{
-    HAVE_SUB(),
-    ENDED(),
-    NOT_ACTIVE(),
-    FREE_DAY();
+    HAVE_SUB,
+    ENDED,
+    NOT_ACTIVE,
+    FREE_DAY,
+    FREE_MINUTE,
+    FREE_DAY_LARGE;
 
     companion object{
         fun getState(state: String?) = values().find { it.name.equals(state, ignoreCase = true) } ?: NOT_ACTIVE
@@ -69,7 +76,7 @@ enum class StateSubscription{
 }
 
 class PreferencesBasket(private val activity: Activity): Preference{
-    private val preferences: SharedPreferences = activity.getSharedPreferences(javaClass.simpleName, Context.MODE_PRIVATE)
+    private val preferences: SharedPreferences = activity.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
     private val billingClient: BillingClient = BillingClient
         .newBuilder(activity)
         .enablePendingPurchases()
@@ -89,6 +96,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
     private val tag = "PreferencesBasket"
 
     init {
+        //deleteFile()
         preferences.registerOnSharedPreferenceChangeListener { _, key ->
             when (key) {
                 KEY_STATE_SUBSCRIPTION -> {
@@ -106,6 +114,43 @@ class PreferencesBasket(private val activity: Activity): Preference{
         val s = list.map { if (it) 1 else 0 }.joinToString()
         preferences.edit().putString(KEY_PASSWORD, s).apply()
     }
+
+    override fun setEveryDayCount(count: Int){
+        val realDay = System.currentTimeMillis() / DAY
+        val resDay = getEveryDaySumDay()?:(System.currentTimeMillis() / DAY -1)
+        val differenceDay = realDay - resDay
+        if (count == 4) setEndedSubByFreeMinute()
+        if (differenceDay == 0L) return
+        if (differenceDay == 1L){
+            preferences.edit().putString(KEY_EVERYDAY_COUNT_SUM_DAY, "$count,$realDay").apply()
+            setFreeMinute(when (count){
+                1 -> FREE_MINUTE_10
+                2 -> FREE_MINUTE_20
+                3 -> FREE_MINUTE_HOUR
+                else -> 0
+            })
+        }
+        if (differenceDay < 0L)  preferences.edit().putString(KEY_EVERYDAY_COUNT_SUM_DAY, "4,$realDay").apply()
+        if (differenceDay > 1L)  preferences.edit().putString(KEY_EVERYDAY_COUNT_SUM_DAY, "0,$realDay").apply()
+    }
+    private fun getEveryDaySumDay(): Long?{
+        val str = preferences.getString(KEY_EVERYDAY_COUNT_SUM_DAY, null)
+        return str?.substringAfter(",")?.toLongOrNull()
+    }
+    override fun getEveryDayCount():Int {
+        val str = preferences.getString(KEY_EVERYDAY_COUNT_SUM_DAY, "")
+        val result = str?.substringBefore(",")?.toIntOrNull()?: 0
+        val realDay = System.currentTimeMillis() / DAY
+        val resDay = getEveryDaySumDay()?:(System.currentTimeMillis() / DAY -1)
+        val differenceDay = realDay - resDay
+        if (differenceDay == 0L) return result
+        if (differenceDay == 1L) return result + 1
+        if (differenceDay > 1L)  return 1
+        return result
+    }
+
+    override fun setFreeMinute(mils: Long) = preferences.edit().putLong(KEY_FREE_MINUTE, mils).apply()
+    override fun getFreeMinute(): Long = preferences.getLong(KEY_FREE_MINUTE, FREE_MINUTE_10)
 
     override fun setFirst() = preferences.edit().putBoolean(KEY_IS_FIRST_START, false).apply()
     override fun isFirstStart() = preferences.getBoolean(KEY_IS_FIRST_START, true)
@@ -134,8 +179,16 @@ class PreferencesBasket(private val activity: Activity): Preference{
             setStateSubscription(StateSubscription.ENDED)
     }
     private fun setEndedSubByFreeDay(){
-        if (getStateSubscription() == StateSubscription.FREE_DAY )
-            setStateSubscription(StateSubscription.ENDED)
+        if (getStateSubscription() == StateSubscription.FREE_DAY ) {
+            setStateSubscription(StateSubscription.FREE_MINUTE)
+            setEveryDayCount(1)
+        }
+    }
+    private fun setEndedSubByFreeMinute(){
+        if (getStateSubscription() == StateSubscription.FREE_MINUTE ) {
+            setStateSubscription(StateSubscription.FREE_DAY_LARGE)
+            startAndGetSubscriptionDay(LONG_FREE_DAY)
+        }
     }
     private fun getStateSubscription(): StateSubscription{
         val state = preferences.getString(KEY_STATE_SUBSCRIPTION,null)
@@ -149,26 +202,29 @@ class PreferencesBasket(private val activity: Activity): Preference{
     }
 
     override fun getFreeDay(): Int{
+        if (getStateSubscription() == StateSubscription.FREE_MINUTE) {
+            val freeMils = getFreeMinute()
+            return (freeMils / MILS_TO_MINUTE).toInt()
+        }
         val startSubscriptionDate: Long = readFile()?:preferences.getLong(KEY_SUBSCRIPTION, 0)
         return if (startSubscriptionDate > 0)
-             startAndGetSubscriptionDay()
+             startAndGetSubscriptionDay(FREE_DAY)
         else FREE_DAY
     }
     override fun startFreeDay(){
         setStateSubscription(StateSubscription.FREE_DAY)
-        startAndGetSubscriptionDay()
+        startAndGetSubscriptionDay(FREE_DAY)
     }
 
-    private fun startAndGetSubscriptionDay(): Int{
+    private fun startAndGetSubscriptionDay(sizeSubscription: Int): Int{
         val startSubscriptionDate = getStartSubscriptionDate()
-        val sizeSubscription: Int = FREE_DAY
         val realTime = System.currentTimeMillis() / DAY
 
         val day = ((startSubscriptionDate + sizeSubscription - realTime)).toInt()
         val s = if (sizeSubscription - day >= 0 && day >= 0) day else 0
 
         Log.d(tag, " day = $day, s = $s, sizeSubscription = $sizeSubscription, startSubscriptionDate = $startSubscriptionDate, realTime = $realTime")
-        if (s <= 0)  setEndedSubByFreeDay()
+        if (s <= 0) setEndedSubByFreeDay()
         startSubscriptionDate(startSubscriptionDate)
         setSizeSubscription(s)
         return  s
@@ -181,6 +237,17 @@ class PreferencesBasket(private val activity: Activity): Preference{
     private fun setSizeSubscription(size: Int) = preferences.edit().putInt(KEY_SIZE_SUBSCRIPTION, size).apply()
 
     //region file
+    /*private fun deleteFile(){
+        val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val file = File(directory, FILENAME)
+        file.delete()
+        if (file.exists()) {
+            file.canonicalFile.delete()
+            if (file.exists()) {
+                activity.applicationContext.deleteFile(file.name)
+            }
+        }
+    }*/
     private fun writeToFile(date: Long){
         if (ContextCompat.checkSelfPermission(activity, PermissionType.READ_STORAGE.permission) ==  PackageManager.PERMISSION_DENIED  ||
             ContextCompat.checkSelfPermission(activity, PermissionType.WRITE_EXTERNAL_STORAGE.permission) ==  PackageManager.PERMISSION_DENIED )
@@ -261,13 +328,6 @@ class PreferencesBasket(private val activity: Activity): Preference{
         return null
     }
     //endregion
-
-    @Suppress("ONLY_DEBUG") override fun clearPreference() {
-        preferences.edit().putBoolean(KEY_IS_SUBSCRIPTION, true).apply()
-        setSizeSubscription(7)
-        startSubscriptionDate(System.currentTimeMillis() / DAY)
-        setStateSubscription(StateSubscription.NOT_ACTIVE)
-    }
 
     //region billing
     private var mSkuDetailsMap: MutableMap<String, SkuDetails> = HashMap()
@@ -382,10 +442,12 @@ class PreferencesBasket(private val activity: Activity): Preference{
     //endregion
 
     companion object {
+        const val PREFERENCES_NAME = "PreferencesBasket"
         const val FREE_DAY = 7
         const val LONG_FREE_DAY = 30
-        const val DAY = 86400000
+        const val DAY = 86400000// 1 день в милисекундах
         const val HOT_OFFER_TIME = 500000L// 30 минут в миллисекундах 1800000L
+        const val MILS_TO_MINUTE = 60000L // 1 минута в миллисекундах для удобства перевода
         const val FILENAME = "testing_phone.txt"
 
         const val BILLING_MONTH = "month"
@@ -397,13 +459,18 @@ class PreferencesBasket(private val activity: Activity): Preference{
         const val BILLING_BOOK = "book"
 
         const val KEY_IS_FIRST_START = "KEY_IS_FIRST_START"
+        const val KEY_EVERYDAY_COUNT_SUM_DAY = "KEY_EVERYDAY_COUNT_SUM_DAY"
         const val KEY_PASSWORD = "password"
         const val KEY_STATE_SUBSCRIPTION = "KEY_STATE_SUBSCRIPTION"
         const val KEY_SUBSCRIPTION = "KEY_SUBSCRIPTION"
         const val KEY_SIZE_SUBSCRIPTION = "KEY_SIZE_SUBSCRIPTION"
         const val KEY_IS_SUBSCRIPTION = "KEY_IS_SUBSCRIPTION"
-        const val KEY_HAVE_SUBSCRIPTION = "KEY_HAVE_SUBSCRIPTION"
         const val KEY_IS_HOT_OFFER = "KEY_IS_HOT_OFFER"
         const val KEY_HOT_OFFER_TIME = "KEY_HOT_OFFER_TIME"
+        const val KEY_FREE_MINUTE = "KEY_FREE_MINUTE"
+
+        const val FREE_MINUTE_10 = 30000L//600000L
+        const val FREE_MINUTE_20 = 1200000L
+        const val FREE_MINUTE_HOUR = 3600000L
     }
 }

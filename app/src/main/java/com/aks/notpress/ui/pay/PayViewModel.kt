@@ -22,7 +22,7 @@ class PayViewModelImpl(
     private val preferencesBasket: PreferencesBasket
 ): ViewModelBase(),PayViewModel{
     override val stateSubscription = preferencesBasket.stateSubscription
-    override val daySubscription = MutableLiveData(preferencesBasket.getFreeDay())
+    override val daySubscription = preferencesBasket.freeDay
 
     override val textSubMonth = preferencesBasket.textSubMonth
     override val textSubYear = preferencesBasket.textSubYear

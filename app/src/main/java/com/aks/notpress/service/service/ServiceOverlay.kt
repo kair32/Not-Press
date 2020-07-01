@@ -2,14 +2,22 @@ package com.aks.notpress.service.service
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.Handler
+import android.os.SystemClock
+import android.util.Log
 import android.view.*
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.aks.notpress.R
 import com.aks.notpress.databinding.OverlayBinding
+import com.aks.notpress.utils.PreferencesBasket
+import com.aks.notpress.utils.PreferencesBasket.Companion.KEY_FREE_MINUTE
+import com.aks.notpress.utils.PreferencesBasket.Companion.KEY_STATE_SUBSCRIPTION
+import com.aks.notpress.utils.PreferencesBasket.Companion.PREFERENCES_NAME
+import com.aks.notpress.utils.StateSubscription
 
 const val DOUBLE_CLICK_INTERVAL: Long = 1250
 const val TEXT_VISIBLE_INTERVAL: Long = 1500
@@ -17,12 +25,14 @@ const val TEXT_VISIBLE_INTERVAL: Long = 1500
 class ServiceOverlay: LifecycleService() {
     private lateinit var binding: OverlayBinding
     private lateinit var manager: WindowManager
+    private lateinit var preferences: SharedPreferences
 
     val isTextVisible = MutableLiveData<Boolean>(false)
     val textClick = MutableLiveData<String>("3")
 
     override fun onCreate() {
         super.onCreate()
+        preferences = getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
         manager = getSystemService(WINDOW_SERVICE) as WindowManager
         val type  = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
                     else WindowManager.LayoutParams.TYPE_PHONE
@@ -45,6 +55,10 @@ class ServiceOverlay: LifecycleService() {
 
         manager.addView(binding.root, params)
         hideSystemUI()
+
+        val timer = if (StateSubscription.getState(preferences.getString(KEY_STATE_SUBSCRIPTION,null)) == StateSubscription.FREE_MINUTE)
+            getFreeMinute() else -1
+        if (timer> 0) timerFreeMinute(timer)
     }
 
     private var i = 0
@@ -67,6 +81,7 @@ class ServiceOverlay: LifecycleService() {
     }
 
     private fun destroy(){
+        stopTimer()
         manager.removeView(binding.root)
         showSystemUI()
         stopSelf()
@@ -99,6 +114,45 @@ class ServiceOverlay: LifecycleService() {
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
         handler.removeCallbacksAndMessages(null)
     }
+
+
+    private val mHandler = Handler()
+    private lateinit var timeUpdaterRunnable: Runnable
+    private var notLostSecond = 0L
+    private var isStop = false
+    private fun timerFreeMinute(time: Long){
+        var mTime = 0L
+        //todo Существует такой баг, если во время таймера, перезагрузить устройство, то приложение не сохранит даные, т.к. дестройне вызывается..
+        timeUpdaterRunnable = object : Runnable {
+            override fun run() {
+                val start: Long = mTime
+                val millis = SystemClock.uptimeMillis() - start
+                notLostSecond = (time - millis)
+                if (notLostSecond / 1000 <= 0) {
+                    destroy()
+                }else {
+                    Log.d("timerFreeMinute","${(time - millis) / 1000}")
+                    if (!isStop) Handler().postDelayed(this, 200)
+                }
+            }
+        }
+
+        if (mTime == 0L) {
+            mTime = SystemClock.uptimeMillis()
+            mHandler.removeCallbacks(timeUpdaterRunnable)
+            mHandler.postDelayed(timeUpdaterRunnable, 100)
+        }
+    }
+    private fun stopTimer(){
+        if (::timeUpdaterRunnable.isInitialized) {
+            isStop = true
+            Log.d("KEY_FREE_MINUTE","$notLostSecond")
+            setFreeMinute(notLostSecond)
+            mHandler.removeCallbacks(timeUpdaterRunnable)
+        }
+    }
+    private fun setFreeMinute(mils: Long) = preferences.edit().putLong(KEY_FREE_MINUTE, mils).apply()
+    private fun getFreeMinute(): Long = preferences.getLong(KEY_FREE_MINUTE, -1)
 
     companion object {
         fun newIntent(context: Context): Intent? {

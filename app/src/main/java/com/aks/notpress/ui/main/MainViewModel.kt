@@ -12,12 +12,12 @@ class MainViewModelImpl(
     private var isHaveHotOffer = preferencesBasket.getHotOffer()
 
     init {
-        replaceFragment(FragmentEvent(
+        replaceFragment(
             when {
-                isFirstStart -> FragmentType.HELLO
-                isHaveHotOffer -> FragmentType.OFFER
-                else -> FragmentType.PURCHASE
+                isFirstStart -> FragmentEvent(FragmentType.HELLO)
+                isHaveHotOffer -> OfferEvent()
+                else -> PurchaseEvent()
             }
-        ))
+        )
     }
 }

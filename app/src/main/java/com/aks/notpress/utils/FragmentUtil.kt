@@ -57,17 +57,17 @@ class FragmentUtil {
     }
     //creat
     private fun createFragment(event: FragmentEvent) = when (event) {
-        is DialogFragmentEvent -> CustomDialogFragment.newInstance(event.resText, event.text, event.state, event.callBack)
+        is DialogFragmentEvent  -> CustomDialogFragment.newInstance(event.resText, event.text, event.state, event.callBack)
+        is PurchaseEvent        -> PurchaseFragment.newInstance(event.isNextVisible)
+        is OfferEvent           -> OfferFragment.newInstance(event.isNextVisible)
         else -> when(event.type) {
             HOME        -> FragmentHome.newInstance()
             HELLO       -> HelloFragment.newInstance()
             BOOK        -> PayBookFragment.newInstance()
             EVERYDAY    -> EverydayFragment.newInstance()
-            OFFER       -> OfferFragment.newInstance()
             PRESENT     -> PresentFragment.newInstance()
             PAY         -> PayFragment.newInstance()
             PASSWORD    -> PasswordFragment.newInstance()
-            PURCHASE    -> PurchaseFragment.newInstance()
             else                    -> null
         }
     }
@@ -89,6 +89,12 @@ open class FragmentEvent(
 class DialogFragmentEvent(val resText: Int? = null, val text: String? = null, val state: CustomDialog? = null,
                           val callBack: CustomDialogFragment.CallBack? = null) :
     FragmentEvent(DIALOG)
+
+class PurchaseEvent(val isNextVisible: Boolean = true):
+    FragmentEvent(PURCHASE)
+
+class OfferEvent(val isNextVisible: Boolean = true):
+    FragmentEvent(OFFER)
 
 enum class FragmentType(val id: Int = R.id.container,
                         val addToStack: Boolean = true,
