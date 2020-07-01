@@ -47,7 +47,7 @@ fun setNumberPickerTime(ll: LinearLayout, viewModel: OfferViewModel){
             min2.text = (second % 10).toString()
             if ((time - millis) / 1000 <= 0) {
                 mHandler.removeCallbacks(this)
-                viewModel.onBackPressed()
+                viewModel.onNext()
             }else {
                 Log.d("numberPickerTime","${(time - millis) / 1000}")
                 Handler().postDelayed(this, 200)
