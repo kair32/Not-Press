@@ -34,7 +34,7 @@ class PurchaseViewModelImpl(
         preferencesBasket.billing()
     }
 
-    override fun onAudionBook() = replaceFragment(FragmentEvent(FragmentType.BOOK))
+    override fun onAudionBook() = replaceFragment(PayBookEvent())
 
     override fun onUpdate() {
         preferencesBasket.update()

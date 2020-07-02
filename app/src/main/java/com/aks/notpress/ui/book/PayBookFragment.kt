@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.aks.notpress.R
 import com.aks.notpress.databinding.FragmentPayBookBinding
 import com.aks.notpress.setStyle
+import com.aks.notpress.ui.dialog.CustomDialogFragment
 import com.aks.notpress.ui.main.MainActivity
 import com.aks.notpress.utils.*
 
@@ -36,12 +37,17 @@ class PayBookFragment: Fragment(){
         val binding = FragmentPayBookBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
 
+        viewModel.isSale = arguments?.getBoolean(ARG_IS_SALE, false)?:false
+
         activity?.setStyle(R.color.colorBlue, R.color.colorLilac)
         binding.setLifecycleOwner(this)
         return binding.root
     }
 
     companion object {
-        fun newInstance() = PayBookFragment()
+        private const val ARG_IS_SALE = "ARG_IS_SALE"
+        fun newInstance(isSale: Boolean) = PayBookFragment()
+            .apply { arguments = Bundle()
+                .apply { putBoolean(ARG_IS_SALE, isSale)}}
     }
 }

@@ -39,7 +39,7 @@ class OfferViewModelImpl(
         preferencesBasket.billing()
     }
 
-    override fun onAudionBook() = replaceFragment(FragmentEvent(FragmentType.BOOK))
+    override fun onAudionBook() = replaceFragment(PayBookEvent(true))
 
     override fun onNext() =
         replaceFragment(FragmentEvent(

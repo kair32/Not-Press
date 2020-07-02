@@ -60,10 +60,10 @@ class FragmentUtil {
         is DialogFragmentEvent  -> CustomDialogFragment.newInstance(event.resText, event.text, event.state, event.callBack)
         is PurchaseEvent        -> PurchaseFragment.newInstance(event.isNextVisible)
         is OfferEvent           -> OfferFragment.newInstance(event.isNextVisible)
+        is PayBookEvent         -> PayBookFragment.newInstance(event.isSale)
         else -> when(event.type) {
             HOME        -> FragmentHome.newInstance()
             HELLO       -> HelloFragment.newInstance()
-            BOOK        -> PayBookFragment.newInstance()
             EVERYDAY    -> EverydayFragment.newInstance()
             PRESENT     -> PresentFragment.newInstance()
             PAY         -> PayFragment.newInstance()
@@ -95,6 +95,9 @@ class PurchaseEvent(val isNextVisible: Boolean = true):
 
 class OfferEvent(val isNextVisible: Boolean = true):
     FragmentEvent(OFFER)
+
+class PayBookEvent(val isSale: Boolean = false):
+    FragmentEvent(BOOK)
 
 enum class FragmentType(val id: Int = R.id.container,
                         val addToStack: Boolean = true,

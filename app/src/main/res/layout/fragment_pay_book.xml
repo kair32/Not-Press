@@ -52,7 +52,7 @@
                 android:layout_marginTop="@dimen/margin_20"
                 layout="@layout/help_violet_button"
                 android:layout_gravity="center"
-                bind:price="@{viewModel.priceBookVIP}"
+                bind:price="@{viewModel.sale? viewModel.priceSaleBookVIP: viewModel.priceBookVIP}"
                 bind:viewModel="@{viewModel}"/>
 
             <ImageView
