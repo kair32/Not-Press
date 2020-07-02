@@ -20,7 +20,7 @@
     <string name="error_subscription">Подписка закончилась. Пожалуйста продлите подписку</string>
     <string name="error_free_time">Время закончилось. До встречи завтра!</string>
     <string name="value_free_day">До конца пробного периода осталось %d дней</string>
-    <string name="value_free_minute">На сегодня, у вас осталось %d минут</string>
+    <string name="value_free_minute">Сегодня, у вас осталось %d минут</string>
     <string name="subscribe_now">Оформить подписку сейчас</string>
     <string name="month_subscription">99 р/месяц</string>
     <string name="year_subscription">990 р/год</string>
@@ -44,7 +44,7 @@
     <string name="audio_book">АУДИОКНИГА</string>
     <string name="audio_book_underline"><u>АУДИОКНИГА</u></string>
 
-    <string name="everyday_text">Запусти приложение\n4 дня подряд\nи получи месяц БЕСПЛАТНОГО доступа</string>
+    <string name="everyday_text">Запусти приложение\n4 дня подряд\nи получи месяц\nБЕСПЛАТНОГО доступа</string>
     <string name="free_ten">10 мин в день</string>
     <string name="free_twenty">20 мин</string>
     <string name="free_hour">1 час</string>

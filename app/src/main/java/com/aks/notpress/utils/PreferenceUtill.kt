@@ -5,20 +5,18 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.aks.notpress.R
 import com.android.billingclient.api.*
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.IOException
+import java.io.*
 import java.lang.Math.abs
-
 
 interface Preference{
     fun getPassword():List<Boolean>
@@ -62,16 +60,18 @@ interface Preference{
     fun getHotOfferTime(): Long
 }
 
-enum class StateSubscription{
-    HAVE_SUB,
-    ENDED,
-    NOT_ACTIVE,
-    FREE_DAY,
-    FREE_MINUTE,
-    FREE_DAY_LARGE;
+enum class StateSubscription(val codeName: String){
+    HAVE_SUB("Y1E3S"),
+    ENDED("O4U1C54H"),
+    NOT_ACTIVE("0SCS"),
+    FREE_DAY("13dEf"),
+    FREE_MINUTE("1EFR7"),
+    FREE_DAY_LARGE("F23EAR");
 
     companion object{
+        fun getStateByCode(codeName: String?): StateSubscription? = values().find { it.codeName.equals(codeName, ignoreCase = true) } ?: null
         fun getState(state: String?) = values().find { it.name.equals(state, ignoreCase = true) } ?: NOT_ACTIVE
+        fun getStateOrNull(state: String?): StateSubscription? = values().find { it.name.equals(state, ignoreCase = true) } ?: null
     }
 }
 
@@ -96,7 +96,6 @@ class PreferencesBasket(private val activity: Activity): Preference{
     private val tag = "PreferencesBasket"
 
     init {
-        //deleteFile()
         preferences.registerOnSharedPreferenceChangeListener { _, key ->
             when (key) {
                 KEY_STATE_SUBSCRIPTION -> {
@@ -173,7 +172,10 @@ class PreferencesBasket(private val activity: Activity): Preference{
     private fun getSettingHotOfferTime(): Long = preferences.getLong(KEY_HOT_OFFER_TIME, -1)
     override fun getHotOfferTime(): Long = abs(System.currentTimeMillis() - preferences.getLong(KEY_HOT_OFFER_TIME, -1) - HOT_OFFER_TIME)
 
-    private fun setStateSubscription(state: StateSubscription) = preferences.edit().putString(KEY_STATE_SUBSCRIPTION, state.name).apply()
+    private fun setStateSubscription(state: StateSubscription) {
+        stateSubscription.value = state
+        preferences.edit().putString(KEY_STATE_SUBSCRIPTION, state.name).apply()
+    }
     private fun setEndedSubByBilling(){
         if (getStateSubscription() == StateSubscription.HAVE_SUB )
             setStateSubscription(StateSubscription.ENDED)
@@ -183,11 +185,13 @@ class PreferencesBasket(private val activity: Activity): Preference{
             setStateSubscription(StateSubscription.FREE_MINUTE)
             setEveryDayCount(1)
         }
+        if (getStateSubscription() == StateSubscription.FREE_DAY_LARGE )
+            setStateSubscription(StateSubscription.ENDED)
     }
     private fun setEndedSubByFreeMinute(){
         if (getStateSubscription() == StateSubscription.FREE_MINUTE ) {
             setStateSubscription(StateSubscription.FREE_DAY_LARGE)
-            startAndGetSubscriptionDay(LONG_FREE_DAY)
+            startAndGetSubscriptionDay(true)
         }
     }
     private fun getStateSubscription(): StateSubscription{
@@ -206,18 +210,24 @@ class PreferencesBasket(private val activity: Activity): Preference{
             val freeMils = getFreeMinute()
             return (freeMils / MILS_TO_MINUTE).toInt()
         }
-        val startSubscriptionDate: Long = readFile()?:preferences.getLong(KEY_SUBSCRIPTION, 0)
+        val startSubscriptionDate: Long = readDate()?:preferences.getLong(KEY_SUBSCRIPTION, 0)
         return if (startSubscriptionDate > 0)
-             startAndGetSubscriptionDay(FREE_DAY)
+             startAndGetSubscriptionDay()
         else FREE_DAY
     }
     override fun startFreeDay(){
         setStateSubscription(StateSubscription.FREE_DAY)
-        startAndGetSubscriptionDay(FREE_DAY)
+        startAndGetSubscriptionDay()
     }
 
-    private fun startAndGetSubscriptionDay(sizeSubscription: Int): Int{
+    private fun startAndGetSubscriptionDay(rewrite: Boolean = false): Int{
         val startSubscriptionDate = getStartSubscriptionDate()
+        val sizeSubscription =
+            when {
+                getStartSubscriptionStatus() == StateSubscription.FREE_DAY          -> FREE_DAY
+                getStartSubscriptionStatus() == StateSubscription.FREE_DAY_LARGE    -> LONG_FREE_DAY
+                else -> 999
+            }
         val realTime = System.currentTimeMillis() / DAY
 
         val day = ((startSubscriptionDate + sizeSubscription - realTime)).toInt()
@@ -225,69 +235,109 @@ class PreferencesBasket(private val activity: Activity): Preference{
 
         Log.d(tag, " day = $day, s = $s, sizeSubscription = $sizeSubscription, startSubscriptionDate = $startSubscriptionDate, realTime = $realTime")
         if (s <= 0) setEndedSubByFreeDay()
-        startSubscriptionDate(startSubscriptionDate)
+        startSubscriptionDate(if (rewrite) realTime else startSubscriptionDate, rewrite)
         setSizeSubscription(s)
         return  s
     }
-    private fun getStartSubscriptionDate(): Long = readFile()?:preferences.getLong(KEY_SUBSCRIPTION, System.currentTimeMillis() / DAY)
-    private fun startSubscriptionDate(date: Long){
-        writeToFile(date)
+    private fun getStartSubscriptionDate(): Long = readDate()?:preferences.getLong(KEY_SUBSCRIPTION, System.currentTimeMillis() / DAY)
+    private fun getStartSubscriptionStatus(): StateSubscription = readState()
+    private fun startSubscriptionDate(date: Long, rewrite: Boolean){
+        writeToFile(date, rewrite)
         preferences.edit().putLong(KEY_SUBSCRIPTION, date).apply()
     }
     private fun setSizeSubscription(size: Int) = preferences.edit().putInt(KEY_SIZE_SUBSCRIPTION, size).apply()
 
     //region file
-    /*private fun deleteFile(){
-        val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-        val file = File(directory, FILENAME)
-        file.delete()
-        if (file.exists()) {
-            file.canonicalFile.delete()
-            if (file.exists()) {
-                activity.applicationContext.deleteFile(file.name)
-            }
-        }
-    }*/
-    private fun writeToFile(date: Long){
+    private fun writeToFile(date: Long, rewrite :Boolean){
+        val value = getStartSubscriptionStatus().codeName + ".$date"
         if (ContextCompat.checkSelfPermission(activity, PermissionType.READ_STORAGE.permission) ==  PackageManager.PERMISSION_DENIED  ||
             ContextCompat.checkSelfPermission(activity, PermissionType.WRITE_EXTERNAL_STORAGE.permission) ==  PackageManager.PERMISSION_DENIED )
             return
-        if (readFile() == null)
+        if (readFile() == null || rewrite)
         try {
             Log.d(tag, "file pre write")
-            val outputStream = if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                 val file = File(directory, FILENAME)
-                FileOutputStream(file)
+                FileOutputStream(file).use { stream ->
+                    stream.write(value.toByteArray())
+                    stream.close()
+                    Log.d(tag, "file Файл записан ${value.toString()}")
+                }
             } else {
+                if (rewriteToOldFile(value)) return
                 val resolver = activity.contentResolver
                 val contentValues = ContentValues().apply {
-                    put(MediaStore.MediaColumns.DISPLAY_NAME, "testing_phone.txt")
+                    put(MediaStore.MediaColumns.DISPLAY_NAME, FILENAME)
+                    put(MediaStore.MediaColumns.BUCKET_DISPLAY_NAME, FILENAME)
                     put(MediaStore.MediaColumns.MIME_TYPE, "txt/plain")
                     put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
                 }
-                resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)?.let {
-                    resolver.openOutputStream(it)
+                val url = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+                url?.let {
+                    resolver.openOutputStream(it)?.use { stream ->
+                        stream.write(value.toByteArray())
+                        stream.close()
+                        Log.d(tag, "file Файл записан $value")
+                    }
                 }
             }
-            outputStream?.use { stream ->
-                stream.write(date.toString().toByteArray())
-                stream.close()
-            }
-
-            Log.d(tag, "file Файл записан")
         } catch (e: IOException) {
             e.printStackTrace()
         }
     }
 
-    private fun readFile():Long? {
+    @RequiresApi(Build.VERSION_CODES.Q)
+    fun rewriteToOldFile(value: String): Boolean{
+        try {
+            val resolver = activity.contentResolver
+            val contentValues = arrayOf(
+                MediaStore.MediaColumns.DISPLAY_NAME,
+                MediaStore.MediaColumns.RELATIVE_PATH,
+                MediaStore.MediaColumns.DATA
+            )
+
+            var outputStream: FileOutputStream? = null
+            val audioCursor = resolver.query(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues, null, null)
+            if (audioCursor != null) {
+                if (audioCursor.moveToFirst()) {
+                    do {
+                        val s = audioCursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME)
+                        if (audioCursor.getString(s) == "phone_testing.txt") {
+                            val data = audioCursor.getString(audioCursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA))
+                            outputStream = FileOutputStream(File(data))
+                        }
+                    } while (audioCursor.moveToNext())
+                }
+            }
+            assert(audioCursor != null)
+            audioCursor?.close()
+            outputStream?.use { stream ->
+                stream.write(value.toByteArray())
+                stream.close()
+                Log.d(tag, "file Файл перезаписан $value")
+                return true
+            }
+        }
+        catch (e: IOException) { e.printStackTrace()
+        return false}
+        return false
+    }
+
+    private fun readDate(): Long? = readFile()?.substringAfterLast(".")?.toLongOrNull()
+    private fun readState(): StateSubscription{
+        val state = getStateSubscription()
+        return if (state == StateSubscription.NOT_ACTIVE) StateSubscription.getStateByCode(readFile()?.substringBefore("."))?:state
+        else state
+    }
+
+    private fun readFile():String? {
         Log.d(tag, "file pre read")
         if (ContextCompat.checkSelfPermission(activity, PermissionType.READ_STORAGE.permission) ==  PackageManager.PERMISSION_DENIED  ||
             ContextCompat.checkSelfPermission(activity, PermissionType.WRITE_EXTERNAL_STORAGE.permission) ==  PackageManager.PERMISSION_DENIED )
             return null
         try {
-        val inputStream = if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
+        val inputStream = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
             val file = File(directory, FILENAME)
             FileInputStream(file)
@@ -306,8 +356,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
                 if (audioCursor.moveToFirst()) {
                     do {
                         val s = audioCursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME)
-                        if (audioCursor.getString(s) == "testing_phone.txt") {
-                            val patch = audioCursor.getString(audioCursor.getColumnIndexOrThrow(MediaStore.MediaColumns.RELATIVE_PATH))
+                        if (audioCursor.getString(s) == "phone_testing.txt") {
                             val data = audioCursor.getString(audioCursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA))
                             inputStream = FileInputStream( File(data))
                         }
@@ -323,7 +372,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
             stream.read(byteArray)
         }
         Log.d(tag, "file ${String(byteArray)}")
-        return String(byteArray).toLongOrNull()
+        return String(byteArray)
         } catch (e: IOException) { e.printStackTrace() }
         return null
     }
@@ -448,7 +497,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
         const val DAY = 86400000// 1 день в милисекундах
         const val HOT_OFFER_TIME = 500000L// 30 минут в миллисекундах 1800000L
         const val MILS_TO_MINUTE = 60000L // 1 минута в миллисекундах для удобства перевода
-        const val FILENAME = "testing_phone.txt"
+        const val FILENAME = "phone_testing.txt"
 
         const val BILLING_MONTH = "month"
         const val BILLING_YEAR = "year"

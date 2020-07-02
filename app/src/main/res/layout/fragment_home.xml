@@ -105,6 +105,7 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <Button
+                android:visibility="gone"
                 android:id="@+id/bt_days"
                 style="@style/Button"
                 android:layout_width="0dp"
@@ -126,7 +127,7 @@
                 layout="@layout/help_youtube"
                 bind:viewModel="@{viewModel}"
                 app:layout_constraintBottom_toTopOf="@+id/ll_book"
-                app:layout_constraintTop_toBottomOf="@+id/bt_days" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_switch_text" />
 
             <LinearLayout
                 android:id="@+id/ll_book"

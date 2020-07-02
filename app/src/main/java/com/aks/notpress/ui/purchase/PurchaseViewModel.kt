@@ -30,6 +30,7 @@ class PurchaseViewModelImpl(
     private val stateSubscription = preferencesBasket.stateSubscription
 
     init {
+        preferencesBasket.getFreeDay()
         preferencesBasket.billing()
     }
 

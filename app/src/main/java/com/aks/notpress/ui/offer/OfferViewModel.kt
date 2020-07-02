@@ -34,8 +34,8 @@ class OfferViewModelImpl(
         SaleOffer(R.string.vip_forever, preferencesBasket.textSaleBookVIP, preferencesBasket.textBookVIP))
     private val isFirstStart: Boolean = preferencesBasket.isFirstStart()
     private val stateSubscription = preferencesBasket.stateSubscription
-
     init {
+        preferencesBasket.getFreeDay()
         preferencesBasket.billing()
     }
 

@@ -29,7 +29,8 @@ class PresentViewModelImpl(
 
     override fun onNext() {
         preferencesBasket.setFirst()
-        preferencesBasket.startFreeDay()
+        if (preferencesBasket.stateSubscription.value == StateSubscription.NOT_ACTIVE)
+            preferencesBasket.startFreeDay()
         replaceFragment(FragmentEvent(FragmentType.HOME))
     }
     override fun cancelDialog(state: CustomDialog?) {
