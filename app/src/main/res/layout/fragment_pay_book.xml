@@ -79,20 +79,6 @@
                 android:textSize="@dimen/text_36"/>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_25"
-                android:layout_gravity="center"
-                android:textStyle="bold"
-                android:text="@string/listen_book"
-                android:textColor="@android:color/white"
-                android:shadowColor="@color/Black25"
-                android:shadowDx="0"
-                android:shadowDy="4"
-                android:shadowRadius="8"
-                android:textSize="@dimen/text_36"/>
-
-            <TextView
                 android:id="@+id/tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
