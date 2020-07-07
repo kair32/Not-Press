@@ -24,9 +24,11 @@ class FragmentUtil {
                 consumer: (FragmentEvent) -> Unit = {}) {
         viewModel.fragmentLiveData.observe(owner, Observer {
             manager ?: return@Observer
-            findFragment(manager, it).takeIf { it }?.run {return@Observer }
             if (it.isRemove) removeFragment(manager, it)
-            else replaceFragment(manager, it)
+            else {
+                findFragment(manager, it).takeIf { it }?.run { return@Observer }
+                replaceFragment(manager, it)
+            }
         })
     }
 

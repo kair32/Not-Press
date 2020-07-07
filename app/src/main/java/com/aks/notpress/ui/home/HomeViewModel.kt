@@ -33,6 +33,7 @@ interface HomeViewModel: FragmentViewModel, ActivityStartViewModel, TeddyViewMod
     fun onButterflyClick()
     fun onCheckedChanged(checked: Boolean)
     fun checkPermissionDialog()
+    fun checkPermissionDialogClose()
     fun checkGrantedPermissionDialog()
 }
 
@@ -96,6 +97,9 @@ class HomeViewModelImpl(
     }
 
     override fun checkPermissionDialog() = replaceFragment(DialogFragmentEvent(R.string.warning_permission, callBack = this, state = DIALOG_TWO))
+    override fun checkPermissionDialogClose() {
+        replaceFragment(FragmentEvent(FragmentType.DIALOG, isRemove = true))
+    }
     override fun checkGrantedPermissionDialog() = replaceFragment(DialogFragmentEvent(R.string.warning_permission, callBack = this, state = state))
     override fun cancelDialog(state: CustomDialog?) {
         when(state){

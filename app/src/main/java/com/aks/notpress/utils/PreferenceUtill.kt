@@ -83,13 +83,13 @@ class PreferencesBasket(private val activity: Activity): Preference{
         .setListener(::onPurchasesUpdated)
         .build()
     override val isHaveBook = MutableLiveData<Boolean>(false)
-    override val textSubMonth = MutableLiveData<String>(activity.getString(R.string.month_subscription))
-    override val textSubYear = MutableLiveData<String>(activity.getString(R.string.year_subscription))
-    override val textBook = MutableLiveData<String>("")
-    override val textBookVIP = MutableLiveData<String>("")
-    override val textSaleSubMonth = MutableLiveData<String>("")
-    override val textSaleSubYear = MutableLiveData<String>("")
-    override val textSaleBookVIP = MutableLiveData<String>("")
+    override val textSubMonth = MutableLiveData<String>("-.--")
+    override val textSubYear = MutableLiveData<String>("-.--")
+    override val textBook = MutableLiveData<String>("-.--")
+    override val textBookVIP = MutableLiveData<String>("-.--")
+    override val textSaleSubMonth = MutableLiveData<String>("-.--")
+    override val textSaleSubYear = MutableLiveData<String>("-.--")
+    override val textSaleBookVIP = MutableLiveData<String>("-.--")
     override val stateSubscription = MutableLiveData<StateSubscription>(getStateSubscription())
     override val freeDay = MutableLiveData<Int>(getFreeDay())
 
@@ -173,7 +173,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
     override fun getHotOfferTime(): Long = abs(System.currentTimeMillis() - preferences.getLong(KEY_HOT_OFFER_TIME, -1) - HOT_OFFER_TIME)
 
     private fun setStateSubscription(state: StateSubscription) {
-        stateSubscription.value = state
+        stateSubscription?.value = state
         preferences.edit().putString(KEY_STATE_SUBSCRIPTION, state.name).apply()
     }
     private fun setEndedSubByBilling(){

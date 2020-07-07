@@ -171,6 +171,27 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintVertical_bias="1.0"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_25"
+                android:text="@string/back"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_28"
+                android:shadowColor="@color/Black25"
+                android:shadowDx="0"
+                android:shadowDy="4"
+                android:shadowRadius="8"
+                bind:isVisible="@{!viewModel.isNextVisible}"
+                android:onClick="@{()->viewModel.onBackPressed()}"
+                app:layout_constraintTop_toBottomOf="@+id/ll"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintVertical_bias="1.0"
+                tools:visibility="gone"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
