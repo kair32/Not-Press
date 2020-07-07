@@ -22,6 +22,7 @@ interface HomeViewModel: FragmentViewModel, ActivityStartViewModel, TeddyViewMod
     val isChecked: LiveData<Boolean>
     val isClicked: LiveData<Boolean>
     val isHaveBook: LiveData<Boolean>
+    val isNotVIP: LiveData<Boolean>
     var textFreeDay: String
 
     fun initChecked(isCheck: Boolean)
@@ -35,6 +36,7 @@ interface HomeViewModel: FragmentViewModel, ActivityStartViewModel, TeddyViewMod
     fun checkPermissionDialog()
     fun checkPermissionDialogClose()
     fun checkGrantedPermissionDialog()
+    fun onOpenPromoCode()
 }
 
 class HomeViewModelImpl(
@@ -45,6 +47,7 @@ class HomeViewModelImpl(
     override val isHaveBook = preferencesBasket.isHaveBook
     override val stateSubscription = preferencesBasket.stateSubscription
     override val daySubscription = preferencesBasket.freeDay
+    override val isNotVIP = preferencesBasket.isNotVIP
     override val isCheckPermissionOverlay = MutableLiveData<Boolean>(false)
     override val isGrantedPermission = MutableLiveData<Boolean>(false)
     override val isChecked = MutableLiveData<Boolean>(false)
@@ -58,7 +61,8 @@ class HomeViewModelImpl(
     }
 
     override fun initChecked(isCheck: Boolean) {
-        isChecked.postValue(isCheck)
+        Log.d("BindingAdapter","initChecked = $isCheck")
+        isChecked.value = isCheck
 
         if (stateSubscription.value == StateSubscription.FREE_DAY ||
             stateSubscription.value == StateSubscription.FREE_DAY_LARGE ||
@@ -70,7 +74,12 @@ class HomeViewModelImpl(
 
     override fun onButterflyClick() = startActivity(ActivityStartEvent(ActivityType.VIDEO))
 
-    override fun onCheckedChanged(checked: Boolean) = isChecked.postValue(checked)
+    override fun onOpenPromoCode() = startActivity(ActivityStartEvent(ActivityType.OPEN_PROMO_CODE))
+
+    override fun onCheckedChanged(checked: Boolean){
+        Log.d("BindingAdapter","onCheckedChanged = $checked")
+        isChecked.value = checked
+    }
 
     override fun onFreeDays(){
         preferencesBasket.startFreeDay()
@@ -88,6 +97,7 @@ class HomeViewModelImpl(
         if (stateSubscription.value == StateSubscription.FREE_MINUTE && preferencesBasket.getFreeMinute() < 15000L){
             isClicked.value = false
             isChecked.value = false
+            Log.d("BindingAdapter","onUpdateCheck = false")
             replaceFragment(DialogFragmentEvent(R.string.error_free_time))
         }
     }

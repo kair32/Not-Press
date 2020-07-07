@@ -39,6 +39,7 @@ interface Preference{
 
     //billing
     val isHaveBook: LiveData<Boolean>
+    val isNotVIP: LiveData<Boolean>
     val textSubMonth: LiveData<String>
     val textSubYear: LiveData<String>
     val textBook: LiveData<String>
@@ -83,6 +84,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
         .setListener(::onPurchasesUpdated)
         .build()
     override val isHaveBook = MutableLiveData<Boolean>(false)
+    override val isNotVIP   = MutableLiveData<Boolean>(true)
     override val textSubMonth = MutableLiveData<String>("-.--")
     override val textSubYear = MutableLiveData<String>("-.--")
     override val textBook = MutableLiveData<String>("-.--")
@@ -203,6 +205,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
     override fun update(){
         stateSubscription.value = getStateSubscription()
         freeDay.value = getFreeDay()
+        billing()
     }
 
     override fun getFreeDay(): Int{
@@ -428,6 +431,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
         when {
             purchasesList?.any{ it?.sku == BILLING_BOOK_VIP || it?.sku == BILLING_SALE_BOOK_VIP} == true -> {
                 isHaveBook.value = true
+                isNotVIP.value = false
                 setStateSubscription(StateSubscription.HAVE_SUB)
             }
             purchasesList?.any{ it?.sku != BILLING_BOOK} == true -> setStateSubscription(StateSubscription.HAVE_SUB)

@@ -18,6 +18,7 @@ interface OfferViewModel: FragmentViewModel, ActivityStartViewModel, PermissionV
     val isNextVisible: LiveData<Boolean>
 
     fun onNext()
+    fun onOpenPromoCode()
     fun setNextVisible(isNextVisible: Boolean)
     fun onAudionBook()
     fun onPayOffer(text: Int)
@@ -50,6 +51,8 @@ class OfferViewModelImpl(
             }))
 
     override fun setNextVisible(isNextVisible: Boolean) { this.isNextVisible.value = isNextVisible }
+
+    override fun onOpenPromoCode() = startActivity(ActivityStartEvent(ActivityType.OPEN_PROMO_CODE))
 
     override fun onPayOffer(text: Int) {
         when(text){

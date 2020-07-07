@@ -34,6 +34,7 @@ fun setButtonBackground(view: View, color: Int){
 
 @BindingAdapter("isVisible")
 fun setVisibility(view: View, isVisible: Boolean) {
+    Log.d("BindingAdapter","isVisible = $isVisible")
     view.visibility = if (isVisible) View.VISIBLE else View.GONE
 }
 

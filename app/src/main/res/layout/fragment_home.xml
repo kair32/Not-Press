@@ -55,7 +55,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    bind:transitionManager="@{viewModel.isChecked}">
+                    bind:isVisible="@{viewModel.isClicked}">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -70,7 +70,6 @@
                         android:text="@{viewModel.isChecked ? @string/off : @string/on}"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/text_24"
-                        bind:isVisible="@{viewModel.isClicked}"
                         tools:text="@string/on"/>
                     <ImageView
                         android:layout_width="wrap_content"
@@ -106,8 +105,8 @@
                 android:textSize="@dimen/text_24"
                 android:textColor="@android:color/black"
                 android:gravity="center"
-                bind:transitionManager="@{viewModel.isChecked}"
                 bind:isVisible="@{viewModel.isChecked}"
+                bind:transitionManager="@{viewModel.isChecked}"
                 app:layout_constraintTop_toBottomOf="@+id/switch_container"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -170,10 +169,10 @@
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_20"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="@dimen/margin_45"
+                app:layout_constraintBottom_toTopOf="@+id/tv_promo_code"
                 android:gravity="center_vertical"
                 android:onClick="@{()->viewModel.onVarenikClick()}">
 
@@ -191,6 +190,23 @@
                     android:text="@string/instagram"/>
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_promo_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/promo_code"
+                android:layout_marginBottom="@dimen/margin_45"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_36"
+                android:background="@drawable/ic_promo_code_background"
+                android:onClick="@{()->viewModel.onOpenPromoCode()}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                bind:isVisible="@{viewModel.isNotVIP}"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

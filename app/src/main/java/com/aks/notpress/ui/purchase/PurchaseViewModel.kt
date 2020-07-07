@@ -14,6 +14,7 @@ interface PurchaseViewModel: FragmentViewModel, ActivityStartViewModel, Permissi
     fun onNext()
     fun setNextVisible(isNextVisible: Boolean)
     fun onUpdate()
+    fun onOpenPromoCode()
     fun onAudionBook()
     fun onPayOffer(text: Int)
 }
@@ -39,6 +40,8 @@ class PurchaseViewModelImpl(
     override fun onUpdate() {
         preferencesBasket.update()
     }
+
+    override fun onOpenPromoCode() = startActivity(ActivityStartEvent(ActivityType.OPEN_PROMO_CODE))
 
     override fun setNextVisible(isNextVisible: Boolean) { this.isNextVisible.value = isNextVisible }
 

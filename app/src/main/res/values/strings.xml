@@ -43,6 +43,7 @@
     <string name="listen_book">СЛУШАТЬ КНИГУ</string>
     <string name="audio_book">АУДИОКНИГА</string>
     <string name="audio_book_underline"><u>АУДИОКНИГА</u></string>
+    <string name="promo_code">ввести промокод</string>
 
     <string name="everyday_text">Запусти приложение\n4 дня подряд\nи получи месяц\nБЕСПЛАТНОГО доступа</string>
     <string name="free_ten">10 мин в день</string>

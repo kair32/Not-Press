@@ -46,6 +46,7 @@ class FragmentHome: Fragment(){
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentHomeBinding.inflate(inflater, container, false)
+        binding.setLifecycleOwner(this)
         binding.viewModel = viewModel
 
         Notification().init(activity)
@@ -63,7 +64,6 @@ class FragmentHome: Fragment(){
         viewModel.isCheckPermissionOverlay.observe(viewLifecycleOwner, Observer { checkPermission() })
         viewModel.isGrantedPermission.observe(viewLifecycleOwner, Observer { checkGrantedPermission() })
         activity?.setStyle(translucent = true)
-        binding.setLifecycleOwner(this)
         return binding.root
     }
 
