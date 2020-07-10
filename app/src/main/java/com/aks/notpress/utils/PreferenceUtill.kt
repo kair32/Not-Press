@@ -58,7 +58,9 @@ interface Preference{
 
     fun setHotOffer(isHave: Boolean)
     fun getHotOffer(): Boolean
+    fun startHotOffer()
     fun getHotOfferTime(): Long
+    fun isWasLastDayInHotOffer(): Boolean
 }
 
 enum class StateSubscription(val codeName: String){
@@ -157,10 +159,16 @@ class PreferencesBasket(private val activity: Activity): Preference{
     override fun isFirstStart() = preferences.getBoolean(KEY_IS_FIRST_START, true)
 
     override fun setHotOffer(isHave: Boolean) {preferences.edit().putBoolean(KEY_IS_HOT_OFFER, isHave).apply()}
+    override fun startHotOffer(){preferences.edit().putLong(KEY_HOT_OFFER_TIME, System.currentTimeMillis()).apply()}
+    override fun isWasLastDayInHotOffer(): Boolean{
+        val isWas = preferences.getBoolean(KEY_IS_LAST_DAY_IN_HOT_OFFER, false)
+        preferences.edit().putBoolean(KEY_IS_LAST_DAY_IN_HOT_OFFER, true).apply()
+        return isWas
+    }
     override fun getHotOffer(): Boolean {
         val time = HOT_OFFER_TIME // 30 минут в миллисекундах 1800000L
         val offerTime = getSettingHotOfferTime()
-        if (offerTime == -1L) setHotOfferTime()
+        if (offerTime == -1L) startHotOffer()
         else {
             val s = System.currentTimeMillis() - offerTime
             if (s > time){
@@ -170,7 +178,6 @@ class PreferencesBasket(private val activity: Activity): Preference{
         }
         return preferences.getBoolean(KEY_IS_HOT_OFFER, true)
     }
-    private fun setHotOfferTime() {preferences.edit().putLong(KEY_HOT_OFFER_TIME, System.currentTimeMillis()).apply()}
     private fun getSettingHotOfferTime(): Long = preferences.getLong(KEY_HOT_OFFER_TIME, -1)
     override fun getHotOfferTime(): Long = abs(System.currentTimeMillis() - preferences.getLong(KEY_HOT_OFFER_TIME, -1) - HOT_OFFER_TIME)
 
@@ -186,9 +193,14 @@ class PreferencesBasket(private val activity: Activity): Preference{
         if (getStateSubscription() == StateSubscription.FREE_DAY ) {
             setStateSubscription(StateSubscription.FREE_MINUTE)
             setEveryDayCount(1)
+            setHotOffer(true)
+            startHotOffer()
         }
-        if (getStateSubscription() == StateSubscription.FREE_DAY_LARGE )
+        if (getStateSubscription() == StateSubscription.FREE_DAY_LARGE ) {
             setStateSubscription(StateSubscription.ENDED)
+            setHotOffer(true)
+            startHotOffer()
+        }
     }
     private fun setEndedSubByFreeMinute(){
         if (getStateSubscription() == StateSubscription.FREE_MINUTE ) {
@@ -499,7 +511,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
         const val FREE_DAY = 7
         const val LONG_FREE_DAY = 30
         const val DAY = 86400000// 1 день в милисекундах
-        const val HOT_OFFER_TIME = 1800000L// 30 минут в миллисекундах 1800000L
+        const val HOT_OFFER_TIME = 100000L// 30 минут в миллисекундах 1800000L//тестовые данные 2 минуты
         const val MILS_TO_MINUTE = 60000L // 1 минута в миллисекундах для удобства перевода
         const val FILENAME = "phone_testing.txt"
 
@@ -519,6 +531,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
         const val KEY_SIZE_SUBSCRIPTION = "KEY_SIZE_SUBSCRIPTION"
         const val KEY_IS_SUBSCRIPTION = "KEY_IS_SUBSCRIPTION"
         const val KEY_IS_HOT_OFFER = "KEY_IS_HOT_OFFER"
+        const val KEY_IS_LAST_DAY_IN_HOT_OFFER = "KEY_IS_LAST_DAY_IN_HOT_OFFER"
         const val KEY_HOT_OFFER_TIME = "KEY_HOT_OFFER_TIME"
         const val KEY_FREE_MINUTE = "KEY_FREE_MINUTE"
 
