@@ -18,6 +18,7 @@ import com.aks.notpress.R
 import com.aks.notpress.databinding.FragmentHomeBinding
 import com.aks.notpress.service.notification.Notification
 import com.aks.notpress.setStyle
+import com.aks.notpress.ui.dialog.CustomDialogFragment
 import com.aks.notpress.ui.main.MainActivity
 import com.aks.notpress.utils.*
 
@@ -70,7 +71,13 @@ class FragmentHome: Fragment(){
     private fun checkPermission(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             if (!Settings.canDrawOverlays(activity!!.baseContext)) viewModel.checkPermissionDialog()
-            else viewModel.checkPermissionDialogClose()
+            else {
+                val fragment = activity?.supportFragmentManager?.findFragmentByTag(FragmentType.DIALOG.name) ?: return
+                if (fragment is CustomDialogFragment) {
+                    if (fragment.callBack != null)
+                    activity?.supportFragmentManager?.beginTransaction()?.remove(fragment)?.commit()
+                }
+            }
     }
     private fun checkGrantedPermission(){
         if (context == null) return

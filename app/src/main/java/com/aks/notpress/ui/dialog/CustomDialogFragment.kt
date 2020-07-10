@@ -23,7 +23,7 @@ enum class CustomDialog{
         fun getStateDialog(state: String?) = values().find { it.name.equals(state, ignoreCase = true) }
     }
 }
-class CustomDialogFragment(private val callBack: CallBack?): DialogFragment(){
+class CustomDialogFragment(val callBack: CallBack?): DialogFragment(){
     private val fragmentUtil = FragmentUtil()
     private val finishUtil = FinishUtil()
 

@@ -1,5 +1,6 @@
 package com.aks.notpress.utils
 
+import android.util.Log
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
@@ -23,6 +24,7 @@ class FragmentUtil {
     fun observe(owner: LifecycleOwner, viewModel: FragmentViewModel, manager: FragmentManager?,
                 consumer: (FragmentEvent) -> Unit = {}) {
         viewModel.fragmentLiveData.observe(owner, Observer {
+            Log.d("FragmentUtil","${it.type}")
             manager ?: return@Observer
             if (it.isRemove) removeFragment(manager, it)
             else {
