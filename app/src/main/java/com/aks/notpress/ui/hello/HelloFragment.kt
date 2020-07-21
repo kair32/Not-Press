@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.aks.notpress.R
 import com.aks.notpress.databinding.FragmentHelloBinding
@@ -28,7 +30,8 @@ class HelloFragment: Fragment(){
     override fun onAttach(context: Context) {
         super.onAttach(context)
         factory = ViewModelFactory((activity as? MainActivity)?.preference?:return)
-        viewModel = ViewModelProvider(this, factory).get(HelloViewModelImpl::class.java)
+        //viewModel = ViewModelProvider(this, factory).get(HelloViewModelImpl::class.java)
+        viewModel = obtainFragmentViewModel(activity?:return,HelloViewModelImpl::class.java, factory) as HelloViewModel
         fragmentUtil.observe(this, viewModel, activity?.supportFragmentManager)
     }
 
@@ -44,7 +47,9 @@ class HelloFragment: Fragment(){
         }
         return binding.root
     }
-
+    private fun <T : ViewModel?> obtainFragmentViewModel(fragment: FragmentActivity, modelClass: Class<T>, factory: ViewModelProvider.Factory): ViewModel {
+        return ViewModelProvider(fragment, factory).get(modelClass)!!
+    }
     companion object {
         fun newInstance() = HelloFragment()
     }

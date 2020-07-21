@@ -13,17 +13,18 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/green_background_gradient">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/green_background_gradient">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/iv_varenik"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_vareniki"/>
 
             <TextView

@@ -11,7 +11,7 @@
             type="com.aks.notpress.utils.TeddyViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent">
 
         <FrameLayout
@@ -28,6 +28,8 @@
                 android:layout_height="wrap_content"
                 android:onClick="@{()->viewModel.onClickTeddy()}"
                 android:layout_marginStart="@dimen/margin_20"
+                android:paddingStart="@dimen/margin_85"
+                android:paddingEnd="@dimen/margin_85"
                 android:layout_marginTop="@dimen/margin_45"
                 android:layout_marginEnd="@dimen/margin_20"
                 android:text="@string/vip_access" />

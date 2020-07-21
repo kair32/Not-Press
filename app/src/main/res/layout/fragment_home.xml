@@ -20,12 +20,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             bind:stateSubscription="@{viewModel.stateSubscription}"
+            android:layout_gravity="center_vertical"
             android:fitsSystemWindows="true">
 
             <include
                 android:id="@+id/bt_gifts"
                 layout="@layout/help_button_teddy"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -34,17 +35,17 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/switch_container"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_20"
                 android:padding="@dimen/margin_10"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 android:background="@drawable/ic_button"
                 android:visibility="gone"
                 bind:switchWidth="@{@dimen/margin_10}"
                 bind:background="@{viewModel.isChecked? @color/colorDimGreen : @android:color/white}"
+                app:layout_constraintEnd_toEndOf="@+id/bt_gifts"
+                app:layout_constraintStart_toStartOf="@+id/bt_gifts"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:visibility="visible">
 
                 <LinearLayout
@@ -128,11 +129,13 @@
 
             <include
                 android:id="@+id/butterfly"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_20"
                 layout="@layout/help_youtube"
                 bind:viewModel="@{viewModel}"
+                app:layout_constraintEnd_toEndOf="@+id/bt_gifts"
+                app:layout_constraintStart_toStartOf="@+id/bt_gifts"
                 app:layout_constraintBottom_toTopOf="@+id/ll_book"
                 app:layout_constraintTop_toBottomOf="@+id/tv_switch_text" />
 
@@ -207,6 +210,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 bind:isVisible="@{viewModel.isNotVIP}"
                 />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
