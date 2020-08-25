@@ -55,9 +55,9 @@ class PurchaseViewModelImpl(
 
     override fun onPayOffer(text: Int) {
         when(text){
-            R.string.for_month -> preferencesBasket.launchSaleBillingMonth()
-            R.string.for_year -> preferencesBasket.launchSaleBillingYear()
-            R.string.vip_forever -> preferencesBasket.launchSaleBillingBookVIP()
+            R.string.for_month -> preferencesBasket.launchBillingMonth()
+            R.string.for_year -> preferencesBasket.launchBillingYear()
+            R.string.vip_forever -> preferencesBasket.launchBillingBookVIP()
         }
     }
 }

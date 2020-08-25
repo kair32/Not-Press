@@ -511,7 +511,7 @@ class PreferencesBasket(private val activity: Activity): Preference{
         const val FREE_DAY = 7
         const val LONG_FREE_DAY = 30
         const val DAY = 86400000// 1 день в милисекундах
-        const val HOT_OFFER_TIME = 100000L// 30 минут в миллисекундах 1800000L//тестовые данные 2 минуты
+        const val HOT_OFFER_TIME = 1800000L// 30 минут в миллисекундах 1800000L// 100000L тестовые данные 2 минуты
         const val MILS_TO_MINUTE = 60000L // 1 минута в миллисекундах для удобства перевода
         const val FILENAME = "phone_testing.txt"
 
