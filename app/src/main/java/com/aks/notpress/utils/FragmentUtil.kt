@@ -21,8 +21,7 @@ import com.aks.notpress.utils.FragmentType.*
 
 
 class FragmentUtil {
-    fun observe(owner: LifecycleOwner, viewModel: FragmentViewModel, manager: FragmentManager?,
-                consumer: (FragmentEvent) -> Unit = {}) {
+    fun observe(owner: LifecycleOwner, viewModel: FragmentViewModel, manager: FragmentManager?) {
         viewModel.fragmentLiveData.observe(owner, Observer {
             Log.d("FragmentUtil","${it.type}")
             manager ?: return@Observer
@@ -51,10 +50,17 @@ class FragmentUtil {
         if (event.isAdd) transaction.add(type.id, fragment, event.type.name)
         else transaction.replace(type.id, fragment, event.type.name)
 
-        if (type.addToStack) {
-            transaction.addToBackStack(null)
-        } else {
-            manager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        if (event.type == OFFER || event.type == PURCHASE ) {
+            if (findFragment(manager, FragmentEvent(HOME)))
+                transaction.addToBackStack(null)
+            else manager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+        else {
+            if (type.addToStack) {
+                transaction.addToBackStack(null)
+            } else {
+                manager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            }
         }
 
         transaction.commit()
