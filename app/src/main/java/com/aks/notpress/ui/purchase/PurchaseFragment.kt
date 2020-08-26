@@ -7,16 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.aks.notpress.R
-import com.aks.notpress.databinding.FragmentOfferBinding
 import com.aks.notpress.databinding.FragmentPurchaseBinding
 import com.aks.notpress.setStyle
-import com.aks.notpress.ui.hello.HelloFragment
 import com.aks.notpress.ui.main.MainActivity
-import com.aks.notpress.ui.offer.OfferFragment
-import com.aks.notpress.ui.offer.OfferViewModel
-import com.aks.notpress.ui.offer.OfferViewModelImpl
 import com.aks.notpress.utils.*
 import jp.wasabeef.blurry.Blurry
 
@@ -52,6 +48,12 @@ class PurchaseFragment: Fragment(){
                 binding.ivVarenik.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }})
 
+        viewModel.stateSubscription.observe(viewLifecycleOwner, Observer {
+            if (it == StateSubscription.HAVE_SUB)
+                if (viewModel.isNextVisible.value == false)
+                    viewModel.onBackPressed()
+                else viewModel.onNext()
+        })
         activity?.setStyle(R.color.colorGreen, R.color.colorDarkGreen)
         binding.setLifecycleOwner(this)
         return binding.root

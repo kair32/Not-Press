@@ -7,14 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.aks.notpress.R
 import com.aks.notpress.databinding.FragmentOfferBinding
-import com.aks.notpress.databinding.FragmentPayBookBinding
 import com.aks.notpress.setStyle
-import com.aks.notpress.ui.book.PayBookFragment
-import com.aks.notpress.ui.book.PayBookViewModel
-import com.aks.notpress.ui.book.PayBookViewModelImpl
 import com.aks.notpress.ui.main.MainActivity
 import com.aks.notpress.utils.*
 import jp.wasabeef.blurry.Blurry
@@ -50,7 +47,12 @@ class OfferFragment: Fragment(){
                     .into(binding.ivVarenik)
                 binding.ivVarenik.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }})
-
+        viewModel.stateSubscription.observe(viewLifecycleOwner, Observer {
+            if (it == StateSubscription.HAVE_SUB)
+                if (viewModel.isNextVisible.value == false)
+                    viewModel.onBackPressed()
+                else viewModel.onNext()
+        })
         activity?.setStyle(R.color.colorRed, R.color.colorDeepRed)
         binding.setLifecycleOwner(this)
         return binding.root

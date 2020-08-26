@@ -1,6 +1,5 @@
 package com.aks.notpress.ui.offer
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.aks.notpress.R
@@ -16,6 +15,7 @@ interface OfferViewModel: FragmentViewModel, ActivityStartViewModel, PermissionV
     val offerTime: Long
     val isHaveBook: LiveData<Boolean>
     val isNextVisible: LiveData<Boolean>
+    val stateSubscription: LiveData<StateSubscription>
 
     fun onNext()
     fun onOpenPromoCode()
@@ -34,7 +34,7 @@ class OfferViewModelImpl(
         SaleOffer(R.string.for_year, preferencesBasket.textSaleSubYear, preferencesBasket.textSubYear),
         SaleOffer(R.string.vip_forever, preferencesBasket.textSaleBookVIP, preferencesBasket.textBookVIP))
     private val isFirstStart: Boolean = preferencesBasket.isFirstStart()
-    private val stateSubscription = preferencesBasket.stateSubscription
+    override val stateSubscription = preferencesBasket.stateSubscription
     init {
         preferencesBasket.getFreeDay()
         preferencesBasket.billing()
@@ -48,7 +48,7 @@ class OfferViewModelImpl(
                 isFirstStart -> FragmentType.PRESENT
                 stateSubscription.value == StateSubscription.FREE_MINUTE -> FragmentType.EVERYDAY
                 else -> FragmentType.HOME
-            }))
+            }, isRecreate = false))
 
     override fun setNextVisible(isNextVisible: Boolean) { this.isNextVisible.value = isNextVisible }
 

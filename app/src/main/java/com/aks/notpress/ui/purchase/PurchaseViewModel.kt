@@ -10,6 +10,7 @@ interface PurchaseViewModel: FragmentViewModel, ActivityStartViewModel, Permissi
     val offers: List<SaleOffer>
     val isHaveBook: LiveData<Boolean>
     val isNextVisible: LiveData<Boolean>
+    val stateSubscription: LiveData<StateSubscription>
 
     fun onNext()
     fun setNextVisible(isNextVisible: Boolean)
@@ -28,7 +29,7 @@ class PurchaseViewModelImpl(
         SaleOffer(R.string.for_year, preferencesBasket.textSaleSubYear, preferencesBasket.textSubYear),
         SaleOffer(R.string.vip_forever, preferencesBasket.textSaleBookVIP, preferencesBasket.textBookVIP))
     private val isFirstStart: Boolean = preferencesBasket.isFirstStart()
-    private val stateSubscription = preferencesBasket.stateSubscription
+    override val stateSubscription = preferencesBasket.stateSubscription
 
     init {
         preferencesBasket.getFreeDay()
